@@ -73,20 +73,33 @@ export default function AdminDashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A] py-10 px-4 sm:px-6 font-sans">
+    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] py-10 px-4 sm:px-6 font-sans realm-tho">
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* NÚT QUAY LẠI TRANG CHỦ */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
+          >
+            ← Quay lại Trang chủ Ngũ Cung
+          </Link>
+        </div>
+
         {/* HEADER ADMIN */}
-        <header className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] flex flex-wrap items-center justify-between gap-4">
+        <header className="bg-[#FFFDF9] dark:bg-[#1E1C23] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] p-6 rounded-2xl shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-[#1A1A1A] text-white text-xs font-black uppercase tracking-wider rounded-md">
+              <span className="px-3 py-1 bg-[#1A1720] text-white text-xs font-black uppercase tracking-wider rounded-[4px]">
                 Admin Console
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black text-[#1A1A1A]">
+              <h1
+                className="font-display font-black text-2xl sm:text-3xl text-[#1A1720] dark:text-[#EAE8D8]"
+                style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+              >
                 Quản Trị Đăng Ký Chơi Thử Ngũ Cung
               </h1>
             </div>
-            <p className="text-xs sm:text-sm text-stone-600 font-medium">
+            <p className="text-xs sm:text-sm text-[#534E5C] dark:text-[#A8A4B2] font-medium" style={{ lineHeight: "var(--lh-body)" }}>
               Báo cáo nhu cầu thực tế • Phân tích độ tuổi 7+ • Xuất dữ liệu bảo mật
             </p>
           </div>
@@ -94,7 +107,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={fetchData}
-              className="p-2.5 bg-white border-2 border-[#1A1A1A] rounded-xl hover:bg-stone-50 font-bold text-xs flex items-center gap-1.5 min-h-[44px] shadow-[2px_2px_0px_#1A1A1A]"
+              className="p-2.5 bg-white dark:bg-stone-800 border-2 border-[#1A1720] dark:border-[#EAE8D8] rounded-xl hover:bg-stone-50 font-bold text-xs flex items-center gap-1.5 min-h-[44px] shadow-[2px_2px_0px_#1A1720] dark:shadow-[2px_2px_0px_#EAE8D8]"
               title="Làm mới dữ liệu"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
