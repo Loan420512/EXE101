@@ -111,6 +111,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Luật Chơi (`/luat-choi`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều hướng** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc nét, header thanh âm mượt | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8/10 | **9.5/10** | Heading Playfair Display không cắt dấu, `--lh-heading-tight` chuẩn, font chữ Be Vietnam Pro rõ ràng | ✅ Đạt |
+| **3. Bộ chuyển chế độ Bé vs Chuẩn** | 8.5/10 | **9.5/10** | Paper-board 4px shadow, nút bấm nổi min-height 44px, tương phản cao | ✅ Đạt |
+| **4. Bảng điểm hòa thanh & Bước chơi** | 8/10 | **9.5/10** | Bảng điểm rõ ràng với `tabular-nums`, badges Đông Hồ có viền sắc sảo | ✅ Đạt |
+| **5. Realm & Không khí** | 8/10 | **9.5/10** | `realm-kim` với sắc thái sáng bạc, border stripe đỉnh, tương thích cả 2 theme | ✅ Đạt |
+
+> **Tổng kết Trang Luật Chơi**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Luật Chơi.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"

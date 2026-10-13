@@ -26,39 +26,45 @@ export default function LuatChoiPage() {
 
       <Header />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-kim">
         {/* NÚT QUAY LẠI */}
         <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D23A22] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
           >
-            ← Quay lại Trang chủ
+            ← Quay lại Trang chủ Ngũ Cung
           </Link>
         </div>
 
         {/* TIÊU ĐỀ CHÍNH */}
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#A36A00] dark:text-[#F2B632] block mb-2">
             HƯỚNG DẪN LUẬT BÀI CHI TIẾT
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h1
+            className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8]"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Luật chơi Ngũ Cung
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[#524F59] dark:text-[#A8A6B0]">
+          <p
+            className="mt-3 text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2]"
+            style={{ lineHeight: "var(--lh-body)" }}
+          >
             Bộ bài gồm 45 lá (15 nhạc cụ × 3 lá mỗi loại). 2 đến 5 người chơi cùng hòa tấu và tranh tài để chạm mốc 15 điểm vinh quang.
           </p>
         </div>
 
         {/* NÚT CHUYỂN CHẾ ĐỘ: GIẢI THÍCH CHO BÉ VS LUẬT TIÊU CHUẨN */}
         <div className="flex justify-center mb-10">
-          <div className="inline-flex p-1 rounded bg-white dark:bg-stone-800 border-2 border-[#16141A] dark:border-[#E8EAE0] shadow-[3px_3px_0px_#16141A]">
+          <div className="inline-flex p-1 rounded-[6px] bg-white dark:bg-[#1E1C23] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
             <button
               onClick={() => setTab("kids")}
               className={`px-4 py-2 rounded text-xs sm:text-sm font-black transition-all ${
                 tab === "kids"
-                  ? "bg-[#D23A22] text-white shadow-[1px_1px_0px_#16141A]"
-                  : "text-[#16141A] dark:text-[#E8EAE0] hover:text-[#D23A22]"
+                  ? "bg-[#CC3520] text-white shadow-[2px_2px_0px_#1A1720]"
+                  : "text-[#1A1720] dark:text-[#EAE8D8] hover:text-[#CC3520]"
               }`}
             >
               🧒 Dành cho bé (7+) & Người mới
@@ -67,8 +73,8 @@ export default function LuatChoiPage() {
               onClick={() => setTab("standard")}
               className={`px-4 py-2 rounded text-xs sm:text-sm font-black transition-all ${
                 tab === "standard"
-                  ? "bg-[#16141A] text-white shadow-[1px_1px_0px_#16141A]"
-                  : "text-[#16141A] dark:text-[#E8EAE0] hover:text-[#D23A22]"
+                  ? "bg-[#1A1720] text-white shadow-[2px_2px_0px_#CC3520]"
+                  : "text-[#1A1720] dark:text-[#EAE8D8] hover:text-[#CC3520]"
               }`}
             >
               📜 Luật thi đấu chuẩn
@@ -90,32 +96,38 @@ export default function LuatChoiPage() {
             </div>
 
             {/* BƯỚC 1: CHUẨN BỊ BÀN CHƠI */}
-            <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
-              <h2 className="font-display font-black text-xl text-[#D23A22] mb-3 flex items-center gap-2">
+            <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
+              <h2
+                className="font-display font-black text-xl text-[#CC3520] mb-3 flex items-center gap-2"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 <span>1️⃣</span> Bắt đầu ván chơi như thế nào?
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
-                <div className="p-3 rounded bg-stone-100 dark:bg-stone-800 border border-[#16141A]/20">
+                <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
                   <span className="text-2xl block mb-1">🃏</span>
-                  <strong>Mỗi người 5 lá</strong>
-                  <p className="text-stone-600 dark:text-stone-300 mt-1">Bé cầm kín trên tay, không cho bạn khác nhìn nhé.</p>
+                  <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Mỗi người 5 lá</strong>
+                  <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Bé cầm kín trên tay, không cho bạn khác nhìn nhé.</p>
                 </div>
-                <div className="p-3 rounded bg-stone-100 dark:bg-stone-800 border border-[#16141A]/20">
+                <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
                   <span className="text-2xl block mb-1">🏪</span>
-                  <strong>Chợ Nhạc 5 lá</strong>
-                  <p className="text-stone-600 dark:text-stone-300 mt-1">Lật ngửa 5 lá ở giữa bàn để ai cũng chọn được.</p>
+                  <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Chợ Nhạc 5 lá</strong>
+                  <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Lật ngửa 5 lá ở giữa bàn để ai cũng chọn được.</p>
                 </div>
-                <div className="p-3 rounded bg-stone-100 dark:bg-stone-800 border border-[#16141A]/20">
+                <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
                   <span className="text-2xl block mb-1">📚</span>
-                  <strong>Chồng bài rút</strong>
-                  <p className="text-stone-600 dark:text-stone-300 mt-1">Để úp ở giữa bàn để rút bù khi Chợ hết lá.</p>
+                  <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Chồng bài rút</strong>
+                  <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Để úp ở giữa bàn để rút bù khi Chợ hết lá.</p>
                 </div>
               </div>
             </div>
 
             {/* BƯỚC 2: MỖI LƯỢT CHỌN 1 TRONG 3 VIỆC */}
-            <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
-              <h2 className="font-display font-black text-xl text-[#3F7D3B] mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
+              <h2
+                className="font-display font-black text-xl text-[#3A7535] mb-4 flex items-center gap-2"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 <span>2️⃣</span> Đến lượt mình, bé chọn 1 việc duy nhất:
               </h2>
               <div className="space-y-4 text-xs sm:text-sm">
@@ -200,11 +212,14 @@ export default function LuatChoiPage() {
              ======================================================== */
           <div className="space-y-8 animate-fade-in">
             {/* THIẾT LẬP */}
-            <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
-              <h2 className="font-display font-black text-xl text-[#16141A] dark:text-[#E8EAE0] mb-3">
+            <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
+              <h2
+                className="font-display font-black text-xl text-[#1A1720] dark:text-[#EAE8D8] mb-3"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 1. Quy cách bộ bài & Thiết lập ván chơi
               </h2>
-              <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-[#524F59] dark:text-[#A8A6B0]">
+              <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                 {RULES_CONTENT.setup.items.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
@@ -213,17 +228,20 @@ export default function LuatChoiPage() {
             </div>
 
             {/* 3 HÀNH ĐỘNG MỖI LƯỢT */}
-            <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
-              <h2 className="font-display font-black text-xl text-[#16141A] dark:text-[#E8EAE0] mb-3">
+            <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
+              <h2
+                className="font-display font-black text-xl text-[#1A1720] dark:text-[#EAE8D8] mb-3"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 2. Ba hành động lựa chọn trong lượt
               </h2>
               <div className="space-y-4 text-xs sm:text-sm">
                 {RULES_CONTENT.turnActions.actions.map((act, i) => (
-                  <div key={i} className="p-3.5 rounded bg-stone-50 dark:bg-stone-800 border border-[#16141A]/20">
-                    <strong className="text-[#16141A] dark:text-[#E8EAE0] font-bold block mb-1">
+                  <div key={i} className="p-3.5 rounded bg-[#E8EAE0]/30 dark:bg-stone-800 border-2 border-[#1A1720]/15 dark:border-[#EAE8D8]/15">
+                    <strong className="text-[#1A1720] dark:text-[#EAE8D8] font-bold block mb-1">
                       {act.name}
                     </strong>
-                    <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
+                    <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                       {act.desc}
                     </p>
                   </div>
@@ -232,28 +250,31 @@ export default function LuatChoiPage() {
             </div>
 
             {/* BẢNG ĐIỂM TỔ HỢP */}
-            <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
-              <h2 className="font-display font-black text-xl text-[#16141A] dark:text-[#E8EAE0] mb-3">
+            <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
+              <h2
+                className="font-display font-black text-xl text-[#1A1720] dark:text-[#EAE8D8] mb-3"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 3. Bảng điểm tổ hợp hòa thanh
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm border-collapse">
                   <thead>
-                    <tr className="border-b-2 border-[#16141A]">
-                      <th className="py-2.5 px-3 font-bold">Bản nhạc</th>
-                      <th className="py-2.5 px-3 font-bold">Điều kiện kết hợp</th>
-                      <th className="py-2.5 px-3 font-bold">Điểm số</th>
-                      <th className="py-2.5 px-3 font-bold">Cấp bậc</th>
+                    <tr className="border-b-2 border-[#1A1720] dark:border-[#EAE8D8]">
+                      <th className="py-2.5 px-3 font-bold text-[#1A1720] dark:text-[#EAE8D8]">Bản nhạc</th>
+                      <th className="py-2.5 px-3 font-bold text-[#1A1720] dark:text-[#EAE8D8]">Điều kiện kết hợp</th>
+                      <th className="py-2.5 px-3 font-bold text-[#1A1720] dark:text-[#EAE8D8]">Điểm số</th>
+                      <th className="py-2.5 px-3 font-bold text-[#1A1720] dark:text-[#EAE8D8]">Cấp bậc</th>
                     </tr>
                   </thead>
                   <tbody>
                     {RULES_CONTENT.scoring.map((row, i) => (
                       <tr key={i} className="border-b border-stone-200 dark:border-stone-800">
-                        <td className="py-2.5 px-3 font-bold text-[#D23A22]">{row.combo}</td>
-                        <td className="py-2.5 px-3 text-[#524F59] dark:text-[#A8A6B0]">{row.requirement}</td>
-                        <td className="py-2.5 px-3 font-bold text-[#16141A] dark:text-[#E8EAE0]">{row.score}</td>
+                        <td className="py-2.5 px-3 font-bold text-[#CC3520]">{row.combo}</td>
+                        <td className="py-2.5 px-3 text-[#534E5C] dark:text-[#A8A4B2]">{row.requirement}</td>
+                        <td className="py-2.5 px-3 font-black text-[#1A1720] dark:text-[#EAE8D8] tabular-nums">{row.score}</td>
                         <td className="py-2.5 px-3">
-                          <span className="px-2 py-0.5 rounded bg-[#F2B632] text-[#16141A] font-bold text-[10px]">
+                          <span className="px-2 py-0.5 rounded bg-[#F2B632] text-[#1A1720] font-black text-[10px] border border-[#1A1720]">
                             {row.badge}
                           </span>
                         </td>
