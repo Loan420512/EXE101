@@ -179,32 +179,38 @@ function PlaygroundInner() {
 
       <Header />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className={`flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-${selectedTimbre}`}>
         {/* NÚT QUAY LẠI */}
         <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D23A22] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
           >
-            ← Quay lại Trang chủ
+            ← Quay lại Trang chủ Ngũ Cung
           </Link>
         </div>
 
         {/* TIÊU ĐỀ */}
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#A36A00] dark:text-[#F2B632] block mb-2">
             TƯƠNG TÁC ÂM HỌC TRỰC TUYẾN
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h1
+            className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8]"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Sân chơi Ngũ Âm
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[#524F59] dark:text-[#A8A6B0]">
+          <p
+            className="mt-3 text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2]"
+            style={{ lineHeight: "var(--lh-body)" }}
+          >
             Bấm các nốt Cung, Thương, Giốc, Chủy, Vũ bằng phím số (1-5) hoặc chuột. Ghi âm giai điệu của riêng bạn và chia sẻ cùng bạn bè!
           </p>
         </div>
 
         {/* BẢNG ĐIỀU KHIỂN: ÂM SẮC HÀNH & QUÃNG TÁM */}
-        <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[6px_6px_0px_#16141A] mb-8">
+        <div className="bg-white dark:bg-[#1E1C23] p-6 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board mb-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b-2 border-stone-200 dark:border-stone-800 pb-6 mb-6">
             {/* CHỌN ÂM SẮC HÀNH */}
             <div className="w-full md:w-auto">

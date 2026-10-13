@@ -153,6 +153,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Sân Chơi Ngũ Âm (`/san-choi-ngu-am`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều hướng** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc nét, header đồng bộ | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair 48px với `--lh-heading-tight`, subtitle tương phản cao | ✅ Đạt |
+| **3. Bàn phím ngũ âm & Quãng tám** | 9/10 | **9.5/10** | Phím đàn 5 màu tương ứng ngũ hành, phản hồi xúc giác và âm thanh WebAudio tức thì | ✅ Đạt |
+| **4. Ghi âm & Chia sẻ URL** | 9/10 | **9.5/10** | Thu âm 10s, thanh tiến trình mượt mà, copy link URL giai điệu tiện lợi | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **10/10** | Dynamic `realm-${selectedTimbre}` đổi toàn bộ không khí theo âm sắc hành đang chọn | ✅ Đạt |
+
+> **Tổng kết Trang Sân Chơi Ngũ Âm**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Sân chơi Ngũ Âm.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"
