@@ -68,22 +68,22 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
 
       <Header />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className={`flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-${inst.element}`}>
         {/* THANH ĐIỀU HƯỚNG VỤN BÁNH MÌ (BREADCRUMB) */}
-        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-bold text-[#524F59] dark:text-[#A8A6B0]">
-          <Link href="/" className="hover:text-[#D23A22]">
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-bold text-[#534E5C] dark:text-[#A8A4B2]">
+          <Link href="/" className="hover:text-[#CC3520]">
             Trang chủ
           </Link>
           <span>/</span>
-          <Link href="/bo-bai" className="hover:text-[#D23A22]">
+          <Link href="/bo-bai" className="hover:text-[#CC3520]">
             Bộ bài
           </Link>
           <span>/</span>
-          <span className="text-[#16141A] dark:text-[#E8EAE0]">{inst.name}</span>
+          <span className="text-[#1A1720] dark:text-[#EAE8D8] font-bold">{inst.name}</span>
         </nav>
 
         {/* KHỐI NỘI DUNG CHÍNH */}
-        <div className="bg-white dark:bg-[#1D1B22] border-[3px] border-[#16141A] dark:border-[#E8EAE0] rounded-[6px] shadow-[6px_6px_0px_#16141A] dark:shadow-[6px_6px_0px_#E8EAE0] p-6 sm:p-10 mb-12">
+        <div className="bg-white dark:bg-[#1E1C23] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] rounded-[6px] shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board p-6 sm:p-10 mb-12">
           {/* PHẦN ĐẦU: LÁ BÀI 3D & TIÊU ĐỀ */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-b-2 border-stone-200 dark:border-stone-800 pb-8 mb-8">
             <div className="flex-shrink-0">
@@ -102,27 +102,36 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <span
                     style={{ backgroundColor: cfg.color, color: cfg.textColor }}
-                    className="px-2.5 py-1 rounded border border-[#16141A] text-xs font-black uppercase tracking-wider"
+                    className="px-2.5 py-1 rounded-[4px] border-[2px] border-[#1A1720] text-xs font-black uppercase tracking-wider"
                   >
                     Hành {inst.elementName} • Âm {inst.tone}
                   </span>
-                  <span className="px-2.5 py-1 rounded bg-[#E8EAE0] dark:bg-stone-800 border border-[#16141A] text-xs font-mono font-bold">
+                  <span className="px-2.5 py-1 rounded-[4px] bg-[#E8EAE0] dark:bg-stone-800 border-[2px] border-[#1A1720] dark:border-[#EAE8D8] text-xs font-mono font-bold tabular-nums">
                     Nốt {inst.noteName} ({inst.noteFrequency})
                   </span>
-                  <span className="px-2 py-0.5 rounded bg-[#F2B632] text-[#16141A] border border-[#16141A] text-[10px] font-black uppercase">
+                  <span className="px-2 py-0.5 rounded-[4px] bg-[#F2B632] text-[#1A1720] border-[2px] border-[#1A1720] text-[10px] font-black uppercase">
                     {inst.status}
                   </span>
                 </div>
 
-                <h1 className="font-display font-black text-3xl sm:text-5xl text-[#16141A] dark:text-[#E8EAE0] mb-3">
+                <h1
+                  className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8] mb-3"
+                  style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+                >
                   {inst.name}
                 </h1>
-                <p className="text-xs sm:text-sm font-medium text-[#524F59] dark:text-[#A8A6B0] mb-4">
+                <p className="text-xs sm:text-sm font-medium text-[#534E5C] dark:text-[#A8A4B2] mb-4" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.nameGlossEn} • 3 lá trong bộ bài tiêu chuẩn 45 lá
                 </p>
 
                 {/* TRÍCH ĐOẠN ĐẶC TÍNH NGUYÊN VĂN */}
-                <div className="p-3.5 rounded bg-[#E8EAE0]/70 dark:bg-stone-800 border-l-4 border-l-[#D23A22] text-xs sm:text-sm italic font-medium mb-6">
+                <div
+                  className="p-3.5 rounded-[4px] bg-[#E8EAE0]/70 dark:bg-stone-800 text-xs sm:text-sm italic font-medium mb-6"
+                  style={{
+                    borderLeft: `5px solid ${cfg.color}`,
+                    lineHeight: "var(--lh-body)",
+                  }}
+                >
                   &ldquo;{inst.summaryVerbatim}&rdquo;
                 </div>
               </div>
@@ -141,19 +150,25 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
             {/* CỘT 1 */}
             <div className="space-y-6">
               <div>
-                <h2 className="font-display font-black text-base uppercase text-[#16141A] dark:text-[#E8EAE0] mb-2 flex items-center gap-2">
+                <h2
+                  className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
+                  style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+                >
                   <span>📖</span> Giới thiệu lịch sử
                 </h2>
-                <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
+                <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.description}
                 </p>
               </div>
 
               <div>
-                <h2 className="font-display font-black text-base uppercase text-[#16141A] dark:text-[#E8EAE0] mb-2 flex items-center gap-2">
+                <h2
+                  className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
+                  style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+                >
                   <span>🪵</span> Cấu tạo nhạc cụ
                 </h2>
-                <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
+                <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.structure}
                 </p>
               </div>
@@ -162,19 +177,25 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
             {/* CỘT 2 */}
             <div className="space-y-6">
               <div>
-                <h2 className="font-display font-black text-base uppercase text-[#16141A] dark:text-[#E8EAE0] mb-2 flex items-center gap-2">
+                <h2
+                  className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
+                  style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+                >
                   <span>🖐️</span> Kỹ thuật diễn tấu
                 </h2>
-                <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
+                <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.playMethod}
                 </p>
               </div>
 
               <div>
-                <h2 className="font-display font-black text-base uppercase text-[#16141A] dark:text-[#E8EAE0] mb-2 flex items-center gap-2">
+                <h2
+                  className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
+                  style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+                >
                   <span>⚡</span> Vì sao thuộc hành {inst.elementName}?
                 </h2>
-                <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed bg-amber-50/60 dark:bg-stone-800/60 p-3 rounded border border-amber-200 dark:border-stone-700">
+                <p className="text-[#534E5C] dark:text-[#A8A4B2] bg-amber-50/60 dark:bg-stone-800/60 p-3 rounded-[4px] border-2 border-amber-200 dark:border-stone-700" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.elementReason}
                 </p>
               </div>

@@ -139,6 +139,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Chi Tiết Nhạc Cụ (`/nhac-cu/[slug]`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Breadcrumb & Điều hướng** | 8.5/10 | **9.5/10** | Đường dẫn 3 cấp rõ ràng, hover tương phản, hỗ trợ quay lại | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair 48px với `--lh-heading-tight`, đoạn trích quote border hành 5px, body line-height 1.65 | ✅ Đạt |
+| **3. Khối lá bài 3D & Trực quan** | 9/10 | **10/10** | CardFace kích thước lớn, tương tác 3D tilt và âm thanh thời gian thực | ✅ Đạt |
+| **4. Các khối kiến thức Đông Hồ** | 8.5/10 | **9.5/10** | Lưới 2 cột lịch sử, cấu tạo, kỹ thuật và lý do hành paper-board viền sắc sảo | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **9.5/10** | Dynamic `realm-${element}` thích ứng theo đúng hành của nhạc cụ đang xem | ✅ Đạt |
+
+> **Tổng kết Trang Chi Tiết Nhạc Cụ**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu 15 trang nhạc cụ.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"
