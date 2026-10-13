@@ -15,8 +15,6 @@ import fs from "fs";
 import path from "path";
 import { RegistrationSchema, RegistrationRecord } from "@/lib/registrationSchema";
 
-export const dynamic = "force-dynamic";
-
 // Rate limiting đơn giản trong bộ nhớ: max 5 lần / 10 phút / IP
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 5;
