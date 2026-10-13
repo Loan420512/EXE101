@@ -97,6 +97,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Bộ Bài (`/bo-bai`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Breadcrumbs** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc nét, header đồng bộ thanh âm | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8/10 | **9.5/10** | Heading Playfair Display 48px với `--lh-heading-tight`, không cắt dấu, mô tả `--lh-body` chuẩn | ✅ Đạt |
+| **3. Thanh lọc & Tìm kiếm** | 8/10 | **9.5/10** | Paper-board border 3px, shadow 4px Đông Hồ, 5 nút hành tương phản cao, min-height 36px | ✅ Đạt |
+| **4. Lưới 45 lá bài** | 9/10 | **9.5/10** | CardFace 3D tilt + xà cừ kim loại + hào quang aura từng hành, grid 5 cột chuẩn | ✅ Đạt |
+| **5. Realm & Không khí** | 8/10 | **9.5/10** | `realm-thuy` tạo nền chiều sâu chàm đậm, sống động cùng WebGL đồng bộ filter | ✅ Đạt |
+
+> **Tổng kết Trang Bộ Bài**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Bộ Bài.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"

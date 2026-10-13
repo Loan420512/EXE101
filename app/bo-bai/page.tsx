@@ -83,7 +83,7 @@ export default function BoBaiPage() {
         onOpenCollection={() => setIsCollectionModalOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full realm-thuy">
         {/* NÚT QUAY VỀ TRANG CHỦ */}
         <div className="mb-6">
           <Link
@@ -96,19 +96,25 @@ export default function BoBaiPage() {
 
         {/* TIÊU ĐỀ TRANG */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#A36A00] dark:text-[#F2B632] block mb-2">
             THƯ VIỆN ĐẦY ĐỦ 45 LÁ BÀI
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h1
+            className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8]"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Bộ bài Ngũ Cung
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[#524F59] dark:text-[#A8A6B0]">
+          <p
+            className="mt-3 text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2]"
+            style={{ lineHeight: "var(--lh-body)" }}
+          >
             Mỗi bộ bài gồm 15 nhạc cụ thuộc 5 hành. Mỗi nhạc cụ được in 3 bản sao giống nhau, tạo thành bộ 45 lá tiêu chuẩn cho 2 đến 5 người chơi.
           </p>
         </div>
 
         {/* CÔNG CỤ TÌM KIẾM & BỘ LỌC HÀNH */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-white dark:bg-[#1D1B22] p-4 rounded-[4px] border-[2px] border-[#16141A] dark:border-[#E8EAE0] shadow-[3px_3px_0px_#16141A]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-white dark:bg-[#1E1C23] p-4 rounded-[4px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board">
           {/* Ô TÌM KIẾM */}
           <div className="w-full sm:w-72">
             <input
@@ -116,16 +122,18 @@ export default function BoBaiPage() {
               placeholder="Tìm nhạc cụ, âm điệu (Đàn bầu, Cung...)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs rounded border border-[#16141A] dark:border-[#E8EAE0] bg-[#E8EAE0]/30 dark:bg-stone-800 focus:outline-none focus:ring-1 focus:ring-[#D23A22]"
+              className="w-full px-3 py-2 text-xs rounded border-[2px] border-[#1A1720] dark:border-[#EAE8D8] bg-[#E8EAE0]/40 dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] placeholder-[#534E5C]/70 dark:placeholder-[#A8A4B2]/70 focus:outline-none focus:ring-2 focus:ring-[#CC3520]"
             />
           </div>
 
           {/* CÁC NÚT LỌC HÀNH */}
-          <div className="flex flex-wrap gap-1.5 justify-center">
+          <div className="flex flex-wrap gap-2 justify-center">
             <button
               onClick={() => setFilter("all")}
-              className={`px-3 py-1 rounded text-xs font-bold border border-[#16141A] ${
-                filter === "all" ? "bg-[#16141A] text-white" : "bg-stone-100 dark:bg-stone-800"
+              className={`px-3 py-1.5 rounded-[4px] text-xs font-black border-[2px] border-[#1A1720] dark:border-[#EAE8D8] transition-all min-h-[36px] ${
+                filter === "all"
+                  ? "bg-[#1A1720] text-white shadow-[2px_2px_0px_#CC3520]"
+                  : "bg-stone-100 dark:bg-stone-800 text-[#1A1720] dark:text-[#EAE8D8] hover:bg-stone-200 dark:hover:bg-stone-700"
               }`}
             >
               Tất cả (15)
@@ -137,9 +145,17 @@ export default function BoBaiPage() {
                 <button
                   key={el}
                   onClick={() => setFilter(el)}
-                  style={isSelected ? { backgroundColor: cfg.color, color: el === "kim" || el === "tho" ? "#16141A" : "#FFFFFF" } : {}}
-                  className={`px-3 py-1 rounded text-xs font-bold border border-[#16141A] ${
-                    !isSelected ? "bg-white dark:bg-stone-800 text-[#16141A] dark:text-[#E8EAE0]" : ""
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: cfg.color,
+                          color: el === "kim" || el === "tho" ? "#1A1720" : "#FFFFFF",
+                          boxShadow: "2px 2px 0px #1A1720",
+                        }
+                      : {}
+                  }
+                  className={`px-3 py-1.5 rounded-[4px] text-xs font-black border-[2px] border-[#1A1720] dark:border-[#EAE8D8] transition-all min-h-[36px] ${
+                    !isSelected ? "bg-white dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] hover:bg-stone-100" : ""
                   }`}
                 >
                   {cfg.name} • {cfg.tone}
