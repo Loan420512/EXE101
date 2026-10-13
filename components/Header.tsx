@@ -58,7 +58,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
         {/* LOGO NGŨ CUNG */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-9 h-9 rounded bg-[#D23A22] border-2 border-[#16141A] dark:border-[#E8EAE0] flex items-center justify-center shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] group-hover:scale-105 transition-transform">
-            <span className="font-display font-black text-white text-base"> ngũ</span>
+            <span className="font-display font-black text-white text-base leading-none">ngũ</span>
           </div>
           <div className="flex flex-col">
             <span className="font-display font-black text-lg tracking-tight text-[#16141A] dark:text-[#E8EAE0] leading-none">

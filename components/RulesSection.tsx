@@ -17,7 +17,8 @@ import { RULES_CONTENT } from "@/data/content";
 
 export default function RulesSection() {
   return (
-    <section id="luat-choi" className="py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="luat-choi" className="py-20 realm-kim relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* TIÊU ĐỀ */}
       <div className="text-center max-w-3xl mx-auto mb-12">
         <span className="text-xs font-black tracking-widest uppercase text-[#D23A22] block mb-2">
@@ -118,6 +119,7 @@ export default function RulesSection() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
