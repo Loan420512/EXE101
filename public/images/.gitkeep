@@ -1,0 +1,3 @@
+# Thư mục chứa hình ảnh dự án Ngũ Cung
+# Bạn có thể thả trực tiếp hình ảnh vào thư mục này (`public/images/`)
+# Trong Next.js, bạn có thể gọi ảnh bằng đường dẫn: `/images/<ten-anh.png>`
