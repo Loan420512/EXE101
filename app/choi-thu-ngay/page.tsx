@@ -30,6 +30,9 @@ import {
   CheckCircle2,
   ChevronRight,
   Eye,
+  Globe,
+  Copy,
+  Check,
 } from "lucide-react";
 import {
   GameState,
@@ -68,12 +71,25 @@ const COMBO_LABELS: Record<string, { label: string; desc: string; score: number 
 };
 
 export default function ChoiThuNgayPage() {
-  const [gameMode, setGameMode] = useState<"bot" | "pass">("bot");
+  const [gameMode, setGameMode] = useState<"bot" | "pass" | "online">("bot");
   const [playerCount, setPlayerCount] = useState<number>(2);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
   const [passScreenLocked, setPassScreenLocked] = useState<boolean>(false);
   const [isBotThinking, setIsBotThinking] = useState<boolean>(false);
+
+  // Trạng thái chơi Online Realtime
+  const [onlineRoomCode, setOnlineRoomCode] = useState<string>("");
+  const [onlinePlayerName, setOnlinePlayerName] = useState<string>("Bé An");
+  const [onlineMyPlayerId, setOnlineMyPlayerId] = useState<string | null>(null);
+  const [onlineIsHost, setOnlineIsHost] = useState<boolean>(false);
+  const [onlineRoomPlayers, setOnlineRoomPlayers] = useState<{ id: string; name: string; isHost: boolean }[]>([]);
+  const [onlineStatus, setOnlineStatus] = useState<"disconnected" | "in_lobby" | "playing">("disconnected");
+  const [onlineInputCode, setOnlineInputCode] = useState<string>("");
+  const [onlineCopied, setOnlineCopied] = useState<boolean>(false);
+  const [onlineError, setOnlineError] = useState<string | null>(null);
+  const wsRef = React.useRef<WebSocket | null>(null);
+
   const [, startTransition] = useTransition();
 
   // Khởi tạo GameState
@@ -118,9 +134,72 @@ export default function ChoiThuNgayPage() {
   const currentBreakOptions = getBreakSoundOptions(game);
   const canPickMarket = activePlayer.hand.length < HAND_LIMIT && game.market.length > 0;
 
+  // Kết nối và quản lý phòng trực tuyến qua WebSocket
+  const connectOnlineRoom = (action: "create" | "join", code?: string) => {
+    setOnlineError(null);
+    try {
+      const host = typeof window !== "undefined" ? window.location.hostname || "localhost" : "localhost";
+      const ws = new WebSocket(`ws://${host}:4000`);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        if (action === "create") {
+          ws.send(JSON.stringify({ type: "CREATE_ROOM", name: onlinePlayerName || "Chủ phòng" }));
+        } else {
+          ws.send(
+            JSON.stringify({
+              type: "JOIN_ROOM",
+              roomCode: (code || onlineInputCode).trim().toUpperCase(),
+              name: onlinePlayerName || "Khách mời",
+            })
+          );
+        }
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === "ROOM_CREATED") {
+            setOnlineRoomCode(msg.roomCode);
+            setOnlineMyPlayerId(msg.playerId);
+            setOnlineIsHost(true);
+            setOnlineStatus("in_lobby");
+            setOnlineRoomPlayers(msg.players || []);
+          } else if (msg.type === "ROOM_JOINED") {
+            setOnlineRoomCode(msg.roomCode);
+            setOnlineMyPlayerId(msg.playerId);
+            setOnlineIsHost(false);
+            setOnlineStatus("in_lobby");
+          } else if (msg.type === "ROOM_PLAYERS_UPDATE") {
+            setOnlineRoomPlayers(msg.players || []);
+          } else if (msg.type === "GAME_STATE_UPDATE") {
+            setGame(msg.game);
+            setOnlineStatus("playing");
+          } else if (msg.type === "ERROR") {
+            setOnlineError(msg.message);
+          }
+        } catch (e) {
+          console.error("WS Parse Error:", e);
+        }
+      };
+
+      ws.onerror = () => {
+        setOnlineError("Máy chủ phòng chơi (ws://localhost:4000) chưa kết nối được. Vui lòng thử lại!");
+      };
+    } catch {
+      setOnlineError("Lỗi kết nối WebSocket trực tuyến.");
+    }
+  };
+
+  const startOnlineGame = () => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "START_GAME" }));
+    }
+  };
+
   // Xử lý tự động khi đến lượt Bot
   useEffect(() => {
-    if (game.over) return;
+    if (game.over || gameMode === "online") return;
     const current = game.players[game.currentPlayerIndex];
     if (current && current.isBot && !isBotThinking) {
       setIsBotThinking(true);
@@ -143,7 +222,7 @@ export default function ChoiThuNgayPage() {
 
       return () => clearTimeout(timer);
     }
-  }, [game, isBotThinking, isMuted]);
+  }, [game, isBotThinking, isMuted, gameMode]);
 
   // Hành động Người chơi: Nhặt lá từ Chợ Nhạc
   const handlePickMarket = (index: number) => {
@@ -152,6 +231,12 @@ export default function ChoiThuNgayPage() {
       const card = game.market[index];
       if (card && !isMuted) {
         soundEngine.playElementTone(card.element);
+      }
+      if (gameMode === "online") {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify({ type: "ACTION_PICK_MARKET", marketIndex: index }));
+        }
+        return;
       }
       const nextGame = pickFromMarket(game, index);
       setGame(nextGame);
@@ -168,6 +253,12 @@ export default function ChoiThuNgayPage() {
       if (!isMuted && combo.cards[0]) {
         soundEngine.playElementTone(combo.cards[0].element);
       }
+      if (gameMode === "online") {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify({ type: "ACTION_PRESENT_COMBO", combo }));
+        }
+        return;
+      }
       const nextGame = presentCombo(game, combo, 0);
       setGame(nextGame);
       checkPassScreen(nextGame);
@@ -182,6 +273,12 @@ export default function ChoiThuNgayPage() {
     try {
       if (!isMuted) {
         soundEngine.playElementTone("kim");
+      }
+      if (gameMode === "online") {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify({ type: "ACTION_BREAK_SOUND", target: opt }));
+        }
+        return;
       }
       const nextGame = breakSound(game, opt);
       setGame(nextGame);
@@ -249,23 +346,38 @@ export default function ChoiThuNgayPage() {
                 <Users className="w-4 h-4" />
                 Chuyền máy
               </button>
+              <button
+                onClick={() => {
+                  setGameMode("online");
+                }}
+                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 min-h-[44px] ${
+                  gameMode === "online"
+                    ? "bg-[#1A1A1A] text-white shadow-sm"
+                    : "text-stone-700 hover:text-black"
+                }`}
+              >
+                <Globe className="w-4 h-4" />
+                Phòng Online
+              </button>
             </div>
 
-            {/* Số người chơi */}
-            <select
-              value={playerCount}
-              onChange={(e) => {
-                const count = Number(e.target.value);
-                setPlayerCount(count);
-                handleRestart(gameMode, count);
-              }}
-              className="bg-white border-[2px] border-[#1A1A1A] px-3 py-2 rounded-xl text-xs sm:text-sm font-bold min-h-[44px] shadow-[2px_2px_0px_#1A1A1A]"
-            >
-              <option value={2}>2 Người chơi</option>
-              <option value={3}>3 Người chơi</option>
-              <option value={4}>4 Người chơi</option>
-              <option value={5}>5 Người chơi</option>
-            </select>
+            {/* Số người chơi (chỉ cho Bot và Chuyền máy) */}
+            {gameMode !== "online" && (
+              <select
+                value={playerCount}
+                onChange={(e) => {
+                  const count = Number(e.target.value);
+                  setPlayerCount(count);
+                  handleRestart(gameMode, count);
+                }}
+                className="bg-white border-[2px] border-[#1A1A1A] px-3 py-2 rounded-xl text-xs sm:text-sm font-bold min-h-[44px] shadow-[2px_2px_0px_#1A1A1A]"
+              >
+                <option value={2}>2 Người chơi</option>
+                <option value={3}>3 Người chơi</option>
+                <option value={4}>4 Người chơi</option>
+                <option value={5}>5 Người chơi</option>
+              </select>
+            )}
 
             {/* Nút Âm thanh */}
             <button
@@ -295,6 +407,155 @@ export default function ChoiThuNgayPage() {
             </button>
           </div>
         </header>
+
+        {/* GIAO DIỆN PHÒNG CHỜ ONLINE REALTIME */}
+        {gameMode === "online" && onlineStatus !== "playing" && (
+          <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] space-y-5 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
+              <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5 text-[#D23A22]" />
+                <h2 className="text-xl font-black text-[#1A1A1A]">
+                  Phòng Chơi Trực Tuyến Thời Gian Thực (WebSocket)
+                </h2>
+              </div>
+              <span className="text-xs font-bold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">
+                Cổng 4000 Hoạt động
+              </span>
+            </div>
+
+            {onlineError && (
+              <div className="p-3 bg-red-50 border-2 border-red-500 rounded-xl text-red-800 text-xs font-bold">
+                ⚠️ {onlineError}
+              </div>
+            )}
+
+            {onlineStatus === "disconnected" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* TÊN NGƯỜI CHƠI */}
+                <div className="space-y-4 md:col-span-2">
+                  <label className="block text-xs font-black text-[#1A1A1A] uppercase tracking-wider">
+                    Tên hiển thị của bạn
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={15}
+                    value={onlinePlayerName}
+                    onChange={(e) => setOnlinePlayerName(e.target.value)}
+                    placeholder="Ví dụ: Bé An, Bạn Nam..."
+                    className="w-full max-w-sm px-4 py-2.5 bg-white border-2 border-[#1A1A1A] rounded-xl font-bold text-sm min-h-[44px]"
+                  />
+                </div>
+
+                {/* TẠO PHÒNG MỚI */}
+                <div className="p-5 border-2 border-[#1A1A1A] rounded-xl bg-amber-50/70 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h3 className="font-black text-base text-[#1A1A1A]">Tạo phòng chơi mới</h3>
+                    <p className="text-xs text-stone-600 font-medium">
+                      Hệ thống sẽ cấp mã 4 ký tự ngắn gọn để bạn gửi cho bạn bè hoặc người thân vào chơi.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => connectOnlineRoom("create")}
+                    className="w-full py-3 bg-[#D23A22] hover:bg-red-700 text-white font-black text-sm rounded-xl border-2 border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] min-h-[44px]"
+                  >
+                    Tạo phòng ngay
+                  </button>
+                </div>
+
+                {/* VÀO PHÒNG CÓ SẴN */}
+                <div className="p-5 border-2 border-[#1A1A1A] rounded-xl bg-blue-50/70 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <h3 className="font-black text-base text-[#1A1A1A]">Vào phòng qua mã</h3>
+                    <p className="text-xs text-stone-600 font-medium">
+                      Nhập mã phòng 4 ký tự do bạn bè hoặc chủ phòng cung cấp.
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      maxLength={4}
+                      value={onlineInputCode}
+                      onChange={(e) => setOnlineInputCode(e.target.value.toUpperCase())}
+                      placeholder="Mã 4 chữ"
+                      className="flex-1 px-3 py-2 bg-white border-2 border-[#1A1A1A] rounded-xl font-mono text-center font-black tracking-widest text-base uppercase min-h-[44px]"
+                    />
+                    <button
+                      disabled={onlineInputCode.trim().length !== 4}
+                      onClick={() => connectOnlineRoom("join")}
+                      className="px-5 py-2 bg-[#1A1A1A] hover:bg-stone-800 disabled:opacity-50 text-white font-black text-xs rounded-xl min-h-[44px]"
+                    >
+                      Vào phòng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* ĐANG Ở TRONG SẢNH CHỜ (LOBBY) */
+              <div className="space-y-6 text-center max-w-lg mx-auto py-4">
+                <div className="space-y-2">
+                  <span className="text-xs font-black uppercase tracking-widest text-stone-500">
+                    Mã phòng của bạn
+                  </span>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="text-4xl font-mono font-black tracking-widest px-6 py-2 bg-amber-100 border-[3px] border-[#1A1A1A] rounded-2xl shadow-[4px_4px_0px_#1A1A1A]">
+                      {onlineRoomCode}
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(onlineRoomCode);
+                        setOnlineCopied(true);
+                        setTimeout(() => setOnlineCopied(false), 2000);
+                      }}
+                      className="p-3 bg-white border-2 border-[#1A1A1A] rounded-xl hover:bg-stone-50 min-h-[44px] min-w-[44px] shadow-[2px_2px_0px_#1A1A1A]"
+                      title="Sao chép mã phòng"
+                    >
+                      {onlineCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5 text-stone-700" />}
+                    </button>
+                  </div>
+                  <p className="text-xs text-stone-600 font-medium">
+                    Hãy chia sẻ mã này cho người khác để cùng tham gia!
+                  </p>
+                </div>
+
+                {/* DANH SÁCH NGƯỜI CHƠI TRONG PHÒNG */}
+                <div className="space-y-2 text-left bg-stone-50 p-4 rounded-xl border-2 border-[#1A1A1A]">
+                  <h4 className="text-xs font-black uppercase text-stone-500">
+                    Người chơi đã vào phòng ({onlineRoomPlayers.length} người)
+                  </h4>
+                  <div className="divide-y divide-stone-200">
+                    {onlineRoomPlayers.map((p) => (
+                      <div key={p.id} className="py-2 flex items-center justify-between text-xs font-bold">
+                        <span className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                          {p.name} {p.id === onlineMyPlayerId && <span className="text-stone-400">(Bạn)</span>}
+                        </span>
+                        {p.isHost && (
+                          <span className="px-2 py-0.5 bg-[#D23A22] text-white text-[10px] rounded font-black">
+                            Chủ phòng
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* NÚT BẮT ĐẦU */}
+                {onlineIsHost ? (
+                  <button
+                    onClick={startOnlineGame}
+                    className="w-full py-3.5 bg-[#D23A22] hover:bg-red-700 text-white font-black text-sm rounded-xl border-[2px] border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A] min-h-[48px]"
+                  >
+                    Bắt đầu trận đấu (Tự động thêm Bot nếu thiếu)
+                  </button>
+                ) : (
+                  <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs font-bold text-amber-900 animate-pulse">
+                    Đang đợi chủ phòng nhấn Bắt đầu ván...
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+        )}
 
         {/* BẢNG ĐIỂM NGƯỜI CHƠI */}
         <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">

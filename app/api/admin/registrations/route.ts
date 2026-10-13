@@ -10,8 +10,6 @@ import fs from "fs";
 import path from "path";
 import { RegistrationRecord } from "@/lib/registrationSchema";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
   try {
     const filePath = path.join(process.cwd(), "storage", "registrations", "registrations.json");
