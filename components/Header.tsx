@@ -35,14 +35,13 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
   };
 
   const navLinks = [
-    { label: "Giới thiệu", href: "#hero" },
-    { label: "Câu chuyện", href: "#cau-chuyen" },
-    { label: "Chơi 30 giây", href: "#choi-30s" },
-    { label: "Bộ bài", href: "#bo-bai" },
-    { label: "Ngũ hành", href: "#ngu-hanh" },
-    { label: "Luật chơi", href: "#luat-choi" },
-    { label: "Đăng ký", href: "#dang-ky" },
-    { label: "Đội ngũ", href: "#doi-ngu" },
+    { label: "Giới thiệu", href: "/#hero" },
+    { label: "Bộ bài", href: "/bo-bai" },
+    { label: "Ngũ hành", href: "/ngu-hanh" },
+    { label: "Luật chơi", href: "/luat-choi" },
+    { label: "Sân chơi ngũ âm", href: "/san-choi-ngu-am" },
+    { label: "Quiz", href: "/quiz" },
+    { label: "Đăng ký", href: "/#dang-ky" },
   ];
 
   return (
