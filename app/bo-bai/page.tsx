@@ -16,6 +16,8 @@ import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
+import PackOpeningModal from "@/components/PackOpening/PackOpeningModal";
+import CollectionModal from "@/components/Collection/CollectionModal";
 import { INSTRUMENTS, Instrument, ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";
@@ -23,6 +25,8 @@ import { soundEngine } from "@/lib/audio";
 export default function BoBaiPage() {
   const [filter, setFilter] = useState<ElementType | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isPackModalOpen, setIsPackModalOpen] = useState(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [activeModalInstrument, setActiveModalInstrument] = useState<Instrument | null>(null);
   const [modalOriginRect, setModalOriginRect] = useState<EffectTargetRect | null>(null);
   const [animatingCardId, setAnimatingCardId] = useState<string | null>(null);
@@ -74,7 +78,10 @@ export default function BoBaiPage() {
       {/* NỀN SỐNG WEBGL ĐỒNG BỘ VỚI BỘ LỌC HÀNH */}
       <LivingBackground forceAtmosphere={filter === "all" ? "mix" : filter} />
 
-      <Header />
+      <Header
+        onOpenPack={() => setIsPackModalOpen(true)}
+        onOpenCollection={() => setIsCollectionModalOpen(true)}
+      />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         {/* NÚT QUAY VỀ TRANG CHỦ */}
@@ -182,9 +189,27 @@ export default function BoBaiPage() {
 
       <TeamFaqFooter />
 
+      {/* HIỆU ỨNG BIẾN ẢO CANVAS */}
       <EffectCanvas
         activeEffect={activeEffect}
         onComplete={handleEffectComplete}
+      />
+
+      {/* MODAL MỞ GÓI BÀI 5 LÁ */}
+      <PackOpeningModal
+        isOpen={isPackModalOpen}
+        onClose={() => setIsPackModalOpen(false)}
+        onCardsUnlocked={() => {}}
+      />
+
+      {/* MODAL BỘ SƯU TẬP */}
+      <CollectionModal
+        isOpen={isCollectionModalOpen}
+        onClose={() => setIsCollectionModalOpen(false)}
+        onOpenPackClick={() => {
+          setIsCollectionModalOpen(false);
+          setIsPackModalOpen(true);
+        }}
       />
     </div>
   );

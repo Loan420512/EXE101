@@ -16,7 +16,12 @@ import Link from "next/link";
 import { soundEngine } from "@/lib/audio";
 import { SITE_METADATA } from "@/data/content";
 
-export default function Header() {
+interface HeaderProps {
+  onOpenPack?: () => void;
+  onOpenCollection?: () => void;
+}
+
+export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {}) {
   const [isMuted, setIsMuted] = useState(() => soundEngine.getIsMuted());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -33,11 +38,11 @@ export default function Header() {
     { label: "Giới thiệu", href: "#hero" },
     { label: "Câu chuyện", href: "#cau-chuyen" },
     { label: "Chơi 30 giây", href: "#choi-30s" },
-    { label: "Bộ bài 15 nhạc cụ", href: "#bo-bai" },
+    { label: "Bộ bài", href: "#bo-bai" },
     { label: "Ngũ hành", href: "#ngu-hanh" },
     { label: "Luật chơi", href: "#luat-choi" },
     { label: "Đăng ký", href: "#dang-ky" },
-    { label: "Đội ngũ & FAQ", href: "#doi-ngu" },
+    { label: "Đội ngũ", href: "#doi-ngu" },
   ];
 
   return (
@@ -110,6 +115,30 @@ export default function Header() {
               </>
             )}
           </button>
+
+          {/* NÚT MỞ GÓI BÀI */}
+          {onOpenPack && (
+            <button
+              onClick={onOpenPack}
+              className="px-2.5 py-1.5 rounded-[4px] bg-[#F2B632] text-[#16141A] border-[2px] border-[#16141A] dark:border-[#E8EAE0] text-xs font-black shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1"
+              title="Mở gói 5 lá bài ngẫu nhiên"
+            >
+              <span>🎁</span>
+              <span className="hidden md:inline">Mở gói</span>
+            </button>
+          )}
+
+          {/* NÚT BỘ SƯU TẬP */}
+          {onOpenCollection && (
+            <button
+              onClick={onOpenCollection}
+              className="px-2.5 py-1.5 rounded-[4px] bg-white dark:bg-stone-800 text-[#16141A] dark:text-[#E8EAE0] border-[2px] border-[#16141A] dark:border-[#E8EAE0] text-xs font-bold shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1"
+              title="Xem bộ sưu tập và huy hiệu"
+            >
+              <span>🎴</span>
+              <span className="hidden md:inline">Bộ sưu tập</span>
+            </button>
+          )}
 
           {/* NÚT THỬ NGAY */}
           <a
