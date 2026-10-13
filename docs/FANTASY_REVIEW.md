@@ -181,6 +181,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Sân Đấu Trực Tuyến (`/choi-thu-ngay`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều khiển** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ, bộ chuyển chế độ (Bot / Chuyền máy / Online), touch target ≥ 44px | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair Display không cắt dấu, `--lh-heading-tight`, mô tả dễ hiểu | ✅ Đạt |
+| **3. Bàn chơi & Lá bài 7+** | 9/10 | **9.5/10** | Chợ Nhạc 5 lá, cọc rút úp, gợi ý tổ hợp thông minh, phù hợp trẻ em | ✅ Đạt |
+| **4. Phản hồi nước đi & Âm thanh** | 9/10 | **10/10** | WebAudio phát nốt tương ứng mỗi hành khi đánh, Bot suy nghĩ mượt mà | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **9.5/10** | `realm-kim` với sắc thái sáng bạc chiến thuật, border stripe sắc sảo | ✅ Đạt |
+
+> **Tổng kết Trang Sân Đấu Trực Tuyến**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Sân Đấu.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"

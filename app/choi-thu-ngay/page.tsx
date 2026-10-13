@@ -296,20 +296,33 @@ export default function ChoiThuNgayPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A] py-8 px-4 sm:px-6 select-none font-sans">
+    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] py-8 px-4 sm:px-6 select-none font-sans realm-kim">
       <div className="max-w-6xl mx-auto space-y-6">
+        {/* NÚT QUAY LẠI TRANG CHỦ */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
+          >
+            ← Quay lại Trang chủ Ngũ Cung
+          </Link>
+        </div>
+
         {/* HEADER ĐIỀU KHIỂN CHÍNH */}
-        <header className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-4 sm:p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] flex flex-wrap items-center justify-between gap-4">
+        <header className="bg-[#FFFDF9] dark:bg-[#1E1C23] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] p-4 sm:p-6 rounded-2xl shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-[#D23A22] text-white text-xs font-bold uppercase tracking-widest rounded-full border-2 border-[#1A1A1A]">
+              <span className="px-3 py-1 bg-[#CC3520] text-white text-xs font-black uppercase tracking-widest rounded-full border-2 border-[#1A1720]">
                 Bàn Chơi 7+
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#1A1A1A]">
+              <h1
+                className="font-display font-black text-2xl sm:text-3xl text-[#1A1720] dark:text-[#EAE8D8]"
+                style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+              >
                 Sân Đấu Ngũ Cung
               </h1>
             </div>
-            <p className="text-sm text-stone-600 font-medium">
+            <p className="text-sm text-[#534E5C] dark:text-[#A8A4B2] font-medium" style={{ lineHeight: "var(--lh-body)" }}>
               Thu thập 5 hành • Trình tấu tổ hợp âm vang • Chạm mốc 15 điểm để chiến thắng
             </p>
           </div>
@@ -317,7 +330,7 @@ export default function ChoiThuNgayPage() {
           {/* CÁC NÚT ĐIỀU KHIỂN NHANH */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {/* Chế độ chơi */}
-            <div className="flex rounded-xl border-[2px] border-[#1A1A1A] bg-stone-100 p-1">
+            <div className="flex rounded-xl border-[2px] border-[#1A1720] dark:border-[#EAE8D8] bg-stone-100 dark:bg-stone-800 p-1">
               <button
                 onClick={() => {
                   setGameMode("bot");
@@ -325,8 +338,8 @@ export default function ChoiThuNgayPage() {
                 }}
                 className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 min-h-[44px] ${
                   gameMode === "bot"
-                    ? "bg-[#1A1A1A] text-white shadow-sm"
-                    : "text-stone-700 hover:text-black"
+                    ? "bg-[#1A1720] text-white shadow-sm"
+                    : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
                 }`}
               >
                 <Bot className="w-4 h-4" />
