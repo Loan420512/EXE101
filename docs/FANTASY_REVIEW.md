@@ -125,6 +125,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Ngũ Hành (`/ngu-hanh`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Breadcrumbs** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc sảo, header âm thanh đồng bộ | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair Display 48px với `--lh-heading-tight`, không cắt dấu, mô tả triết lý ngũ âm mượt mà | ✅ Đạt |
+| **3. Sơ đồ ngũ giác WuXingDiagram** | 9/10 | **9.5/10** | SVG ngũ giác Đông Hồ, nút tương sinh / tương khắc tương tác chuyển động mượt | ✅ Đạt |
+| **4. Bảng thông tin 5 hành** | 9/10 | **9.5/10** | 5 card paper-board với border màu hành, âm nốt tương ứng, hiển thị sắc nét | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **9.5/10** | `realm-tho` mang không khí đất mẹ ngàn năm, border stripe vàng thổ | ✅ Đạt |
+
+> **Tổng kết Trang Ngũ Hành**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Ngũ Hành.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"

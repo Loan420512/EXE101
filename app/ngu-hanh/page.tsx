@@ -29,26 +29,32 @@ export default function NguHanhPage() {
 
       <Header />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-tho">
         {/* NÚT QUAY LẠI */}
         <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D23A22] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
           >
-            ← Quay lại Trang chủ
+            ← Quay lại Trang chủ Ngũ Cung
           </Link>
         </div>
 
         {/* GIỚI THIỆU CHUYÊN ĐỀ */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#A36A00] dark:text-[#F2B632] block mb-2">
             TRIẾT LÝ ÂM HỌC Á ĐÔNG
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-5xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h1
+            className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8]"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Ngũ Âm & Ngũ Hành
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-[#524F59] dark:text-[#A8A6B0]">
+          <p
+            className="mt-3 text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2]"
+            style={{ lineHeight: "var(--lh-body)" }}
+          >
             Trời đất có ngũ hành, con người có ngũ tạng, âm nhạc có ngũ thanh. Mỗi cung bậc mang một tính cách, một sắc thái và vận hành theo quy luật sinh khắc ngàn đời.
           </p>
         </div>
