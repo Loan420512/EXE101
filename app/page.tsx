@@ -18,7 +18,7 @@
  * ==============================================================================
  */
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Story from "@/components/Story";
@@ -30,15 +30,42 @@ import RegisterForm from "@/components/RegisterForm";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
 import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
+import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import { ElementType } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
+import { SectionId, SECTION_IDS } from "@/config/sections";
 
 export default function Home() {
+  const [currentSection, setCurrentSection] = useState<SectionId>("hero");
   const [activeEffect, setActiveEffect] = useState<{
     element: ElementType;
     cardRect: EffectTargetRect;
     onFinish: () => void;
   } | null>(null);
+
+  // Theo dõi section đang cuộn qua để đổi bầu không khí nền sống
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.id) {
+            const id = entry.target.id as SectionId;
+            if (SECTION_IDS.includes(id)) {
+              setCurrentSection(id);
+            }
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Kích hoạt hiệu ứng canvas khi bấm bất kỳ lá bài nào
   const handleTriggerEffect = useCallback(
@@ -69,6 +96,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
+      {/* 0. NỀN SỐNG WEBGL NGŨ HÀNH & GIẤY ĐIỆP */}
+      <LivingBackground currentSection={currentSection} />
+
       {/* 1. THANH TRÊN CÙNG & HEADER */}
       <Header />
 
