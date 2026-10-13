@@ -1,69 +1,128 @@
-import Image from "next/image";
+"use client";
+
+/**
+ * ==============================================================================
+ * FILE: app/page.tsx
+ * MỤC ĐÍCH: Trang chủ hoàn chỉnh bản xem trước web game "Ngũ Cung".
+ * CẤU TRÚC:
+ * 1. Header (Thanh demo draft + Điều hướng + Bật/Tắt âm thanh)
+ * 2. Hero (Tiêu đề + Quạt 5 lá bài ngũ hành tương tác hiệu ứng biến ảo)
+ * 3. Câu chuyện ("Văn hóa vẫn còn đó. Chỉ thiếu một cách để chạm vào." + Bảng so sánh 4 dòng)
+ * 4. Chơi trong 30 giây (Minh họa bàn cờ 4 bước tự chuyển)
+ * 5. Bộ bài (Lưới 15 nhạc cụ + Lọc 5 họ + Modal chi tiết + Nghe thử âm)
+ * 6. Ngũ âm, ngũ hành (Sơ đồ ngũ giác tương tác SVG + Tương sinh / Tương khắc)
+ * 7. Luật chơi rút gọn (Chuẩn bị + 3 hành động + Bảng điểm + Điều kiện thắng)
+ * 8. Đăng ký chơi thử (Form mô phỏng + Lưu ý dưới 18 tuổi)
+ * 9. Đội ngũ Team 35 + Giảng viên + 5 câu hỏi FAQ + Chân trang
+ * 10. Canvas hiệu ứng toàn màn hình (Thủy, Hỏa, Mộc, Kim, Thổ)
+ * ==============================================================================
+ */
+
+import React, { useState, useCallback } from "react";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import Story from "@/components/Story";
+import GameGuide30s from "@/components/GameGuide30s";
+import CardDeck from "@/components/CardDeck";
+import WuXingDiagram from "@/components/WuXingDiagram";
+import RulesSection from "@/components/RulesSection";
+import RegisterForm from "@/components/RegisterForm";
+import TeamFaqFooter from "@/components/TeamFaqFooter";
+import ColorRibbon from "@/components/ColorRibbon";
+import EffectCanvas from "@/components/EffectCanvas";
+import { ElementType } from "@/data/instruments";
+import { EffectTargetRect } from "@/effects/types";
 
 export default function Home() {
+  const [activeEffect, setActiveEffect] = useState<{
+    element: ElementType;
+    cardRect: EffectTargetRect;
+    onFinish: () => void;
+  } | null>(null);
+
+  // Kích hoạt hiệu ứng canvas khi bấm bất kỳ lá bài nào
+  const handleTriggerEffect = useCallback(
+    (
+      element: ElementType,
+      cardRect: EffectTargetRect,
+      onFinish: () => void
+    ) => {
+      // Khóa không cho bấm chồng khi hiệu ứng đang chạy
+      if (activeEffect) return;
+
+      setActiveEffect({
+        element,
+        cardRect,
+        onFinish,
+      });
+    },
+    [activeEffect]
+  );
+
+  // Khi canvas chạy hết thời gian (~0.8s)
+  const handleEffectComplete = useCallback(() => {
+    if (activeEffect) {
+      activeEffect.onFinish();
+      setActiveEffect(null);
+    }
+  }, [activeEffect]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
+      {/* 1. THANH TRÊN CÙNG & HEADER */}
+      <Header />
+
+      <main className="flex-1 flex flex-col">
+        {/* 2. HERO: TIÊU ĐỀ & QUẠT 5 LÁ BÀI */}
+        <Hero
+          onTriggerEffect={handleTriggerEffect}
+          isEffectRunning={!!activeEffect}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        <ColorRibbon />
+
+        {/* 3. CÂU CHUYỆN SẢN PHẨM & BẢNG SO SÁNH 4 DÒNG */}
+        <Story />
+
+        <ColorRibbon />
+
+        {/* 4. CHƠI TRONG 30 GIÂY */}
+        <GameGuide30s />
+
+        <ColorRibbon />
+
+        {/* 5. BỘ BÀI 15 NHẠC CỤ & MODAL CHI TIẾT */}
+        <CardDeck
+          onTriggerEffect={handleTriggerEffect}
+          isEffectRunning={!!activeEffect}
+        />
+
+        <ColorRibbon />
+
+        {/* 6. NGŨ ÂM & NGŨ HÀNH (SƠ ĐỒ TƯƠNG TÁC) */}
+        <WuXingDiagram />
+
+        <ColorRibbon />
+
+        {/* 7. LUẬT CHƠI RÚT GỌN */}
+        <RulesSection />
+
+        <ColorRibbon />
+
+        {/* 8. ĐĂNG KÝ CHƠI THỬ (MÔ PHỎNG) */}
+        <RegisterForm />
+
+        <ColorRibbon />
+
+        {/* 9. ĐỘI NGŨ TEAM 35, FAQ & FOOTER */}
+        <TeamFaqFooter />
       </main>
+
+      {/* 10. HIỆU ỨNG BIẾN ẢO CANVAS PHỦ TOÀN MÀN HÌNH (~0.8S) */}
+      <EffectCanvas
+        activeEffect={activeEffect}
+        onComplete={handleEffectComplete}
+      />
     </div>
   );
 }
