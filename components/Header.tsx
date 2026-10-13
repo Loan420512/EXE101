@@ -11,18 +11,14 @@
  * ==============================================================================
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { soundEngine } from "@/lib/audio";
 import { SITE_METADATA } from "@/data/content";
 
 export default function Header() {
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(() => soundEngine.getIsMuted());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMuted(soundEngine.getIsMuted());
-  }, []);
 
   const handleToggleSound = () => {
     const nextMuted = soundEngine.toggleMute();

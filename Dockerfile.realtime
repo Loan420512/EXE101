@@ -1,0 +1,12 @@
+# ==============================================================================
+# DOCKERFILE CHO DỊCH VỤ REALTIME WEBSOCKET (NGŨ CUNG)
+# ==============================================================================
+
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci --legacy-peer-deps --omit=dev
+COPY . .
+ENV PORT=4000
+EXPOSE 4000
+CMD ["node", "server/realtime.js"]

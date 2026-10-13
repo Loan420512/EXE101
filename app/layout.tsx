@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -16,12 +16,16 @@ const playfairDisplay = Playfair_Display({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Ngũ Cung (Five Tones) — Board Game Âm Nhạc Truyền Thống Việt Nam",
   description: "Card game giáo dục dựa trên ngũ âm và ngũ hành Việt Nam. Bộ bài 15 nhạc cụ, 45 lá bài mang hồn dân tộc vào trải nghiệm tương tác hiện đại.",
   keywords: ["Ngũ Cung", "board game Việt Nam", "nhạc cụ dân tộc", "ngũ âm", "ngũ hành", "Đông Hồ", "game giáo dục"],
   authors: [{ name: "Team 35" }],
-  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({

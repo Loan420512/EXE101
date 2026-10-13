@@ -1,0 +1,24 @@
+[
+  {
+    "id": "reg-demo-1",
+    "name": "Phụ huynh Minh An",
+    "email": "parent.minhan@example.com",
+    "childNickname": "Bé Bo",
+    "ageGroup": "7-12",
+    "parentConsent": true,
+    "timeSlot": "Cuối tuần - Buổi sáng (09:00 - 10:30)",
+    "confirmed": true,
+    "createdAt": "2026-10-13T09:34:13.972Z"
+  },
+  {
+    "id": "reg-demo-2",
+    "name": "Nguyễn Hải Đăng",
+    "email": "haidang.music@example.com",
+    "childNickname": "Đăng",
+    "ageGroup": "13-17",
+    "parentConsent": true,
+    "timeSlot": "Cuối tuần - Buổi chiều (14:30 - 16:00)",
+    "confirmed": true,
+    "createdAt": "2026-10-13T09:34:13.973Z"
+  }
+]

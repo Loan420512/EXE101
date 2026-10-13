@@ -14,7 +14,7 @@
 
 import React, { useState } from "react";
 import CardFace from "./CardFace";
-import { ElementType, ELEMENT_CONFIG } from "@/data/instruments";
+import { ElementType } from "@/data/instruments";
 import { HERO_CONTENT, WUXING_DATA } from "@/data/content";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";

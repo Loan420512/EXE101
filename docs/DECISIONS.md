@@ -1,0 +1,47 @@
+# NHẬT KÝ QUYẾT ĐỊNH KIẾN TRÚC & THIẾT KẾ (DECISIONS.MD)
+
+Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy tắc thiết kế và cơ chế giải quyết điểm mơ hồ trong dự án Web App "Ngũ Cung".
+
+---
+
+## 1. Đối tượng mục tiêu: Độ tuổi 7+
+
+- **Vấn đề**: Tài liệu dự thảo ban đầu đề cập độ tuổi 13+, nhưng nhóm đã thống nhất điều chỉnh độ tuổi mục tiêu thành 7+ (trẻ em từ 7 tuổi, học sinh tiểu học, gia đình).
+- **Quyết định**:
+  1. Cập nhật biến cấu hình tập trung trong `data/content.ts` thành `7+`.
+  2. **Ngôn ngữ & Giao diện**: Dùng câu ngắn gọn, trong sáng; các thuật ngữ âm nhạc cổ truyền (Cung, Thương, Giốc, Chủy, Vũ, tương sinh, tương khắc) đều có chú thích ngữ nghĩa trực quan hoặc tooltip hình ảnh. Kích thước nút bấm tối thiểu 44px, chữ lớn dễ đọc.
+  3. **Luật chơi cho bé**: Bên cạnh luật chuẩn đầy đủ, bổ sung tab "Giải thích cho bé" với hình ảnh trực quan, 4 bước ngắn gọn.
+  4. **Bảo vệ trẻ em trực tuyến**:
+     - Tuyệt đối không tích hợp ô chat văn bản tự do giữa người chơi, không nội dung bên thứ 3, không quảng cáo.
+     - Chế độ chơi trực tuyến: Tên hiển thị người chơi được chọn từ danh sách nhạc cụ/con vật dân gian hoặc nhập chuỗi ngắn (tối đa 12 ký tự) có bộ lọc từ ngữ. Mã phòng 4 ký tự ngắn gọn, dễ đọc.
+     - Đăng ký chơi thử: Trẻ dưới 13 tuổi không được tự điền email. Biểu mẫu có câu cảnh báo rõ ràng: "Phụ huynh điền thay bé" và yêu cầu email của người lớn kèm ô cam kết đồng thuận của cha mẹ/người giám hộ.
+  5. **An toàn giác quan**: Mọi hiệu ứng ánh sáng không nhấp nháy tần số cao (>3Hz), không gây giật mình. Âm thanh WebAudio mặc định tắt (Muted), khi mở có âm lượng mặc định nhỏ nhẹ, êm tai.
+
+---
+
+## 2. Làm rõ các điểm mơ hồ trong Luật chơi (Pure TypeScript Engine)
+
+- **Vấn đề**: Bản tóm tắt luật chơi để lại một số câu hỏi về thứ tự và hành vi biên.
+- **Quyết định**:
+  1. **Hành động Phá âm**:
+     - Người chơi bỏ 1 lá thuộc họ X.
+     - *Điều kiện hợp lệ*: Nước đi này CHỈ hợp lệ khi có ít nhất một đối thủ đang nắm giữ lá thuộc họ Y (trong đó X khắc Y: Mộc khắc Thổ, Thổ khắc Thủy, Thủy khắc Hỏa, Hỏa khắc Kim, Kim khắc Mộc). Nếu không ai có lá bị khắc, người chơi không thể chọn Phá âm.
+     - *Chọn mục tiêu*: Nếu có nhiều đối thủ cùng giữ lá họ Y, người đánh được quyền chỉ định đối thủ bị ảnh hưởng. Đối thủ bị chỉ định sẽ tự chọn lá họ Y trên tay mình để bỏ vào cọc bỏ.
+  2. **Liên hoàn theo chiều Tương sinh (Directed Sequence)**:
+     - Khẳng định tính có hướng một chiều: Mộc -> Hỏa -> Thổ -> Kim -> Thủy -> Mộc.
+     - Ví dụ: Cặp (Mộc, Hỏa) hợp lệ; nhưng cặp (Hỏa, Mộc) là nghịch chiều, không được tính Liên hoàn.
+     - Phần thưởng Liên hoàn: Ghi 2 điểm VÀ được chọn lấy thêm 1 lá từ Chợ Nhạc (sau đó bù cọc rút vào Chợ).
+  3. **Kết thúc ván & Xử lý cọc bài**:
+     - Khi người chơi đạt từ 15 điểm: Kích hoạt vòng cuối cùng để các người chơi còn lại hoàn thành đủ số lượt trong vòng đó, đảm bảo công bằng lượt đi.
+     - Tiebreak (Hòa điểm): Ưu tiên người tạo được nhiều bộ "Hợp tấu" hơn. Nếu vẫn bằng nhau, đồng hạng chiến thắng.
+     - Cọc rút hết bài: Tự động gom cọc bài bỏ (discard pile), xáo trộn ngẫu nhiên để làm cọc rút mới. Nếu cả cọc rút lẫn cọc bỏ đều cạn kiệt, ván đấu lập tức tính điểm hiện có để kết thúc.
+
+---
+
+## 3. Lựa chọn Công nghệ & Thư viện
+
+- **Âm thanh**: Dùng Web Audio API thuần (synthesizer với OscillatorNode, GainNode, BiquadFilterNode) cho 5 âm sắc ngũ hành (Thổ C4, Kim D4, Mộc E4, Hỏa G4, Thủy A4). Không dùng Tone.js để tiết kiệm ~120KB JavaScript bundle ban đầu.
+- **Hoạt ảnh & Chuyển động**: Dùng GSAP + ScrollTrigger cho các chuỗi hoạt ảnh cuộn kể chuyện ghim trang, kết hợp Lenis smooth scrolling. Dùng CSS/Tailwind cho vi tương tác hover/click nhỏ. Không sử dụng song song Framer Motion để tránh phình dung lượng và xung đột vòng đời render.
+- **WebGL & Shader**: Xây dựng shader GLSL tự viết cho giấy điệp (fbm fractal brownian motion, xơ giấy, vệt mực, ánh kim) trên nền Three.js / WebGL thuần, có cơ chế Dynamic Resolution Scaling và FPS Guardian (hạ cấp khi khung hình > 20ms liên tục 1s).
+- **Phân hạng thiết bị (Device Tiering)**: 4 cấp độ (High: WebGL đầy đủ hạt + hậu kỳ; Mid: WebGL giảm hạt không hậu kỳ; Low: Canvas 2D mộc; Min: CSS/SVG tĩnh khi bật prefers-reduced-motion hoặc máy cực yếu).
+- **Dịch vụ Realtime**: Triển khai standalone Node.js WebSocket server nhẹ với logic state server-authoritative, đảm bảo bot thay thế người thoát và hỗ trợ reconnect mượt mà.
