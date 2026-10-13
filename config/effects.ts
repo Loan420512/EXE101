@@ -1,58 +1,55 @@
 /**
- * ==============================================================================
  * FILE: config/effects.ts
- * MỤC ĐÍCH: Tập trung toàn bộ thông số hiệu ứng biến ảo của 5 họ bài (Thổ, Kim, Mộc, Hỏa, Thủy).
- * HƯỚNG DẪN CHỈNH SỬA:
- * - Muốn tăng/giảm thời gian chạy hiệu ứng: sửa `durationMs` (mặc định 800ms)
- * - Muốn tăng/giảm số lượng hạt: sửa `particleCount`
- * - Muốn đổi màu hạt phát sáng: sửa các mảng màu `colors`
- * - Muốn đổi tốc độ bay/kích thước: sửa `speedMin`, `speedMax`, `sizeMin`, `sizeMax`
- * - Khi sửa ở đây, hiệu ứng Canvas sẽ tự động áp dụng thông số mới mà không cần sửa code vẽ!
- * ==============================================================================
+ * MỤC ĐÍCH: Thông số hiệu ứng biến ảo, nền sống, phân hạng thiết bị.
+ * Sửa số liệu ở đây, không sửa trong shader/component.
  */
 
+import { ELEMENT_COLORS, MOTION, SPACE } from "@/design/tokens";
+import type { ElementType } from "@/data/instruments";
+import type { Atmosphere } from "@/config/sections";
+
 export interface BaseEffectConfig {
-  durationMs: number;       // Thời lượng hiệu ứng tính bằng mili-giây (~800ms)
-  particleCount: number;    // Số lượng hạt cơ bản (sẽ chia đôi nếu máy yếu)
-  colors: string[];         // Bảng màu cho hiệu ứng
-  speedMin: number;         // Tốc độ tối thiểu
-  speedMax: number;         // Tốc độ tối đa
-  sizeMin: number;          // Kích thước hạt/nét nhỏ nhất (px)
-  sizeMax: number;          // Kích thước hạt/nét lớn nhất (px)
+  durationMs: number;
+  particleCount: number;
+  colors: string[];
+  speedMin: number;
+  speedMax: number;
+  sizeMin: number;
+  sizeMax: number;
 }
 
 export interface ThuyEffectConfig extends BaseEffectConfig {
-  waveRingCount: number;    // Số vòng sóng elip loang ra từ tâm
-  dropCount: number;        // Số giọt nước bắn lên
-  gravity: number;          // Gia tốc trọng lực cho giọt nước rơi
-  maxWaveRadius: number;    // Bán kính sóng tối đa (px)
+  waveRingCount: number;
+  dropCount: number;
+  gravity: number;
+  maxWaveRadius: number;
 }
 
 export interface HoaEffectConfig extends BaseEffectConfig {
-  emberCount: number;       // Số tàn lửa bốc lên
-  horizontalSway: number;   // Biên độ dao động ngang (lắc lư)
-  haloRadius: number;       // Bán kính vầng sáng cam nhấp nháy sau lá bài
-  blendMode: GlobalCompositeOperation; // Blend mode "lighter"
+  emberCount: number;
+  horizontalSway: number;
+  haloRadius: number;
+  blendMode: GlobalCompositeOperation;
 }
 
 export interface MocEffectConfig extends BaseEffectConfig {
-  bambooCount: number;      // Số thân tre mọc từ mép dưới lá bài (mặc định 5)
-  leavesPerBamboo: number;  // Số lá nảy ra dọc mỗi thân tre
-  stemMaxWidth: number;     // Độ dày tối đa của thân tre (px)
-  maxHeightRatio: number;   // Chiều cao mọc tối đa theo tỉ lệ chiều cao lá bài
+  bambooCount: number;
+  leavesPerBamboo: number;
+  stemMaxWidth: number;
+  maxHeightRatio: number;
 }
 
 export interface KimEffectConfig extends BaseEffectConfig {
-  rayWidth: number;         // Độ rộng vệt sáng đồng quét chéo
-  soundRingCount: number;   // Số vòng sóng âm tròn lan tỏa (yêu cầu 3 vòng)
-  sparkleCount: number;     // Số ánh lấp lánh hình sao 4 cánh
-  sparkleSize: number;      // Kích thước sao 4 cánh
+  rayWidth: number;
+  soundRingCount: number;
+  sparkleCount: number;
+  sparkleSize: number;
 }
 
 export interface ThoEffectConfig extends BaseEffectConfig {
-  stoneShardCount: number;  // Số mảnh đá bay từ 4 phía ghép vào lá bài
-  dustParticleCount: number;// Số hạt bụi tỏa ra khi va đập
-  cardScaleStart: number;   // Tỉ lệ bắt đầu phóng lên (từ nhỏ và mờ)
+  stoneShardCount: number;
+  dustParticleCount: number;
+  cardScaleStart: number;
 }
 
 export interface AllEffectsConfig {
@@ -64,11 +61,10 @@ export interface AllEffectsConfig {
 }
 
 export const EFFECTS_CONFIG: AllEffectsConfig = {
-  // 1. THỦY: Các vòng sóng elip loang ra từ giữa lá bài, giọt nước bắn lên rồi rơi theo trọng lực
   thuy: {
-    durationMs: 800,
+    durationMs: MOTION.cardMs,
     particleCount: 40,
-    colors: ["#1F3F7E", "#3A6BB2", "#7CB9E8", "#D4F1F9", "#FFFFFF"],
+    colors: [ELEMENT_COLORS.thuy.fill, "#3A6BB2", ELEMENT_COLORS.thuy.glow, "#D4F1F9", "#FFFFFF"],
     speedMin: 3.5,
     speedMax: 7.0,
     sizeMin: 2.5,
@@ -78,12 +74,10 @@ export const EFFECTS_CONFIG: AllEffectsConfig = {
     gravity: 0.28,
     maxWaveRadius: 180,
   },
-
-  // 2. HỎA: Tàn lửa (vàng, cam, đỏ, blend "lighter") bay lên với dao động ngang, vầng sáng cam nhấp nháy
   hoa: {
-    durationMs: 800,
+    durationMs: MOTION.cardMs,
     particleCount: 60,
-    colors: ["#FFD700", "#FF8C00", "#FF4500", "#D23A22", "#FFE4B5"],
+    colors: ["#FFD700", ELEMENT_COLORS.hoa.glow, "#FF4500", ELEMENT_COLORS.hoa.fill, "#FFE4B5"],
     speedMin: 2.5,
     speedMax: 6.5,
     sizeMin: 2.0,
@@ -93,12 +87,10 @@ export const EFFECTS_CONFIG: AllEffectsConfig = {
     haloRadius: 140,
     blendMode: "lighter",
   },
-
-  // 3. MỘC: 5 thân tre mọc từ mép dưới lá bài, vừa mọc vừa uốn nhẹ, lá nảy ra dọc thân, mờ dần
   moc: {
-    durationMs: 800,
+    durationMs: MOTION.cardMs,
     particleCount: 30,
-    colors: ["#3F7D3B", "#5BA855", "#8FD389", "#244E21", "#C2E8BC"],
+    colors: [ELEMENT_COLORS.moc.fill, "#5BA855", ELEMENT_COLORS.moc.glow, "#244E21", "#C2E8BC"],
     speedMin: 1.5,
     speedMax: 4.0,
     sizeMin: 3.0,
@@ -108,12 +100,10 @@ export const EFFECTS_CONFIG: AllEffectsConfig = {
     stemMaxWidth: 7,
     maxHeightRatio: 1.3,
   },
-
-  // 4. KIM: Vệt sáng đồng quét chéo ngang mặt bài, ba vòng sóng âm tròn lan ra, vài ánh lấp lánh hình sao bốn cánh
   kim: {
-    durationMs: 800,
+    durationMs: MOTION.cardMs,
     particleCount: 35,
-    colors: ["#DDE3E8", "#F5D77F", "#E6C687", "#FFFFFF", "#B8860B"],
+    colors: [ELEMENT_COLORS.kim.fill, ELEMENT_COLORS.kim.glow, "#E6C687", "#FFFFFF", "#B8860B"],
     speedMin: 2.0,
     speedMax: 5.0,
     sizeMin: 2.0,
@@ -123,12 +113,10 @@ export const EFFECTS_CONFIG: AllEffectsConfig = {
     sparkleCount: 14,
     sparkleSize: 16,
   },
-
-  // 5. THỔ: Các mảnh đá và bụi từ bốn phía bay vào ghép lại thành lá bài, rồi đám bụi nhỏ tỏa ra
   tho: {
-    durationMs: 800,
+    durationMs: MOTION.cardMs,
     particleCount: 45,
-    colors: ["#F2B632", "#B3821B", "#8C6214", "#D8A33A", "#E4D1A0"],
+    colors: [ELEMENT_COLORS.tho.fill, "#B3821B", "#8C6214", ELEMENT_COLORS.tho.glow, "#E4D1A0"],
     speedMin: 3.0,
     speedMax: 7.5,
     sizeMin: 3.0,
@@ -136,5 +124,66 @@ export const EFFECTS_CONFIG: AllEffectsConfig = {
     stoneShardCount: 20,
     dustParticleCount: 35,
     cardScaleStart: 0.65,
+  },
+};
+
+export const BACKGROUND_CONFIG = {
+  maxDprHigh: 1.5,
+  maxDprMid: 1.15,
+  maxDprLow: 1,
+  particleCount: { high: 420, mid: 180, low: 0, min: 0 },
+  frameBudgetMs: 20,
+  jankWindowMs: 1000,
+  pointerInkRadius: 0.18,
+  pointerAttract: 0.35,
+  vignette: 0.35,
+  patternContrast: 0.12,
+  drumRotateSpeed: 0.015,
+  cloudSpeed: 0.04,
+  waveSpeed: 0.06,
+  sparkleDensity: 0.04,
+  lerp: MOTION.sectionLerp,
+  maxTiltDeg: SPACE.maxTiltDeg,
+} as const;
+
+export const ATMOSPHERE_COLORS: Record<
+  Atmosphere,
+  { a: string; b: string; c: string; particle: ElementType | "mix" }
+> = {
+  mix: {
+    a: ELEMENT_COLORS.tho.fill,
+    b: ELEMENT_COLORS.thuy.fill,
+    c: ELEMENT_COLORS.hoa.fill,
+    particle: "mix",
+  },
+  tho: {
+    a: ELEMENT_COLORS.tho.fill,
+    b: "#E4D1A0",
+    c: "#8C6214",
+    particle: "tho",
+  },
+  kim: {
+    a: ELEMENT_COLORS.kim.fill,
+    b: ELEMENT_COLORS.kim.glow,
+    c: "#B8860B",
+    particle: "kim",
+  },
+  moc: {
+    a: ELEMENT_COLORS.moc.fill,
+    b: ELEMENT_COLORS.moc.glow,
+    c: "#244E21",
+    particle: "moc",
+  },
+  hoa: {
+    a: ELEMENT_COLORS.hoa.fill,
+    b: ELEMENT_COLORS.hoa.glow,
+    c: "#4A0C08",
+    particle: "hoa",
+  },
+  thuy: {
+    a: ELEMENT_COLORS.thuy.fill,
+    b: ELEMENT_COLORS.thuy.glow,
+    c: "#0A1A3A",
+    particle: "thuy",
   },
 };

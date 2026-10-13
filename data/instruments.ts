@@ -9,71 +9,102 @@
  * ==============================================================================
  */
 
+import { ELEMENT_COLORS } from "@/design/tokens";
+
 export type ElementType = "tho" | "kim" | "moc" | "hoa" | "thuy";
+
+export const ELEMENT_ORDER: ElementType[] = ["tho", "kim", "moc", "hoa", "thuy"];
+
+/** Chiều tương sinh: Thổ → Kim → Thủy → Mộc → Hỏa → Thổ */
+export const SHENG_NEXT: Record<ElementType, ElementType> = {
+  tho: "kim",
+  kim: "thuy",
+  thuy: "moc",
+  moc: "hoa",
+  hoa: "tho",
+};
+
+/** Chiều tương khắc */
+export const KE_NEXT: Record<ElementType, ElementType> = {
+  tho: "thuy",
+  kim: "moc",
+  thuy: "hoa",
+  moc: "tho",
+  hoa: "kim",
+};
 
 export interface Instrument {
   id: string;
+  slug: string;
   name: string;
+  nameGlossEn: string;
   element: ElementType;
   elementName: string;
   tone: string;
   toneVietnamese: string;
-  noteFrequency: string; // Tần số nốt mẫu
-  noteName: string; // Tên nốt (C4, D4, E4, G4, A4)
+  noteFrequency: string;
+  noteName: string;
   elementColor: string;
   textColor: string;
-  summaryVerbatim: string; // Nguyên văn theo thiết kế
-  description: string;     // Giới thiệu
-  structure: string;       // Cấu tạo
-  playMethod: string;      // Cách chơi
-  timbre: string;          // Âm sắc
-  elementReason: string;   // Vì sao thuộc hành đó
-  copiesInDeck: number;    // Mỗi loại 3 lá (tổng 45 lá)
-  status: "Bản nháp";      // Đánh dấu bản nháp theo yêu cầu
+  summaryVerbatim: string;
+  description: string;
+  structure: string;
+  playMethod: string;
+  timbre: string;
+  elementReason: string;
+  copiesInDeck: number;
+  status: "Bản nháp";
+  imageUrl?: string;
+  audioUrl?: string;
 }
 
 export const ELEMENT_CONFIG = {
   tho: {
     name: "Thổ",
+    nameEn: "Earth",
     tone: "Cung",
-    color: "#F2B632",
-    textColor: "#16141A",
+    color: ELEMENT_COLORS.tho.fill,
+    textColor: ELEMENT_COLORS.tho.text,
     note: "C4",
     freq: 261.63,
     description: "Âm trầm ấm, đôn hậu, tượng trưng cho đất mẹ nuôi dưỡng vạn vật.",
   },
   kim: {
     name: "Kim",
+    nameEn: "Metal",
     tone: "Thương",
-    color: "#DDE3E8",
-    textColor: "#16141A",
+    color: ELEMENT_COLORS.kim.fill,
+    textColor: ELEMENT_COLORS.kim.text,
     note: "D4",
     freq: 293.66,
     description: "Âm sắc trong trẻo, vang dội, sắc sảo như kim loại quý.",
   },
   moc: {
     name: "Mộc",
+    nameEn: "Wood",
     tone: "Giốc",
-    color: "#3F7D3B",
-    textColor: "#FFFFFF",
+    color: ELEMENT_COLORS.moc.fill,
+    textColor: ELEMENT_COLORS.moc.text,
     note: "E4",
     freq: 329.63,
     description: "Âm mộc mạc, tươi tắn, thanh thoát như tiếng gió qua rặng tre ngút ngàn.",
   },
   hoa: {
     name: "Hỏa",
+    nameEn: "Fire",
     tone: "Chủy",
-    color: "#D23A22",
-    textColor: "#FFFFFF",
+    color: ELEMENT_COLORS.hoa.fill,
+    textColor: ELEMENT_COLORS.hoa.text,
     note: "G4",
     freq: 392.00,
     description: "Âm ấm áp, rực rỡ, nhiệt huyết và biến ảo như ngọn lửa bùng cháy.",
   },
   thuy: {
     name: "Thủy",
+    nameEn: "Water",
     tone: "Vũ",
-    color: "#1F3F7E",
-    textColor: "#FFFFFF",
+    color: ELEMENT_COLORS.thuy.fill,
+    textColor: ELEMENT_COLORS.thuy.text,
     note: "A4",
     freq: 440.00,
     description: "Âm mềm mại, uốn lượn, lắng đọng khôn lường như dòng nước luân chuyển.",
@@ -84,7 +115,9 @@ export const INSTRUMENTS: Instrument[] = [
   // ===================== THỔ (CUNG) =====================
   {
     id: "dan-da",
+    slug: "dan-da",
     name: "Đàn đá",
+    nameGlossEn: "lithophone",
     element: "tho",
     elementName: "Thổ",
     tone: "Cung",
@@ -104,7 +137,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "trong-com",
+    slug: "trong-com",
     name: "Trống cơm",
+    nameGlossEn: "rice drum",
     element: "tho",
     elementName: "Thổ",
     tone: "Cung",
@@ -124,7 +159,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "tu-va",
+    slug: "tu-va",
     name: "Tù và",
+    nameGlossEn: "horn",
     element: "tho",
     elementName: "Thổ",
     tone: "Cung",
@@ -146,7 +183,9 @@ export const INSTRUMENTS: Instrument[] = [
   // ===================== KIM (THƯƠNG) =====================
   {
     id: "cong-chieng",
+    slug: "cong-chieng",
     name: "Cồng chiêng",
+    nameGlossEn: "gongs",
     element: "kim",
     elementName: "Kim",
     tone: "Thương",
@@ -166,7 +205,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "trong-dong",
+    slug: "trong-dong",
     name: "Trống đồng",
+    nameGlossEn: "bronze drum",
     element: "kim",
     elementName: "Kim",
     tone: "Thương",
@@ -186,7 +227,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "thanh-la",
+    slug: "thanh-la",
     name: "Thanh la",
+    nameGlossEn: "small gong",
     element: "kim",
     elementName: "Kim",
     tone: "Thương",
@@ -208,7 +251,9 @@ export const INSTRUMENTS: Instrument[] = [
   // ===================== MỘC (GIỐC) =====================
   {
     id: "dan-trung",
+    slug: "dan-trung",
     name: "Đàn t'rưng",
+    nameGlossEn: "bamboo xylophone",
     element: "moc",
     elementName: "Mộc",
     tone: "Giốc",
@@ -228,7 +273,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "sao-truc",
+    slug: "sao-truc",
     name: "Sáo trúc",
+    nameGlossEn: "bamboo flute",
     element: "moc",
     elementName: "Mộc",
     tone: "Giốc",
@@ -248,7 +295,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "phach",
+    slug: "phach",
     name: "Phách",
+    nameGlossEn: "clappers",
     element: "moc",
     elementName: "Mộc",
     tone: "Giốc",
@@ -270,7 +319,9 @@ export const INSTRUMENTS: Instrument[] = [
   // ===================== HỎA (CHỦY) =====================
   {
     id: "ken-bau",
+    slug: "ken-bau",
     name: "Kèn bầu",
+    nameGlossEn: "gourd oboe",
     element: "hoa",
     elementName: "Hỏa",
     tone: "Chủy",
@@ -290,7 +341,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "trong-chau",
+    slug: "trong-chau",
     name: "Trống chầu",
+    nameGlossEn: "praise drum",
     element: "hoa",
     elementName: "Hỏa",
     tone: "Chủy",
@@ -310,7 +363,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "dan-ty-ba",
+    slug: "dan-ty-ba",
     name: "Đàn tỳ bà",
+    nameGlossEn: "pear lute",
     element: "hoa",
     elementName: "Hỏa",
     tone: "Chủy",
@@ -332,7 +387,9 @@ export const INSTRUMENTS: Instrument[] = [
   // ===================== THỦY (VŨ) =====================
   {
     id: "dan-bau",
+    slug: "dan-bau",
     name: "Đàn bầu",
+    nameGlossEn: "monochord",
     element: "thuy",
     elementName: "Thủy",
     tone: "Vũ",
@@ -352,7 +409,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "dan-tranh",
+    slug: "dan-tranh",
     name: "Đàn tranh",
+    nameGlossEn: "zither",
     element: "thuy",
     elementName: "Thủy",
     tone: "Vũ",
@@ -372,7 +431,9 @@ export const INSTRUMENTS: Instrument[] = [
   },
   {
     id: "dan-nhi",
+    slug: "dan-nhi",
     name: "Đàn nhị",
+    nameGlossEn: "two-string fiddle",
     element: "thuy",
     elementName: "Thủy",
     tone: "Vũ",
@@ -391,3 +452,26 @@ export const INSTRUMENTS: Instrument[] = [
     status: "Bản nháp",
   },
 ];
+
+export function getInstrument(slug: string): Instrument | undefined {
+  return INSTRUMENTS.find((item) => item.slug === slug);
+}
+
+export function relatedInstruments(slug: string): Instrument[] {
+  const current = getInstrument(slug);
+  if (!current) return [];
+  const sameFamily = INSTRUMENTS.filter(
+    (item) => item.element === current.element && item.slug !== slug,
+  );
+  const shengFamily = INSTRUMENTS.filter((item) => item.element === SHENG_NEXT[current.element]);
+  const keFamily = INSTRUMENTS.filter((item) => item.element === KE_NEXT[current.element]);
+  const extra = [shengFamily[0], keFamily[0]].filter(
+    (item): item is Instrument => Boolean(item),
+  );
+  return [...sameFamily, ...extra];
+}
+
+export function isShengAdjacent(a: ElementType, b: ElementType): boolean {
+  return SHENG_NEXT[a] === b;
+}
+

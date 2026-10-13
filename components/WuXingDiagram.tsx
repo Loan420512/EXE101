@@ -14,7 +14,7 @@
 
 import React, { useState } from "react";
 import { WUXING_DATA } from "@/data/content";
-import { ElementType, ELEMENT_CONFIG } from "@/data/instruments";
+import { ElementType } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
 
 export default function WuXingDiagram() {

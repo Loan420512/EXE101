@@ -12,12 +12,14 @@
  * ==============================================================================
  */
 
+export const TARGET_AGE = "7+";
+
 export const SITE_METADATA = {
   title: "Ngũ Cung (Five Tones) — Board Game Âm Nhạc Truyền Thống Việt Nam",
   tagline: "Collect the elements. Hear the culture.",
   description: "Card game giáo dục dựa trên ngũ âm và ngũ hành Việt Nam. Bộ bài 15 nhạc cụ, 45 lá bài mang hồn dân tộc vào trải nghiệm tương tác hiện đại.",
   bannerDemoText: "Bản demo: nội dung là bản nháp",
-  targetAudience: "Học sinh, sinh viên, gia đình từ 13 tuổi",
+  targetAudience: "Trẻ em từ 7 tuổi, học sinh và gia đình (7+)",
   contactEmail: "lienhe@ngucunggame.vn",
 };
 
@@ -30,7 +32,7 @@ export const HERO_CONTENT = {
   quickFacts: [
     { label: "Số người chơi", value: "2 - 5 người", icon: "users" },
     { label: "Thời lượng", value: "15 - 20 phút", icon: "clock" },
-    { label: "Độ tuổi", value: "Từ 13 tuổi", icon: "user-check" },
+    { label: "Độ tuổi", value: "Từ 7 tuổi (7+)", icon: "user-check" },
     { label: "Quy mô", value: "45 lá bài", icon: "layers" },
   ],
 };
@@ -233,7 +235,7 @@ export const FAQ_LIST = [
   },
   {
     q: "Độ tuổi nào phù hợp để chơi trò chơi này?",
-    a: "Trò chơi được thiết kế tối ưu cho học sinh, sinh viên và gia đình từ 13 tuổi trở lên. Luật chơi tinh gọn, dễ nắm bắt chỉ sau 1 ván hướng dẫn ngắn nhưng có chiều sâu chiến thuật cao.",
+    a: "Trò chơi được thiết kế tối ưu cho trẻ em từ 7 tuổi trở lên (7+), học sinh và gia đình. Luật chơi tinh gọn, dễ nắm bắt chỉ sau 1 ván hướng dẫn ngắn với hình minh họa sinh động nhưng có chiều sâu chiến thuật cao.",
   },
   {
     q: "Âm thanh phát trên website có phải là tiếng thu âm nhạc cụ thật không?",

@@ -25,7 +25,6 @@ interface ModalInstrumentProps {
 
 export default function ModalInstrument({
   instrument,
-  originRect,
   onClose,
 }: ModalInstrumentProps) {
   // Lắng nghe phím ESC để đóng modal
