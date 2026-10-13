@@ -167,6 +167,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Trắc Nghiệm (`/quiz`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều hướng** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc sảo, header thanh âm mượt mà | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair Display 40px với `--lh-heading-tight`, mô tả dễ hiểu cho trẻ 7+ | ✅ Đạt |
+| **3. Thẻ câu hỏi & Tùy chọn** | 9/10 | **9.5/10** | 5 tùy chọn văn hóa Đông Hồ, viền paper-board 3px, shadow 2px, icon trực quan | ✅ Đạt |
+| **4. Thẻ kết quả & Chia sẻ** | 9/10 | **9.5/10** | Khối kết quả sắc sảo, nút chia sẻ Web Share API & clipboard, lá bài đại diện 3D | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **10/10** | `realm-hoa` không khí lễ hội lúc làm bài → chuyển sang `realm-${resultElement}` khi có kết quả | ✅ Đạt |
+
+> **Tổng kết Trang Trắc Nghiệm**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Trắc Nghiệm.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"

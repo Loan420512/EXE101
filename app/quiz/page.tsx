@@ -177,29 +177,35 @@ export default function QuizPage() {
 
       <Header />
 
-      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className={`flex-1 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-${resultElement || "hoa"}`}>
         {/* NÚT QUAY LẠI */}
         <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D23A22] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
           >
-            ← Quay lại Trang chủ
+            ← Quay lại Trang chủ Ngũ Cung
           </Link>
         </div>
 
         {/* TIÊU ĐỀ */}
         <div className="text-center mb-8">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#A36A00] dark:text-[#F2B632] block mb-2">
             TRẮC NGHIỆM TƯƠNG TÁC VĂN HÓA
           </span>
-          <h1 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h1
+            className="font-display font-black text-3xl sm:text-4xl text-[#1A1720] dark:text-[#EAE8D8]"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Bạn hợp họ nào trong Ngũ Cung?
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-[#524F59] dark:text-[#A8A6B0]">
+          <p
+            className="mt-2 text-xs sm:text-sm text-[#534E5C] dark:text-[#A8A4B2]"
+            style={{ lineHeight: "var(--lh-body)" }}
+          >
             Trả lời 5 câu hỏi vui ngắn để khám phá thanh âm cổ truyền đại diện cho tâm hồn bạn.
           </p>
-          <div className="inline-block mt-2 px-2.5 py-0.5 rounded bg-amber-100 dark:bg-stone-800 text-[11px] font-semibold text-stone-600 dark:text-stone-300 border border-amber-300 dark:border-stone-700">
+          <div className="inline-block mt-2 px-2.5 py-1 rounded-[4px] bg-amber-100 dark:bg-stone-800 text-[11px] font-bold text-[#1A1720] dark:text-[#EAE8D8] border border-amber-300 dark:border-stone-700">
             Trò chơi giải trí vui • Khám phá sở thích âm nhạc truyền thống
           </div>
         </div>
@@ -208,25 +214,28 @@ export default function QuizPage() {
           /* ========================================================
              GIAO DIỆN CÂU HỎI TRẮC NGHIỆM
              ======================================================== */
-          <div className="bg-white dark:bg-[#1D1B22] p-6 sm:p-8 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[6px_6px_0px_#16141A] dark:shadow-[6px_6px_0px_#E8EAE0] animate-fade-in">
+          <div className="bg-white dark:bg-[#1E1C23] p-6 sm:p-8 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board animate-fade-in">
             {/* THANH TIẾN ĐỘ */}
-            <div className="flex items-center justify-between text-xs font-bold mb-3 text-[#524F59] dark:text-[#A8A6B0]">
+            <div className="flex items-center justify-between text-xs font-bold mb-3 text-[#534E5C] dark:text-[#A8A4B2]">
               <span>Câu hỏi {currentStep + 1} / {QUIZ_QUESTIONS.length}</span>
-              <span>{Math.round(((currentStep + 1) / QUIZ_QUESTIONS.length) * 100)}%</span>
+              <span className="tabular-nums">{Math.round(((currentStep + 1) / QUIZ_QUESTIONS.length) * 100)}%</span>
             </div>
             <div className="w-full bg-stone-200 dark:bg-stone-800 h-2 rounded-full overflow-hidden mb-6">
               <div
-                className="bg-[#D23A22] h-full transition-all duration-300"
+                className="bg-[#CC3520] h-full transition-all duration-300"
                 style={{ width: `${((currentStep + 1) / QUIZ_QUESTIONS.length) * 100}%` }}
               />
             </div>
 
             {/* NỘI DUNG CÂU HỎI */}
             <div className="mb-6">
-              <h2 className="font-display font-black text-xl sm:text-2xl text-[#16141A] dark:text-[#E8EAE0] mb-1">
+              <h2
+                className="font-display font-black text-xl sm:text-2xl text-[#1A1720] dark:text-[#EAE8D8] mb-1"
+                style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
+              >
                 {currentQ.question}
               </h2>
-              <p className="text-xs text-[#524F59] dark:text-[#A8A6B0]">
+              <p className="text-xs text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                 {currentQ.subtitle}
               </p>
             </div>
@@ -237,10 +246,10 @@ export default function QuizPage() {
                 <button
                   key={i}
                   onClick={() => handleSelectOption(opt.element)}
-                  className="w-full p-4 rounded-[4px] border-2 border-[#16141A] dark:border-[#E8EAE0] bg-stone-50 dark:bg-stone-800/80 text-left hover:bg-amber-50 dark:hover:bg-stone-700/80 hover:-translate-y-0.5 active:translate-y-0 shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] transition-all cursor-pointer flex items-center gap-3.5"
+                  className="w-full p-4 rounded-[4px] border-2 border-[#1A1720] dark:border-[#EAE8D8] bg-[#E8EAE0]/30 dark:bg-stone-800/80 text-left hover:bg-amber-50 dark:hover:bg-stone-700/80 hover:-translate-y-0.5 active:translate-y-0 shadow-[2px_2px_0px_#1A1720] dark:shadow-[2px_2px_0px_#EAE8D8] transition-all cursor-pointer flex items-center gap-3.5 paper-board"
                 >
                   <span className="text-2xl flex-shrink-0">{opt.icon}</span>
-                  <span className="text-xs sm:text-sm font-semibold text-[#16141A] dark:text-[#E8EAE0]">
+                  <span className="text-xs sm:text-sm font-bold text-[#1A1720] dark:text-[#EAE8D8]">
                     {opt.text}
                   </span>
                 </button>
@@ -251,14 +260,17 @@ export default function QuizPage() {
           /* ========================================================
              KẾT QUẢ TRẮC NGHIỆM
              ======================================================== */
-          <div className="bg-white dark:bg-[#1D1B22] p-6 sm:p-10 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[8px_8px_0px_#16141A] dark:shadow-[8px_8px_0px_#E8EAE0] text-center animate-scale-in">
-            <span className="text-xs font-black tracking-widest uppercase text-[#D23A22] block mb-1">
+          <div className="bg-white dark:bg-[#1E1C23] p-6 sm:p-10 rounded-[6px] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] shadow-[8px_8px_0px_#1A1720] dark:shadow-[8px_8px_0px_#EAE8D8] paper-board text-center animate-scale-in">
+            <span className="text-xs font-black tracking-widest uppercase text-[#CC3520] block mb-1">
               CHÚC MỪNG BẠN • KẾT QUẢ ĐÃ SẴN SÀNG
             </span>
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0] mb-2">
+            <h2
+              className="font-display font-black text-3xl sm:text-4xl text-[#1A1720] dark:text-[#EAE8D8] mb-2"
+              style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+            >
               Bạn mang tâm hồn họ {ELEMENT_CONFIG[resultElement].name}
             </h2>
-            <p className="text-sm font-bold text-[#F2B632] mb-6">
+            <p className="text-sm font-black text-[#A36A00] dark:text-[#F2B632] mb-6">
               Âm sắc chủ đạo: {ELEMENT_CONFIG[resultElement].tone} (Nốt {ELEMENT_CONFIG[resultElement].note})
             </p>
 
