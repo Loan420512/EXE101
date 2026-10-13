@@ -31,12 +31,17 @@ import TeamFaqFooter from "@/components/TeamFaqFooter";
 import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
+import PackOpeningModal from "@/components/PackOpening/PackOpeningModal";
+import CollectionModal from "@/components/Collection/CollectionModal";
 import { ElementType } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
 import { SectionId, SECTION_IDS } from "@/config/sections";
 
 export default function Home() {
   const [currentSection, setCurrentSection] = useState<SectionId>("hero");
+  const [isPackModalOpen, setIsPackModalOpen] = useState(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+
   const [activeEffect, setActiveEffect] = useState<{
     element: ElementType;
     cardRect: EffectTargetRect;
@@ -100,7 +105,10 @@ export default function Home() {
       <LivingBackground currentSection={currentSection} />
 
       {/* 1. THANH TRÊN CÙNG & HEADER */}
-      <Header />
+      <Header
+        onOpenPack={() => setIsPackModalOpen(true)}
+        onOpenCollection={() => setIsCollectionModalOpen(true)}
+      />
 
       <main className="flex-1 flex flex-col">
         {/* 2. HERO: TIÊU ĐỀ & QUẠT 5 LÁ BÀI */}
@@ -152,6 +160,23 @@ export default function Home() {
       <EffectCanvas
         activeEffect={activeEffect}
         onComplete={handleEffectComplete}
+      />
+
+      {/* 11. MODAL MỞ GÓI BÀI 5 LÁ NGẪU NHIÊN */}
+      <PackOpeningModal
+        isOpen={isPackModalOpen}
+        onClose={() => setIsPackModalOpen(false)}
+        onCardsUnlocked={() => {}}
+      />
+
+      {/* 12. MODAL BỘ SƯU TẬP 15 NHẠC CỤ & HUY HIỆU */}
+      <CollectionModal
+        isOpen={isCollectionModalOpen}
+        onClose={() => setIsCollectionModalOpen(false)}
+        onOpenPackClick={() => {
+          setIsCollectionModalOpen(false);
+          setIsPackModalOpen(true);
+        }}
       />
     </div>
   );
