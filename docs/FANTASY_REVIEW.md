@@ -209,6 +209,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Quản Trị (`/admin`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều khiển** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ, nút làm mới dữ liệu, badge Admin Console | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair Display 30px với `--lh-heading-tight`, phân tích số liệu rõ ràng | ✅ Đạt |
+| **3. Thống kê & Phễu nhu cầu** | 9/10 | **9.5/10** | Các thẻ chỉ số paper-board viền 3px, shadow 4px, số liệu `tabular-nums` | ✅ Đạt |
+| **4. Danh sách đăng ký & Xuất CSV** | 9/10 | **9.5/10** | Bảng dữ liệu lọc độ tuổi, tìm kiếm nhanh, nút xuất CSV UTF-8 BOM chuẩn | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **9.5/10** | `realm-tho` đôn hậu, vững chãi, border stripe vàng đất | ✅ Đạt |
+
+> **Tổng kết Trang Quản Trị**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Quản Trị.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"
