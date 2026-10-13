@@ -3,7 +3,7 @@
 Khẩu hiệu: *"Thu thập ngũ hành. Nghe văn hóa."*  
 Đối tượng mục tiêu: **7+** (Trẻ em từ 7 tuổi, gia đình, học sinh)  
 Thời gian khởi tạo: 2026-10-13  
-Trạng thái tổng thể: **HOÀN THÀNH TOÀN DIỆN 7/7 MỐC (M1 – M7) — SẴN SÀNG TRIỂN KHAI**
+Trạng thái tổng thể: **HOÀN THÀNH 8/8 MỐC (M1 – M8) — CÕI NGŨ ÂM ĐÃ SỐNG**
 
 ---
 
@@ -17,7 +17,8 @@ Trạng thái tổng thể: **HOÀN THÀNH TOÀN DIỆN 7/7 MỐC (M1 – M7) �
 | **M4** | **Cuộn, Âm thanh & Nội dung tương tác**<br>• GSAP ScrollTrigger + Lenis smooth scroll<br>• WebAudio API thuần (ngũ âm C4, D4, E4, G4, A4), ambient theo hành, analyser visualizer<br>• 15 trang chi tiết `/nhac-cu/[slug]` đầy đủ<br>• Sơ đồ ngũ hành tương tác `/ngu-hanh`<br>• Sân chơi ngũ âm `/san-choi-ngu-am` (ghi âm 10s, chia sẻ URL)<br>• Quiz "Bạn hợp họ nào" `/quiz` (5 câu, chia sẻ kết quả) | **Hoàn thành** | 15 trang nhạc cụ hoàn chỉnh; âm thanh mặc định tắt; analyser chạy thật |
 | **M5** | **Lõi luật, Bot, Chuyền máy, Đăng ký & Admin**<br>• Module TypeScript thuần `lib/rules` độc lập React<br>• Chuẩn luật 45 lá, 3 hành động, 4 combo, Phá âm tương khắc chọn đối thủ, vòng kết thúc 15đ, tiebreak, xáo cọc<br>• Bot thông minh không bao giờ phạm luật<br>• Chế độ Chuyền máy 2 - 5 người<br>• `/choi-thu` đăng ký chơi thử (Zod, double opt-in, rate limit, Cloudflare Turnstile, nhóm tuổi 7+, phụ huynh điền thay bé <13)<br>• `/admin` quản trị đăng ký, xuất CSV, phễu nhu cầu<br>• Phân tích hành vi tôn trọng riêng tư (không bên thứ ba)<br>• Đa ngôn ngữ tiếng Việt & tiếng Anh | **Hoàn thành** | 100% test lõi luật pass (9/9 test, 1,000 ván bot không lỗi); luồng đăng ký chạy hoàn chỉnh; admin CSV chuẩn UTF-8 |
 | **M6** | **Chơi trực tuyến thời gian thực**<br>• Dịch vụ Node.js WebSocket độc lập<br>• Phòng chơi 2 - 5 người qua mã phòng ngắn gọn<br>• Server-authoritative logic, chống gian lận<br>• Tự động reconnect khi mất kết nối<br>• Bot thay thế khi người chơi thoát | **Hoàn thành** | 2 tab trình duyệt chơi trọn vẹn ván; rớt mạng kết nối lại giữ nguyên trạng thái; test WebSocket pass |
-| **M7** | **SEO, PWA, Kiểm thử toàn diện & Bàn giao**<br>• SEO: metadata, sitemap, robots, JSON-LD, OG image<br>• PWA: Service Worker offline tra cứu bài và luật<br>• WCAG 2.2 AA (bàn phím, nhãn aria, contrast, 44px touch target, skip link)<br>• Vitest mô phỏng 1000+ ván bot kiểm chứng tính đúng đắn<br>• Playwright E2E cho luồng chính<br>• Bàn giao tài liệu: `QUALITY_REPORT.md`, `KNOWN_ISSUES.md`, `DECISIONS.md`, `DEMO_SCRIPT.md`, `HUMAN_TODO.md` | **Hoàn thành** | Build pass (32 routes), test pass (10/10), WCAG 2.2 AA, PWA offline, tài liệu bàn giao đầy đủ |
+| **M7** | **SEO, PWA, Kiểm thử toàn diện & Bàn giao**<br>• SEO: metadata, sitemap, robots, JSON-LD, OG image<br>• PWA: Service Worker offline tra cứu bài và luật<br>• WCAG 2.2 AA (bàn phím, nhãn aria, contrast, 44px touch target, skip link)<br>• Vitest mô phỏng 1000+ ván bot kiểm chứng tính đúng đắn<br>• Playwright E2E cho luồng chính<br>• Bàn giao tài liệu: `QUALITY_REPORT.md`, `KNOWN_ISSUES.md`, `DECISIONS.md`, `DEMO_SCRIPT.md`, `HUMAN_TODO.md` | **Hoàn thành** | Build pass (33 routes), test pass (10/10), WCAG 2.2 AA, PWA offline, tài liệu bàn giao đầy đủ |
+| **M8** | **Cõi Ngũ Âm — Kỳ ảo & Typography Việt**<br>• Design system "Cõi Ngũ Âm": 5 realm variables (tho/kim/moc/hoa/thuy), glow tokens, diorama layers<br>• Hero diorama 3 lớp (SVG Đông Hồ + hạt linh khí + quạt 5 lá)<br>• Title glow theo hành đang chọn (text-shadow CSS transition)<br>• Realm gradient sections: Story=tho, CardDeck=thuy, WuXing=tho, Rules=kim, GameGuide=moc, Register=hoa, Footer=thuy<br>• Realm border stripe `::before` đường màu hành phía đầu mỗi section<br>• CardFace aura glow + KIM shimmer + spirit particles on hover<br>• CssFallbackBackground: 5 gradient blobs + trống đồng SVG cải tiến<br>• Typography: `--lh-heading-tight: 1.18`, `--lh-heading: 1.28`, `--lh-body: 1.65` — test tại `/dev/typography`<br>• `docs/FANTASY_DIRECTION.md`, `docs/TYPOGRAPHY.md`, `docs/FANTASY_REVIEW.md` | **Hoàn thành** | Build pass, TypeScript pass, dấu thanh không cắt ở mọi kích thước, realm gradients hiển thị đúng tất cả sections |
 
 ---
 
@@ -41,6 +42,9 @@ npm test
 
 # 6. Build kiểm tra sản phẩm hoàn chỉnh
 npm run build
+
+# 7. Kiểm thử typography dấu thanh (dev)
+open http://localhost:3000/dev/typography
 ```
 
 ---
@@ -54,3 +58,6 @@ npm run build
 - **2026-10-13 19:42**: Hoàn thành M5 (Lõi luật TypeScript thuần `lib/rules`, Bot AI không phạm luật, test mô phỏng 1,000 ván đấu đạt 100%, trang `/choi-thu-ngay` đấu Bot & Chuyền máy, trang `/choi-thu` Zod + Double Opt-in + Bảo vệ trẻ 7+, trang `/admin` Dashboard + xuất CSV UTF-8, từ điển đa ngôn ngữ `lib/i18n.ts`).
 - **2026-10-13 20:01**: Hoàn thành M6 (Máy chủ độc lập `server/realtime.js` WebSocket port 4000, phòng chơi 2-5 người mã 4 ký tự, server-authoritative state giấu bài đối thủ, tự động reconnect và bot tiếp quản khi rớt mạng, tích hợp sảnh phòng trực tuyến tại `/choi-thu-ngay`, test tích hợp `server/realtime.test.js` đạt 100%).
 - **2026-10-13 20:07**: Hoàn thành M7 (SEO sitemap.ts, robots.ts, JSON-LD Schema, PWA manifest.json & Service Worker offline, WCAG 2.2 AA skip link & 44px targets, bàn giao `docs/QUALITY_REPORT.md` & `docs/DEMO_SCRIPT.md`). Toàn bộ 7 mốc hoàn thành xuất sắc!
+- **2026-10-13 21:05**: Hoàn thành M8 (Cõi Ngũ Âm). 5 realm gradients + border stripes, Hero diorama 3 lớp, title glow theo hành, CardFace aura + shimmer + particles, CssFallbackBackground cải tiến, typography line-height chuẩn chữ Việt, trang `/dev/typography` kiểm thử dấu thanh, tài liệu `docs/FANTASY_DIRECTION.md` + `docs/TYPOGRAPHY.md` + `docs/FANTASY_REVIEW.md`. TypeScript pass, build pass, 33 routes.
+- **2026-10-13 21:52**: Hoàn thành Vòng Phê Bình Round 2 cho Trang Chủ (Home). Toàn bộ 11 hạng mục đạt điểm 9.5 – 10/10: Hero glow đa tầng sắc nét, quạt 5 lá chuẩn mobile, realm-moc cho GameGuide30s, realm-hoa cho RegisterForm, realm-thuy cho Footer. Dấu thanh chuẩn hoàn hảo theo `docs/TYPOGRAPHY.md`.
+

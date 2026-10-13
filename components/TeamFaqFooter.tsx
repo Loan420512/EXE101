@@ -22,7 +22,7 @@ export default function TeamFaqFooter() {
   };
 
   return (
-    <footer id="doi-ngu" className="pt-20 pb-12 bg-stone-200/70 dark:bg-[#121116] border-t-[3px] border-[#16141A] dark:border-[#E8EAE0]">
+    <footer id="doi-ngu" className="pt-20 pb-12 realm-thuy relative overflow-hidden border-t-[3px] border-[#1A1720] dark:border-[#EAE8D8]" style={{ backgroundColor: "var(--bg-diep)" }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ================= PHẦN 1: ĐỘI NGŨ TEAM 35 ================= */}
         <div className="mb-20">

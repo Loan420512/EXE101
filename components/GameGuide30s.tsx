@@ -81,7 +81,8 @@ export default function GameGuide30s() {
   const stepData = GAMEPLAY_30S_STEPS[currentStep];
 
   return (
-    <section id="choi-30s" className="py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="choi-30s" className="py-20 realm-moc relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* TIÊU ĐỀ */}
       <div className="text-center max-w-2xl mx-auto mb-10">
         <span className="text-xs font-black tracking-widest uppercase text-[#3F7D3B] block mb-2">
@@ -238,6 +239,7 @@ export default function GameGuide30s() {
             </span>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

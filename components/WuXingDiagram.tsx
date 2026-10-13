@@ -39,17 +39,17 @@ export default function WuXingDiagram() {
   const currentElement = WUXING_DATA.elements.find((e) => e.id === activeElementId)!;
 
   return (
-    <section id="ngu-hanh" className="py-20 bg-stone-100/50 dark:bg-black/20">
+    <section id="ngu-hanh" className="py-20 realm-tho relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* TIÊU ĐỀ */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2">
+          <span className="text-xs font-black tracking-widest uppercase text-[#F2B632] block mb-2" style={{ lineHeight: "var(--lh-caption)" }}>
             TRIẾT LÝ ÂM DƯƠNG NGŨ HÀNH
           </span>
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+          <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]" style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em", paddingBottom: "0.05em" }}>
             {WUXING_DATA.title}
           </h2>
-          <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]">
+          <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]" style={{ lineHeight: "var(--lh-body)" }}>
             {WUXING_DATA.description}
           </p>
         </div>

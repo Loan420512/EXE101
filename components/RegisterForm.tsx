@@ -31,7 +31,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <section id="dang-ky" className="py-20 bg-stone-100/60 dark:bg-black/20">
+    <section id="dang-ky" className="py-20 realm-hoa relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
       <div className="max-w-xl mx-auto px-4 sm:px-6">
         <div className="bg-white dark:bg-[#1D1B22] rounded-[4px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[6px_6px_0px_#16141A] dark:shadow-[6px_6px_0px_#E8EAE0] p-6 sm:p-8">
           <div className="text-center mb-6">

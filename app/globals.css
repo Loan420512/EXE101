@@ -1,86 +1,160 @@
 /**
  * ==============================================================================
  * FILE: app/globals.css
- * MỤC ĐÍCH: Nơi duy nhất định nghĩa toàn bộ biến CSS của hệ thống giao diện Ngũ Cung.
+ * MỤC ĐÍCH: Hệ thống thiết kế "Cõi Ngũ Âm" — nơi năm hành là năm vùng đất sống động.
  * PHONG CÁCH:
- * - Tranh dân gian Đông Hồ: Nền giấy điệp (#E8EAE0), viền đen dày 3px, bóng đổ cứng lệch không mờ.
- * - 5 màu ngũ hành: Thổ #F2B632, Kim #DDE3E8, Mộc #3F7D3B, Hỏa #D23A22, Thủy #1F3F7E.
- * HƯỚNG DẪN CHỈNH SỬA:
- * - Muốn đổi màu nền, màu chữ: sửa ở `:root` (light) hoặc `@media (prefers-color-scheme: dark)`.
- * - Muốn đổi độ dày viền: sửa `--border-width-dongho`.
- * - Muốn đổi độ lệch bóng đổ: sửa `--shadow-dongho` hoặc `--shadow-dongho-lg`.
+ * - Tranh dân gian Đông Hồ: Nền giấy điệp (#E8EAE0), viền đen dày 3px, bóng đổ cứng.
+ * - 5 Vùng đất kỳ ảo: Mỗi hành có palette riêng, glow token, particle type.
+ * - Typography: Be Vietnam Pro (body) + Playfair Display (heading), line-height 1.65
+ *   cho chữ Việt (dấu thanh không bị cắt), font-display swap, subset vi+latin.
+ * NGUYÊN TẮC VÀNG: KỲ ẢO NHƯNG KHÔNG CẢN ĐỌC
+ * - Chữ luôn nằm trên "bảng giấy" yên tĩnh. Hiệu ứng sống ở nền, rìa, khoảng trống.
  * ==============================================================================
  */
 
 @import "tailwindcss";
 
+/* ============================================================
+   1. BẢNG MÀU ĐÔ HỒ & NGŨ HÀNH CỐT LÕI
+   ============================================================ */
 :root {
-  /* 1. BẢNG MÀU ĐÔNG HỒ CHÍNH */
-  --bg-diep: #E8EAE0;                  /* Nền giấy điệp xám xanh nhạt */
-  --bg-card: #FFFFFF;                  /* Nền ô nội dung */
-  --text-ink: #16141A;                 /* Mực đen than Đông Hồ */
-  --text-muted: #524F59;               /* Mực nhạt cho phụ đề */
-  --border-color: #16141A;             /* Màu viền đen */
-  
-  /* 2. ĐỘ DÀY VIỀN & BÓNG ĐỔ CỨNG */
-  --border-width-dongho: 3px;          /* Viền đen dày 3px */
+  /* -- Nền & Chữ -- */
+  --bg-diep: #EAE8D8;                  /* Giấy điệp ấm, hơi vàng */
+  --bg-diep-warm: #F0EDD9;             /* Giấy điệp ấm hơn cho card */
+  --bg-card: #FAFAF5;                  /* Card trắng ngà */
+  --text-ink: #1A1720;                 /* Mực đen than đậm */
+  --text-muted: #534E5C;               /* Mực nhạt phụ đề */
+  --text-faint: #8C8599;               /* Chú thích mờ */
+  --border-color: #1A1720;             /* Viền đen */
+
+  /* -- Viền & Bóng đổ cứng Đông Hồ -- */
+  --border-width-dongho: 3px;
   --border-dongho: 3px solid var(--border-color);
+  --shadow-dongho-xs: 1px 1px 0px var(--border-color);
   --shadow-dongho-sm: 2px 2px 0px var(--border-color);
   --shadow-dongho: 4px 4px 0px var(--border-color);
   --shadow-dongho-lg: 6px 6px 0px var(--border-color);
   --shadow-dongho-xl: 8px 8px 0px var(--border-color);
-  --radius-dongho: 4px;                /* Bo góc vuông vức mộc mạc */
+  --radius-dongho: 4px;
 
-  /* 3. BẢNG NĂM MÀU NGŨ HÀNH CHUẨN */
-  --color-tho: #F2B632;                /* Thổ - Cung (Vàng nghệ) */
-  --color-kim: #DDE3E8;                /* Kim - Thương (Bạc ánh xám sáng) */
-  --color-moc: #3F7D3B;                /* Mộc - Giốc (Xanh lá tre) */
-  --color-hoa: #D23A22;                /* Hỏa - Chủy (Đỏ son) */
-  --color-thuy: #1F3F7E;               /* Thủy - Vũ (Xanh chàm đậm) */
+  /* -- Bảng 5 màu ngũ hành chuẩn -- */
+  --color-tho:    #F2B632;   /* Thổ - Cung  (Vàng nghệ)     */
+  --color-kim:    #C8D4DC;   /* Kim - Thương (Bạc xanh nhẹ) */
+  --color-moc:    #3A7535;   /* Mộc - Giốc  (Xanh lá đậm)  */
+  --color-hoa:    #CC3520;   /* Hỏa - Chủy  (Đỏ son thuần) */
+  --color-thuy:   #1B3B7A;   /* Thủy - Vũ   (Chàm sâu)     */
 
-  /* Màu chữ tương phản trên nền lá bài */
-  --text-tho: #16141A;
-  --text-kim: #16141A;
+  /* -- Màu chữ tương phản trên nền lá bài -- */
+  --text-tho: #1A1720;
+  --text-kim: #1A1720;
   --text-moc: #FFFFFF;
   --text-hoa: #FFFFFF;
   --text-thuy: #FFFFFF;
 
-  /* Phông chữ */
+  /* -- Glow tokens ngũ hành (hào quang linh khí) -- */
+  --glow-tho:  rgba(242, 182, 50, 0.55);
+  --glow-kim:  rgba(220, 235, 245, 0.65);
+  --glow-moc:  rgba(80, 180, 72, 0.5);
+  --glow-hoa:  rgba(220, 60, 30, 0.55);
+  --glow-thuy: rgba(50, 100, 200, 0.55);
+
+  /* -- Glow tokens sáng hơn (cho tiêu đề / hero text) -- */
+  --glow-tho-bright:  0 0 30px rgba(242, 182, 50, 0.7), 0 0 60px rgba(242, 182, 50, 0.35);
+  --glow-kim-bright:  0 0 30px rgba(200, 215, 230, 0.7), 0 0 60px rgba(200, 215, 230, 0.3);
+  --glow-moc-bright:  0 0 30px rgba(70, 160, 60, 0.65), 0 0 60px rgba(70, 160, 60, 0.3);
+  --glow-hoa-bright:  0 0 30px rgba(220, 60, 30, 0.7),  0 0 60px rgba(220, 60, 30, 0.35);
+  --glow-thuy-bright: 0 0 30px rgba(50, 90, 200, 0.65), 0 0 60px rgba(50, 90, 200, 0.3);
+
+  /* -- 5 Vùng đất kỳ ảo — gradient nền khi section active -- */
+  --realm-tho-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(242,182,50,0.22) 0%, rgba(242,182,50,0.06) 50%, transparent 75%);
+  --realm-kim-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(180,205,225,0.22) 0%, rgba(180,205,225,0.06) 50%, transparent 75%);
+  --realm-moc-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(58,117,53,0.20) 0%, rgba(58,117,53,0.05) 50%, transparent 75%);
+  --realm-hoa-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(204,53,32,0.22) 0%, rgba(204,53,32,0.06) 50%, transparent 75%);
+  --realm-thuy-bg:  radial-gradient(ellipse 100% 70% at 50% 110%, rgba(27,59,122,0.25) 0%, rgba(27,59,122,0.07) 50%, transparent 75%);
+
+  /* -- Typography -- */
   --font-heading: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-body: var(--font-be-vietnam), "Be Vietnam Pro", system-ui, sans-serif;
+
+  /* -- Line height chuẩn cho dấu thanh Việt -- */
+  --lh-heading-tight: 1.18;    /* heading lớn, không cắt Ắ Ộ Ứ */
+  --lh-heading:  1.28;         /* heading thường */
+  --lh-body:     1.65;         /* body — đủ chỗ dấu thanh */
+  --lh-caption:  1.5;          /* caption nhỏ */
+
+  /* -- Mực loang ink wash (loading) -- */
+  --ink-wash-color: rgba(26, 23, 32, 0.06);
 }
 
-/* HỆ THỐNG DARK MODE TỰ ĐỘNG THEO HỆ ĐIỀU HÀNH */
+/* ============================================================
+   2. DARK MODE — "ĐÊM TRỐNG ĐỒNG"
+   ============================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-diep: #141318;
-    --bg-card: #1D1B22;
-    --text-ink: #E8EAE0;
-    --text-muted: #A8A6B0;
-    --border-color: #E8EAE0;
-    --shadow-dongho-sm: 2px 2px 0px #E8EAE0;
-    --shadow-dongho: 4px 4px 0px #E8EAE0;
-    --shadow-dongho-lg: 6px 6px 0px #E8EAE0;
-    --shadow-dongho-xl: 8px 8px 0px #E8EAE0;
+    --bg-diep: #121016;
+    --bg-diep-warm: #1A1720;
+    --bg-card: #1E1C23;
+    --text-ink: #EAE8D8;
+    --text-muted: #A8A4B2;
+    --text-faint: #7A7688;
+    --border-color: #EAE8D8;
+
+    --shadow-dongho-xs: 1px 1px 0px #EAE8D8;
+    --shadow-dongho-sm: 2px 2px 0px #EAE8D8;
+    --shadow-dongho: 4px 4px 0px #EAE8D8;
+    --shadow-dongho-lg: 6px 6px 0px #EAE8D8;
+    --shadow-dongho-xl: 8px 8px 0px #EAE8D8;
+
+    --color-tho:  #F5C040;
+    --color-kim:  #D0DCE4;
+    --color-moc:  #4A9045;
+    --color-hoa:  #E04428;
+    --color-thuy: #2A5090;
+
+    --glow-tho:  rgba(245, 192, 64, 0.6);
+    --glow-kim:  rgba(200, 220, 235, 0.55);
+    --glow-moc:  rgba(80, 180, 72, 0.55);
+    --glow-hoa:  rgba(230, 70, 40, 0.6);
+    --glow-thuy: rgba(50, 110, 220, 0.6);
+
+    --realm-tho-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(245,192,64,0.28) 0%, rgba(245,192,64,0.08) 50%, transparent 75%);
+    --realm-kim-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(200,220,235,0.25) 0%, rgba(200,220,235,0.07) 50%, transparent 75%);
+    --realm-moc-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(74,144,69,0.28) 0%, rgba(74,144,69,0.07) 50%, transparent 75%);
+    --realm-hoa-bg:   radial-gradient(ellipse 100% 70% at 50% 110%, rgba(224,68,40,0.28) 0%, rgba(224,68,40,0.08) 50%, transparent 75%);
+    --realm-thuy-bg:  radial-gradient(ellipse 100% 70% at 50% 110%, rgba(42,80,144,0.30) 0%, rgba(42,80,144,0.09) 50%, transparent 75%);
+
+    --ink-wash-color: rgba(234, 232, 216, 0.04);
   }
 }
 
-/* CẤU HÌNH THEME CHO TAILWIND CSS */
+/* ============================================================
+   3. TAILWIND THEME TOKENS
+   ============================================================ */
 @theme {
-  --color-diep: var(--bg-diep);
-  --color-card: var(--bg-card);
-  --color-ink: var(--text-ink);
-  --color-muted: var(--text-muted);
-  --color-border-dongho: var(--border-color);
+  --color-diep:           var(--bg-diep);
+  --color-card:           var(--bg-card);
+  --color-ink:            var(--text-ink);
+  --color-muted:          var(--text-muted);
+  --color-faint:          var(--text-faint);
+  --color-border-dongho:  var(--border-color);
 
-  --color-tho: var(--color-tho);
-  --color-kim: var(--color-kim);
-  --color-moc: var(--color-moc);
-  --color-hoa: var(--color-hoa);
-  --color-thuy: var(--color-thuy);
+  --color-tho:   var(--color-tho);
+  --color-kim:   var(--color-kim);
+  --color-moc:   var(--color-moc);
+  --color-hoa:   var(--color-hoa);
+  --color-thuy:  var(--color-thuy);
 
   --font-serif: var(--font-heading);
-  --font-sans: var(--font-body);
+  --font-sans:  var(--font-body);
+}
+
+/* ============================================================
+   4. BASE STYLES — TYPOGRAPHY CHUẨN CHỮ VIỆT
+   ============================================================ */
+html {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -90,17 +164,42 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  line-height: 1.6;
+  line-height: var(--lh-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Overflow-wrap cho chữ Việt dài không bị tràn */
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-h1, h2, h3, h4, .font-display {
+/* Heading: Playfair Display, dấu thanh không bị cắt */
+h1, h2, h3, h4, h5, h6, .font-display {
   font-family: var(--font-heading);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-heading);
+  /* Đảm bảo dấu Ắ Ằ Ẩ... không bị cắt trên/dưới */
+  padding-top: 0.05em;
+  padding-bottom: 0.05em;
+  overflow: visible;
 }
 
-/* LỚP TIỆN ÍCH PHONG CÁCH ĐÔNG HỒ */
+h1 { line-height: var(--lh-heading-tight); }
+
+p, li, td, th {
+  line-height: var(--lh-body);
+}
+
+/* Số tabular (điểm số, chỉ số) */
+.tabular-nums,
+[data-tabular] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ============================================================
+   5. LỚP TIỆN ÍCH PHONG CÁCH ĐÔNG HỒ
+   ============================================================ */
 .dongho-box {
   background-color: var(--bg-card);
   border: var(--border-dongho);
@@ -126,6 +225,8 @@ h1, h2, h3, h4, .font-display {
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   cursor: pointer;
   user-select: none;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .dongho-btn:hover {
@@ -138,94 +239,218 @@ h1, h2, h3, h4, .font-display {
   box-shadow: var(--shadow-dongho-sm);
 }
 
-/* DẢI 5 MÀU NGŨ HÀNH PHÂN CÁCH CÁC PHẦN */
+/* ============================================================
+   6. DẢI 5 MÀU NGŨ HÀNH
+   ============================================================ */
 .five-element-ribbon {
   height: 6px;
   width: 100%;
   background: linear-gradient(
     to right,
-    var(--color-tho) 0%,
-    var(--color-tho) 20%,
-    var(--color-kim) 20%,
-    var(--color-kim) 40%,
-    var(--color-moc) 40%,
-    var(--color-moc) 60%,
-    var(--color-hoa) 60%,
-    var(--color-hoa) 80%,
-    var(--color-thuy) 80%,
-    var(--color-thuy) 100%
+    var(--color-tho)  0%,   var(--color-tho)  20%,
+    var(--color-kim)  20%,  var(--color-kim)  40%,
+    var(--color-moc)  40%,  var(--color-moc)  60%,
+    var(--color-hoa)  60%,  var(--color-hoa)  80%,
+    var(--color-thuy) 80%,  var(--color-thuy) 100%
   );
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
 }
 
-/* ==============================================================================
-   ANIMATION CSS CHO 5 HÀNH KHI BẤM LÁ BÀI
-   ============================================================================== */
+/* ============================================================
+   7. CARD AURA — PHÁT SÁNG LINH KHÍ KHI HOVER
+   ============================================================ */
+.card-aura-tho  { --aura: var(--glow-tho); }
+.card-aura-kim  { --aura: var(--glow-kim); }
+.card-aura-moc  { --aura: var(--glow-moc); }
+.card-aura-hoa  { --aura: var(--glow-hoa); }
+.card-aura-thuy { --aura: var(--glow-thuy); }
+
+.card-aura-active {
+  box-shadow: 0 0 0 2px var(--aura, rgba(255,255,255,0.3)),
+              0 0 24px 4px var(--aura, rgba(255,255,255,0.15)),
+              4px 4px 0px var(--border-color);
+}
+
+/* ============================================================
+   8. GIẤY ĐIỆP BOARD — "Bảng giấy" yên tĩnh cho chữ
+   ============================================================ */
+.paper-board {
+  background-color: var(--bg-card);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.012) 0px, rgba(0,0,0,0) 1px,
+      rgba(0,0,0,0) 8px, rgba(0,0,0,0.012) 9px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.012) 0px, rgba(0,0,0,0) 1px,
+      rgba(0,0,0,0) 8px, rgba(0,0,0,0.012) 9px
+    );
+  border: var(--border-dongho);
+  border-radius: var(--radius-dongho);
+}
+
+@media (prefers-color-scheme: dark) {
+  .paper-board {
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.018) 0px, rgba(255,255,255,0) 1px,
+        rgba(255,255,255,0) 8px, rgba(255,255,255,0.018) 9px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.018) 0px, rgba(255,255,255,0) 1px,
+        rgba(255,255,255,0) 8px, rgba(255,255,255,0.018) 9px
+      );
+  }
+}
+
+/* Cuộn giấy (scroll banner) */
+.scroll-banner {
+  background-color: var(--bg-diep-warm);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.03) 100%);
+  border-left: 6px solid var(--border-color);
+  border-right: 6px solid var(--border-color);
+  box-shadow:
+    -4px 0 0 var(--border-color),
+    4px 0 0 var(--border-color),
+    var(--shadow-dongho-lg);
+}
+
+/* ============================================================
+   9. REALM SECTION — MỖI SECTION CÓ BẦU KHÍ QUYỂN RIÊNG
+   ============================================================ */
+.realm-tho  { background-image: var(--realm-tho-bg);  }
+.realm-kim  { background-image: var(--realm-kim-bg);  }
+.realm-moc  { background-image: var(--realm-moc-bg);  }
+.realm-hoa  { background-image: var(--realm-hoa-bg);  }
+.realm-thuy { background-image: var(--realm-thuy-bg); }
+
+/* Đường viền màu hành phía trên mỗi realm section */
+.realm-tho::before  { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--color-tho) 20%, var(--color-tho) 80%, transparent); opacity: 0.55; }
+.realm-kim::before  { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--color-kim) 20%, var(--color-kim) 80%, transparent); opacity: 0.45; }
+.realm-moc::before  { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--color-moc) 20%, var(--color-moc) 80%, transparent); opacity: 0.5; }
+.realm-hoa::before  { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--color-hoa) 20%, var(--color-hoa) 80%, transparent); opacity: 0.55; }
+.realm-thuy::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, var(--color-thuy) 20%, var(--color-thuy) 80%, transparent); opacity: 0.6; }
+
+/* ============================================================
+   10. ANIMATION CSS CHO 5 HÀNH KHI BẤM LÁ BÀI
+   ============================================================ */
 
 /* 1. THỦY: Lắc lư co giãn nhẹ như sóng nước */
 @keyframes card-anim-thuy {
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(1.06, 0.96) rotate(-2deg); }
-  50% { transform: scale(0.97, 1.05) rotate(2deg); }
-  75% { transform: scale(1.03, 0.98) rotate(-1deg); }
+  0%   { transform: scale(1) rotate(0deg); }
+  25%  { transform: scale(1.06, 0.96) rotate(-2deg); }
+  50%  { transform: scale(0.97, 1.05) rotate(2deg); }
+  75%  { transform: scale(1.03, 0.98) rotate(-1deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
-
-.anim-card-thuy {
-  animation: card-anim-thuy 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+.anim-card-thuy { animation: card-anim-thuy 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
 /* 2. HỎA: Rung nhẹ và bùng sáng rực rỡ */
 @keyframes card-anim-hoa {
-  0% { transform: scale(1); filter: brightness(1); }
-  15% { transform: scale(1.04) translate(-2px, -1px); filter: brightness(1.25) drop-shadow(0 0 12px #D23A22); }
-  35% { transform: scale(1.03) translate(2px, 1px); filter: brightness(1.35) drop-shadow(0 0 20px #FF8C00); }
-  60% { transform: scale(1.02) translate(-1px, 1px); filter: brightness(1.2) drop-shadow(0 0 10px #D23A22); }
+  0%   { transform: scale(1); filter: brightness(1); }
+  15%  { transform: scale(1.04) translate(-2px, -1px); filter: brightness(1.25) drop-shadow(0 0 12px #CC3520); }
+  35%  { transform: scale(1.03) translate(2px, 1px);  filter: brightness(1.35) drop-shadow(0 0 20px #FF8C00); }
+  60%  { transform: scale(1.02) translate(-1px, 1px); filter: brightness(1.2) drop-shadow(0 0 10px #CC3520); }
   100% { transform: scale(1); filter: brightness(1); }
 }
-
-.anim-card-hoa {
-  animation: card-anim-hoa 0.8s ease-in-out forwards;
-}
+.anim-card-hoa { animation: card-anim-hoa 0.8s ease-in-out forwards; }
 
 /* 3. MỘC: Giãn dọc như đang lớn vươn lên */
 @keyframes card-anim-moc {
-  0% { transform: scale(1, 1); }
-  35% { transform: scale(0.96, 1.1) translateY(-8px); }
-  70% { transform: scale(1.02, 0.98) translateY(-2px); }
+  0%   { transform: scale(1, 1); }
+  35%  { transform: scale(0.96, 1.1) translateY(-8px); }
+  70%  { transform: scale(1.02, 0.98) translateY(-2px); }
   100% { transform: scale(1, 1) translateY(0); }
 }
-
-.anim-card-moc {
-  animation: card-anim-moc 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
+.anim-card-moc { animation: card-anim-moc 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 
 /* 4. KIM: Vệt sáng quét ngang và lóe sáng ánh kim */
 @keyframes card-anim-kim {
-  0% { transform: scale(1); filter: contrast(1); }
-  30% { transform: scale(1.05); filter: contrast(1.4) brightness(1.3); }
-  70% { transform: scale(1.02); filter: contrast(1.1) brightness(1.1); }
+  0%   { transform: scale(1); filter: contrast(1); }
+  30%  { transform: scale(1.05); filter: contrast(1.4) brightness(1.3); }
+  70%  { transform: scale(1.02); filter: contrast(1.1) brightness(1.1); }
   100% { transform: scale(1); filter: contrast(1); }
 }
-
-.anim-card-kim {
-  animation: card-anim-kim 0.8s ease-out forwards;
-}
+.anim-card-kim { animation: card-anim-kim 0.8s ease-out forwards; }
 
 /* 5. THỔ: Từ nhỏ và mờ phóng lên rồi định vị vững chãi */
 @keyframes card-anim-tho {
-  0% { transform: scale(0.75); opacity: 0.6; }
-  60% { transform: scale(1.08); opacity: 1; }
-  85% { transform: scale(0.98); }
+  0%   { transform: scale(0.75); opacity: 0.6; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  85%  { transform: scale(0.98); }
   100% { transform: scale(1); opacity: 1; }
 }
+.anim-card-tho { animation: card-anim-tho 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-.anim-card-tho {
-  animation: card-anim-tho 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+/* ============================================================
+   11. INK WASH LOADING — MÀN MỰC LOANG
+   ============================================================ */
+@keyframes ink-wash-in {
+  0%   { transform: scaleX(0); transform-origin: left center; opacity: 1; }
+  60%  { transform: scaleX(1.02); transform-origin: left center; opacity: 1; }
+  100% { transform: scaleX(1); transform-origin: left center; opacity: 1; }
 }
 
-/* BỎ ANIMATION KHI NGƯỜI DÙNG BẬT PREFERS-REDUCED-MOTION */
+@keyframes ink-wash-out {
+  0%   { transform: scaleX(1); transform-origin: right center; opacity: 1; }
+  100% { transform: scaleX(0); transform-origin: right center; opacity: 0; }
+}
+
+@keyframes ink-drip {
+  0%   { transform: translateY(-100%) rotate(-1deg); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+}
+
+@keyframes float-up {
+  0%   { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-40px) scale(0.7); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px 2px var(--aura, rgba(255,255,255,0.2)); }
+  50%       { box-shadow: 0 0 20px 6px var(--aura, rgba(255,255,255,0.35)); }
+}
+
+/* Shimmer quét qua lá bài KIM */
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(300%) skewX(-15deg); }
+}
+
+/* Hạt linh khí nổi lên từ lá bài */
+@keyframes spirit-rise {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50%  { transform: translate(var(--dx, 5px), -25px) scale(0.8); opacity: 0.6; }
+  100% { transform: translate(var(--dx, 5px), -50px) scale(0.4); opacity: 0; }
+}
+
+/* Lớp nền kỳ ảo mờ dần vào */
+@keyframes realm-fade-in {
+  0%   { opacity: 0; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Diorama layers parallax (nền của hero) */
+@keyframes layer-drift {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.layer-drift-slow  { animation: layer-drift 8s ease-in-out infinite; }
+.layer-drift-mid   { animation: layer-drift 6s ease-in-out infinite 1s; }
+.layer-drift-fast  { animation: layer-drift 4.5s ease-in-out infinite 0.5s; }
+
+/* ============================================================
+   12. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
