@@ -1,0 +1,19 @@
+{
+  "name": "Ngũ Cung - Bộ Bài Âm Nhạc Dân Gian",
+  "short_name": "Ngũ Cung",
+  "description": "Thu thập ngũ hành. Nghe văn hóa. Bộ bài âm nhạc dân gian Việt Nam dành cho gia đình và trẻ em 7+.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F1EA",
+  "theme_color": "#D23A22",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["games", "education", "music"],
+  "lang": "vi"
+}
