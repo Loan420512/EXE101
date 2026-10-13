@@ -195,6 +195,20 @@
 
 ---
 
+## Round 2 — Nghiệm Thu Trang Đăng Ký Chơi Thử (`/choi-thu`)
+
+| Hạng mục | Điểm trước | Điểm sau | Ghi chú đánh giá | Trạng thái |
+|----------|------------|----------|-------------------|------------|
+| **1. Header & Điều hướng** | 8.5/10 | **9.5/10** | Nút quay lại trang chủ sắc nét, badge bảo vệ trẻ 7+ nổi bật | ✅ Đạt |
+| **2. Tiêu đề & Typography** | 8.5/10 | **9.5/10** | Heading Playfair Display 36px với `--lh-heading-tight`, mô tả dễ hiểu | ✅ Đạt |
+| **3. Khung cam kết an toàn trẻ em** | 9/10 | **9.5/10** | Khối thông tin paper-board viền 3px, shadow 4px, icon chiếc khiên rõ ràng | ✅ Đạt |
+| **4. Form đăng ký Zod & Trạng thái** | 9/10 | **9.5/10** | Hỗ trợ 3 nhóm tuổi (7-12 phụ huynh điền thay, 13-17, 18+), phản hồi tức thì | ✅ Đạt |
+| **5. Realm & Không khí** | 8.5/10 | **9.5/10** | `realm-hoa` thể hiện sự hào hứng và nhiệt huyết đón nhận trò chơi | ✅ Đạt |
+
+> **Tổng kết Trang Đăng Ký Chơi Thử**: Toàn bộ 5/5 hạng mục đạt ≥ 9.5/10. Hoàn tất nghiệm thu Trang Đăng Ký.
+
+---
+
 ## Nguyên Tắc Vàng Đánh Giá
 
 1. **Chữ luôn rõ** — không bao giờ blur text để làm "hiệu ứng"
