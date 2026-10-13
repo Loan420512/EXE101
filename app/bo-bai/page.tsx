@@ -15,6 +15,7 @@ import ModalInstrument from "@/components/ModalInstrument";
 import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
+import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import { INSTRUMENTS, Instrument, ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";
@@ -70,6 +71,9 @@ export default function BoBaiPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
+      {/* NỀN SỐNG WEBGL ĐỒNG BỘ VỚI BỘ LỌC HÀNH */}
+      <LivingBackground forceAtmosphere={filter === "all" ? "mix" : filter} />
+
       <Header />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
