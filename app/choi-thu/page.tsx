@@ -87,28 +87,41 @@ export default function ChoiThuRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A] py-12 px-4 sm:px-6 font-sans">
+    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] py-12 px-4 sm:px-6 font-sans realm-hoa">
       <div className="max-w-3xl mx-auto space-y-8">
+        {/* NÚT QUAY LẠI TRANG CHỦ */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
+          >
+            ← Quay lại Trang chủ Ngũ Cung
+          </Link>
+        </div>
+
         {/* TIÊU ĐỀ TRANG */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#D23A22] text-white text-xs font-black uppercase tracking-widest rounded-full border-2 border-[#1A1A1A]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#CC3520] text-white text-xs font-black uppercase tracking-widest rounded-full border-2 border-[#1A1720]">
             <Sparkles className="w-3.5 h-3.5" />
             Trải Nghiệm Trực Tiếp • Dành Cho Độ Tuổi 7+
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-[#1A1A1A] tracking-tight">
+          <h1
+            className="font-display font-black text-3xl sm:text-4xl text-[#1A1720] dark:text-[#EAE8D8] tracking-tight"
+            style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          >
             Đăng Ký Chơi Thử Bộ Bài Ngũ Cung
           </h1>
-          <p className="text-sm sm:text-base text-stone-600 max-w-xl mx-auto font-medium">
+          <p className="text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2] max-w-xl mx-auto font-medium" style={{ lineHeight: "var(--lh-body)" }}>
             Trải nghiệm trọn vẹn bộ bài 45 lá in khắc phong cách Đông Hồ, khám phá 15 nhạc cụ cổ truyền và thi đấu tương sinh tương khắc cùng bạn bè, gia đình.
           </p>
         </div>
 
         {/* THÔNG BÁO BẢO VỆ TRẺ EM */}
-        <div className="p-4 bg-amber-50 border-[3px] border-[#1A1A1A] rounded-2xl shadow-[4px_4px_0px_#1A1A1A] flex items-start gap-3.5">
-          <ShieldCheck className="w-6 h-6 text-[#D23A22] flex-shrink-0 mt-0.5" />
+        <div className="p-4 bg-amber-50 dark:bg-stone-800 border-[3px] border-[#1A1720] dark:border-[#EAE8D8] rounded-2xl shadow-[4px_4px_0px_#1A1720] dark:shadow-[4px_4px_0px_#EAE8D8] paper-board flex items-start gap-3.5">
+          <ShieldCheck className="w-6 h-6 text-[#CC3520] flex-shrink-0 mt-0.5" />
           <div className="space-y-1 text-xs sm:text-sm">
-            <h4 className="font-black text-[#1A1A1A]">Cam kết an toàn thông tin cho trẻ em</h4>
-            <p className="text-stone-700 font-medium">
+            <h4 className="font-black text-[#1A1720] dark:text-[#EAE8D8]" style={{ lineHeight: "var(--lh-heading)" }}>Cam kết an toàn thông tin cho trẻ em</h4>
+            <p className="text-[#534E5C] dark:text-[#A8A4B2] font-medium" style={{ lineHeight: "var(--lh-body)" }}>
               Đối với các bé từ 7–12 tuổi, biểu mẫu yêu cầu phụ huynh hoặc người giám hộ điền thay và sử dụng email của người lớn. Không thu thập thông tin tài chính hay chia sẻ với bên thứ ba.
             </p>
           </div>
