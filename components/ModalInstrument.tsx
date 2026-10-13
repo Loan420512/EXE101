@@ -12,14 +12,16 @@
  * ==============================================================================
  */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { Instrument } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
 import { EffectTargetRect } from "@/effects/types";
+import WaveformVisualizer from "@/components/WaveformVisualizer";
 
 interface ModalInstrumentProps {
   instrument: Instrument | null;
-  originRect: EffectTargetRect | null;
+  originRect?: EffectTargetRect | null;
   onClose: () => void;
 }
 
@@ -27,6 +29,8 @@ export default function ModalInstrument({
   instrument,
   onClose,
 }: ModalInstrumentProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   // Lắng nghe phím ESC để đóng modal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,8 +43,10 @@ export default function ModalInstrument({
   if (!instrument) return null;
 
   const handlePlaySound = () => {
+    setIsPlaying(true);
     // Nút "Nghe âm thử" trong modal được phép phát bất chấp Mute
     soundEngine.playElementTone(instrument.element, true);
+    setTimeout(() => setIsPlaying(false), 1200);
   };
 
   return (
@@ -88,18 +94,32 @@ export default function ModalInstrument({
           </span>
         </div>
 
-        {/* TÊN NHẠC CỤ & NÚT NGHE ÂM THỬ */}
+        {/* TÊN NHẠC CỤ, BIỂU ĐỒ SÓNG ÂM & NÚT NGHE ÂM THỬ */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black/10 dark:border-white/10 pb-4 mb-6">
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
-            {instrument.name}
-          </h2>
+          <div>
+            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+              {instrument.name}
+            </h2>
+            <Link
+              href={`/nhac-cu/${instrument.slug}`}
+              className="inline-block mt-1 text-xs font-bold text-[#D23A22] hover:underline"
+            >
+              Mở trang riêng của nhạc cụ →
+            </Link>
+          </div>
 
-          <button
-            onClick={handlePlaySound}
-            className="dongho-btn px-4 py-2 bg-[#D23A22] text-white text-xs font-bold flex items-center gap-2 hover:bg-[#b52a14]"
-          >
-            <span>🎵 Nghe âm thử ({instrument.noteName})</span>
-          </button>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <WaveformVisualizer
+              element={instrument.element}
+              isPlaying={isPlaying}
+            />
+            <button
+              onClick={handlePlaySound}
+              className="dongho-btn px-4 py-2 bg-[#D23A22] text-white text-xs font-bold flex items-center gap-2 hover:bg-[#b52a14] cursor-pointer"
+            >
+              <span>🎵 Nghe âm thử ({instrument.noteName})</span>
+            </button>
+          </div>
         </div>
 
         {/* TRÍCH ĐOẠN NGUYÊN VĂN THIẾT KẾ */}
