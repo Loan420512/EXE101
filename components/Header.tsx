@@ -46,12 +46,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#E8EAE0] dark:bg-[#141318] border-b-[3px] border-[#16141A] dark:border-[#E8EAE0]">
-      {/* 1. THANH THÔNG BÁO BẢN DEMO TRÊN CÙNG */}
-      <div className="bg-[#F2B632] text-[#16141A] text-xs font-bold text-center py-1.5 px-4 border-b-2 border-[#16141A] flex items-center justify-center gap-2">
-        <span className="inline-block w-2 h-2 rounded-full bg-[#D23A22] animate-pulse" />
-        <span>{SITE_METADATA.bannerDemoText}</span>
-        <span className="hidden sm:inline opacity-75">| Tuyển người chơi thử đợt 1</span>
-      </div>
+
 
       {/* 2. THANH ĐIỀU HƯỚNG CHÍNH */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
