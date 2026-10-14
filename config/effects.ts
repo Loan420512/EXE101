@@ -187,3 +187,22 @@ export const ATMOSPHERE_COLORS: Record<
     particle: "thuy",
   },
 };
+
+export const SCENE_TRANSITION_CONFIG = {
+  durationMs: 900,
+  fadeEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
+  drum: {
+    rotationDurationSec: 240,
+    opacity: 0.18,
+    scale: 1.18,
+    blendMode: "screen" as const,
+  },
+  overlay: {
+    gradientOpacity: 0.88,
+  },
+  cardTriggerTransition: {
+    enabled: true,
+    stayDurationMs: 5000,
+  },
+} as const;
+
