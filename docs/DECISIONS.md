@@ -45,3 +45,19 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
 - **WebGL & Shader**: Xây dựng shader GLSL tự viết cho giấy điệp (fbm fractal brownian motion, xơ giấy, vệt mực, ánh kim) trên nền Three.js / WebGL thuần, có cơ chế Dynamic Resolution Scaling và FPS Guardian (hạ cấp khi khung hình > 20ms liên tục 1s).
 - **Phân hạng thiết bị (Device Tiering)**: 4 cấp độ (High: WebGL đầy đủ hạt + hậu kỳ; Mid: WebGL giảm hạt không hậu kỳ; Low: Canvas 2D mộc; Min: CSS/SVG tĩnh khi bật prefers-reduced-motion hoặc máy cực yếu).
 - **Dịch vụ Realtime**: Triển khai standalone Node.js WebSocket server nhẹ với logic state server-authoritative, đảm bảo bot thay thế người thoát và hỗ trợ reconnect mượt mà.
+
+---
+
+## 4. Quản lý Tài nguyên Hình ảnh & Dọn dẹp File (Asset Pipeline)
+
+- **Vấn đề**: Các file ảnh nền phong cảnh và logo cung cấp có dung lượng và kích thước khác nhau (từ 640px đến 1200px), cần đảm bảo tải nhanh trên di động lẫn sắc nét trên màn hình lớn Retina/4K, đồng thời bảo vệ alpha transparency của trống đồng và logo.
+- **Quyết định**:
+  1. **Bảo tồn ảnh gốc**: Chuyển toàn bộ ảnh gốc vào `assets-src/backgroundweb/` và `assets-src/logo/`, không xóa hay sửa trực tiếp file gốc.
+  2. **Pipeline nén đa tầng (`scripts/optimize-images.mjs`)**:
+     - Sử dụng thư viện `sharp` tích hợp vào lệnh `npm run images`.
+     - Xuất 3 kích thước: 640w (mobile), 1280w (laptop/desktop), 2560w (màn hình lớn Retina).
+     - Định dạng kép AVIF (quality 80) ưu tiên cho trình duyệt hiện đại + WebP (quality 85) tương thích rộng, kèm bản master không hậu tố kích thước.
+     - Riêng ảnh `trong-dong` và `logo`: Bảo tồn 100% kênh alpha trong suốt (alphaQuality: 90-95) và sinh thêm bản PNG tối ưu.
+  3. **Biểu tượng Favicon & PWA**: Tự động sinh `favicon-32x32.png`, `favicon.ico`, `apple-touch-icon.png` (180x180), `icon-192.png` và `icon-512.png` từ logo chính thức.
+  4. **Dọn sạch file rác**: Xóa triệt để 5 file SVG mặc định của Next.js (`file.svg`, `globe.svg`, `next.svg`, `vercel.svg`, `window.svg`) không còn sử dụng.
+
