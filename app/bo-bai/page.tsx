@@ -176,6 +176,7 @@ export default function BoBaiPage() {
                 element={inst.element}
                 tone={inst.tone}
                 noteName={inst.noteName}
+                instrumentId={inst.id}
                 size="md"
                 isAnimating={animatingCardId === inst.id}
                 onClick={(rect) => handleCardClick(inst, rect)}

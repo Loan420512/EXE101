@@ -14,6 +14,7 @@
 
 import React from "react";
 import { RULES_CONTENT } from "@/data/content";
+import { IconCardBack, IconBolt, IconTarget, IconFlag } from "@/components/icons";
 
 export default function RulesSection() {
   return (
@@ -38,7 +39,7 @@ export default function RulesSection() {
           {/* KHỐI 1: CHUẨN BỊ */}
           <div className="p-6 rounded-[4px] bg-white dark:bg-[#1D1B22] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A] dark:shadow-[4px_4px_0px_#E8EAE0]">
             <h3 className="font-display font-black text-lg text-[#16141A] dark:text-[#E8EAE0] mb-3 flex items-center gap-2">
-              <span>🃏</span> {RULES_CONTENT.setup.title}
+              <IconCardBack size={18} aria-hidden /> {RULES_CONTENT.setup.title}
             </h3>
             <ul className="space-y-2 text-xs sm:text-sm text-[#524F59] dark:text-[#A8A6B0]">
               {RULES_CONTENT.setup.items.map((item, idx) => (
@@ -53,7 +54,7 @@ export default function RulesSection() {
           {/* KHỐI 2: 3 HÀNH ĐỘNG MỖI LƯỢT */}
           <div className="p-6 rounded-[4px] bg-white dark:bg-[#1D1B22] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A] dark:shadow-[4px_4px_0px_#E8EAE0]">
             <h3 className="font-display font-black text-lg text-[#16141A] dark:text-[#E8EAE0] mb-3 flex items-center gap-2">
-              <span>⚡</span> {RULES_CONTENT.turnActions.title}
+              <IconBolt size={18} aria-hidden /> {RULES_CONTENT.turnActions.title}
             </h3>
             <div className="space-y-3">
               {RULES_CONTENT.turnActions.actions.map((act, idx) => (
@@ -78,7 +79,7 @@ export default function RulesSection() {
           {/* BẢNG TÍNH ĐIỂM */}
           <div className="p-6 rounded-[4px] bg-white dark:bg-[#1D1B22] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A] dark:shadow-[4px_4px_0px_#E8EAE0]">
             <h3 className="font-display font-black text-lg text-[#16141A] dark:text-[#E8EAE0] mb-3 flex items-center gap-2">
-              <span>🎯</span> Bảng hòa thanh & Điểm số
+              <IconTarget size={18} aria-hidden /> Bảng hòa thanh & Điểm số
             </h3>
 
             <div className="divide-y divide-black/10 dark:divide-white/10">
@@ -108,7 +109,7 @@ export default function RulesSection() {
 
           {/* ĐIỀU KIỆN KẾT THÚC VÒNG CHƠI */}
           <div className="p-5 rounded-[4px] bg-[#F2B632]/25 dark:bg-[#F2B632]/10 border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A] dark:shadow-[4px_4px_0px_#E8EAE0] flex items-center gap-3">
-            <span className="text-3xl">🏁</span>
+            <IconFlag size={30} className="shrink-0" aria-hidden />
             <div>
               <h4 className="font-display font-black text-sm text-[#16141A] dark:text-[#E8EAE0] uppercase">
                 Điều kiện phân định thắng bại

@@ -21,6 +21,29 @@ import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import CardFace from "@/components/CardFace";
 import { ElementType, ELEMENT_CONFIG, INSTRUMENTS, Instrument } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
+import { IconMusicNote, IconShare, IconCheck, IconDrum, IconBell, IconLeaf, IconFire, IconWave, IconMountain, IconSparkles, IconTree, IconTent, IconIsland, IconShield, IconSwords, IconUsers, IconRocket, IconCycle, IconBlocks, IconDongSon } from "@/components/icons";
+
+// Icon SVG cho lựa chọn quiz — key trần, không emoji
+const QUIZ_ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  drum: IconDrum, bell: IconBell, leaf: IconLeaf, fire: IconFire, wave: IconWave,
+  mountain: IconMountain, sparkles: IconSparkles, tree: IconTree, tent: IconTent, island: IconIsland,
+  shield: IconShield, swords: IconSwords, users: IconUsers, rocket: IconRocket, cycle: IconCycle,
+  blocks: IconBlocks, dongson: IconDongSon, musicnote: IconMusicNote,
+};
+
+function QuizIcon({ name, element }: { name: string; element: ElementType }) {
+  if (name === "dot") {
+    return (
+      <span
+        className="inline-block w-6 h-6 rounded-full border-2 border-[#16141A] dark:border-[#E8EAE0] flex-shrink-0"
+        style={{ backgroundColor: ELEMENT_CONFIG[element].color }}
+        aria-hidden
+      />
+    );
+  }
+  const Cmp = QUIZ_ICON_MAP[name] ?? IconMusicNote;
+  return <Cmp size={24} className="flex-shrink-0" aria-hidden />;
+}
 
 interface Question {
   id: number;
@@ -39,11 +62,11 @@ const QUIZ_QUESTIONS: Question[] = [
     question: "Khi nghe nhạc, âm thanh nào khiến bạn thấy cuốn hút nhất?",
     subtitle: "Hãy chọn cảm xúc đầu tiên bạn liên tưởng tới",
     options: [
-      { text: "Tiếng trống trầm ấm, vững chãi, đôn hậu", icon: "🥁", element: "tho" },
-      { text: "Tiếng chuông ngân vang, sắc sảo, trong trẻo", icon: "🔔", element: "kim" },
-      { text: "Tiếng sáo vi vu, mộc mạc như gió qua lũy tre", icon: "🎋", element: "moc" },
-      { text: "Tiếng đàn sôi động, rực lửa, bùng nổ khí thế", icon: "🔥", element: "hoa" },
-      { text: "Tiếng vĩ lượn sóng, mềm mại, sâu lắng như dòng sông", icon: "🌊", element: "thuy" },
+      { text: "Tiếng trống trầm ấm, vững chãi, đôn hậu", icon: "drum", element: "tho" },
+      { text: "Tiếng chuông ngân vang, sắc sảo, trong trẻo", icon: "bell", element: "kim" },
+      { text: "Tiếng sáo vi vu, mộc mạc như gió qua lũy tre", icon: "leaf", element: "moc" },
+      { text: "Tiếng đàn sôi động, rực lửa, bùng nổ khí thế", icon: "fire", element: "hoa" },
+      { text: "Tiếng vĩ lượn sóng, mềm mại, sâu lắng như dòng sông", icon: "wave", element: "thuy" },
     ],
   },
   {
@@ -51,11 +74,11 @@ const QUIZ_QUESTIONS: Question[] = [
     question: "Bạn thích ở trong không gian thiên nhiên nào nhất?",
     subtitle: "Nơi giúp bạn cảm thấy thư giãn và tràn đầy năng lượng",
     options: [
-      { text: "Vùng đất cao nguyên, đồi đất màu mỡ rộng lớn", icon: "⛰️", element: "tho" },
-      { text: "Đỉnh núi đá vôi hùng vĩ, bầu trời sáng lấp lánh", icon: "✨", element: "kim" },
-      { text: "Khu rừng nhiệt đới bạt ngàn chồi non xanh mát", icon: "🌲", element: "moc" },
-      { text: "Bên đống lửa trại rực rỡ dưới bầu trời đêm", icon: "⛺", element: "hoa" },
-      { text: "Bờ biển xanh biếc hay suối nguồn róc rách", icon: "🏝️", element: "thuy" },
+      { text: "Vùng đất cao nguyên, đồi đất màu mỡ rộng lớn", icon: "mountain", element: "tho" },
+      { text: "Đỉnh núi đá vôi hùng vĩ, bầu trời sáng lấp lánh", icon: "sparkles", element: "kim" },
+      { text: "Khu rừng nhiệt đới bạt ngàn chồi non xanh mát", icon: "tree", element: "moc" },
+      { text: "Bên đống lửa trại rực rỡ dưới bầu trời đêm", icon: "tent", element: "hoa" },
+      { text: "Bờ biển xanh biếc hay suối nguồn róc rách", icon: "island", element: "thuy" },
     ],
   },
   {
@@ -63,11 +86,11 @@ const QUIZ_QUESTIONS: Question[] = [
     question: "Khi chơi trò chơi cùng bạn bè, phong cách của bạn là gì?",
     subtitle: "Cách bạn thường hành động trong một nhóm",
     options: [
-      { text: "Bình tĩnh, là điểm tựa đáng tin cậy cho cả đội", icon: "🛡️", element: "tho" },
-      { text: "Quyết đoán, đưa ra chiến lược chính xác và sắc bén", icon: "⚔️", element: "kim" },
-      { text: "Khéo léo, kết nối mọi người và tạo niềm vui tự nhiên", icon: "🤝", element: "moc" },
-      { text: "Nhiệt huyết, truyền lửa và xung phong dẫn đầu", icon: "🚀", element: "hoa" },
-      { text: "Biến hóa, linh hoạt ứng biến theo mọi tình huống", icon: "🔄", element: "thuy" },
+      { text: "Bình tĩnh, là điểm tựa đáng tin cậy cho cả đội", icon: "shield", element: "tho" },
+      { text: "Quyết đoán, đưa ra chiến lược chính xác và sắc bén", icon: "swords", element: "kim" },
+      { text: "Khéo léo, kết nối mọi người và tạo niềm vui tự nhiên", icon: "users", element: "moc" },
+      { text: "Nhiệt huyết, truyền lửa và xung phong dẫn đầu", icon: "rocket", element: "hoa" },
+      { text: "Biến hóa, linh hoạt ứng biến theo mọi tình huống", icon: "cycle", element: "thuy" },
     ],
   },
   {
@@ -75,11 +98,11 @@ const QUIZ_QUESTIONS: Question[] = [
     question: "Màu sắc nào trong tranh dân gian Đông Hồ thu hút bạn nhất?",
     subtitle: "Màu sắc mang lại cho bạn cảm giác thân thuộc",
     options: [
-      { text: "Vàng nghệ ấm áp của đất mẹ phù sa", icon: "🟡", element: "tho" },
-      { text: "Bạc ánh sáng của kim loại và mẹ điệp", icon: "⚪", element: "kim" },
-      { text: "Xanh lá tre mộc mạc của cỏ cây đồng nội", icon: "🟢", element: "moc" },
-      { text: "Đỏ son thắm đượm như hoa đào ngày Tết", icon: "🔴", element: "hoa" },
-      { text: "Chàm sẫm huyền bí của dòng nước và trời đêm", icon: "🔵", element: "thuy" },
+      { text: "Vàng nghệ ấm áp của đất mẹ phù sa", icon: "dot", element: "tho" },
+      { text: "Bạc ánh sáng của kim loại và mẹ điệp", icon: "dot", element: "kim" },
+      { text: "Xanh lá tre mộc mạc của cỏ cây đồng nội", icon: "dot", element: "moc" },
+      { text: "Đỏ son thắm đượm như hoa đào ngày Tết", icon: "dot", element: "hoa" },
+      { text: "Chàm sẫm huyền bí của dòng nước và trời đêm", icon: "dot", element: "thuy" },
     ],
   },
   {
@@ -87,11 +110,11 @@ const QUIZ_QUESTIONS: Question[] = [
     question: "Nếu được học một nhạc cụ dân tộc ngay hôm nay, bạn muốn thử:",
     subtitle: "Nhạc cụ nào khơi gợi sự tò mò trong bạn?",
     options: [
-      { text: "Đàn đá cổ xưa với tiếng gõ trầm hùng ngàn năm", icon: "🪨", element: "tho" },
-      { text: "Trống đồng hay Cồng chiêng vang dội khắp buôn làng", icon: "🪘", element: "kim" },
-      { text: "Sáo trúc hay Đàn T'rưng rộn rã trong trẻo", icon: "🪈", element: "moc" },
-      { text: "Kèn bầu hay Đàn tỳ bà biến ảo rộn ràng", icon: "🎺", element: "hoa" },
-      { text: "Đàn bầu độc huyền hay Đàn tranh réo rắt dịu êm", icon: "🎻", element: "thuy" },
+      { text: "Đàn đá cổ xưa với tiếng gõ trầm hùng ngàn năm", icon: "blocks", element: "tho" },
+      { text: "Trống đồng hay Cồng chiêng vang dội khắp buôn làng", icon: "dongson", element: "kim" },
+      { text: "Sáo trúc hay Đàn T'rưng rộn rã trong trẻo", icon: "leaf", element: "moc" },
+      { text: "Kèn bầu hay Đàn tỳ bà biến ảo rộn ràng", icon: "musicnote", element: "hoa" },
+      { text: "Đàn bầu độc huyền hay Đàn tranh réo rắt dịu êm", icon: "wave", element: "thuy" },
     ],
   },
 ];
@@ -248,7 +271,7 @@ export default function QuizPage() {
                   onClick={() => handleSelectOption(opt.element)}
                   className="w-full p-4 rounded-[4px] border-2 border-[#1A1720] dark:border-[#EAE8D8] bg-[#E8EAE0]/30 dark:bg-stone-800/80 text-left hover:bg-amber-50 dark:hover:bg-stone-700/80 hover:-translate-y-0.5 active:translate-y-0 shadow-[2px_2px_0px_#1A1720] dark:shadow-[2px_2px_0px_#EAE8D8] transition-all cursor-pointer flex items-center gap-3.5 paper-board"
                 >
-                  <span className="text-2xl flex-shrink-0">{opt.icon}</span>
+                  <QuizIcon name={opt.icon} element={opt.element} />
                   <span className="text-xs sm:text-sm font-bold text-[#1A1720] dark:text-[#EAE8D8]">
                     {opt.text}
                   </span>
@@ -282,6 +305,7 @@ export default function QuizPage() {
                   element={repInst.element}
                   tone={repInst.tone}
                   noteName={repInst.noteName}
+                  instrumentId={repInst.id}
                   size="md"
                   isInteractive={true}
                 />
@@ -302,7 +326,7 @@ export default function QuizPage() {
                 onClick={() => soundEngine.playElementTone(resultElement, true)}
                 className="px-4 py-2 text-xs font-bold bg-[#D23A22] text-white rounded border-2 border-[#16141A] shadow-[2px_2px_0px_#16141A] hover:bg-[#b8311c] cursor-pointer flex items-center gap-2"
               >
-                <span>🎵</span>
+                <IconMusicNote size={14} aria-hidden />
                 <span>Nghe lại thanh âm {ELEMENT_CONFIG[resultElement].tone}</span>
               </button>
 
@@ -310,15 +334,15 @@ export default function QuizPage() {
                 onClick={handleShareResult}
                 className="px-4 py-2 text-xs font-bold bg-white dark:bg-stone-700 text-[#16141A] dark:text-[#E8EAE0] rounded border-2 border-[#16141A] dark:border-[#E8EAE0] shadow-[2px_2px_0px_#16141A] hover:bg-stone-50 cursor-pointer flex items-center gap-2"
               >
-                <span>🔗</span>
-                <span>{shareCopied ? "✓ Đã sao chép!" : "Chia sẻ kết quả"}</span>
+                {shareCopied ? <IconCheck size={14} aria-hidden /> : <IconShare size={14} aria-hidden />}
+                <span>{shareCopied ? "Đã sao chép!" : "Chia sẻ kết quả"}</span>
               </button>
 
               <button
                 onClick={handleReset}
                 className="px-4 py-2 text-xs font-bold bg-stone-200 dark:bg-stone-800 text-[#16141A] dark:text-[#E8EAE0] rounded border-2 border-[#16141A] dark:border-[#E8EAE0] shadow-[2px_2px_0px_#16141A] hover:bg-stone-300 cursor-pointer"
               >
-                🔄 Chơi lại Quiz
+                <span className="inline-flex items-center gap-1.5"><IconCycle size={14} aria-hidden /> Chơi lại Quiz</span>
               </button>
             </div>
           </div>

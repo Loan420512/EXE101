@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import { INSTRUMENTS, Instrument } from "@/data/instruments";
 import CardFace from "@/components/CardFace";
 import { soundEngine } from "@/lib/audio";
+import { IconCardBack, IconClose, IconGift } from "@/components/icons";
 
 interface PackOpeningModalProps {
   isOpen: boolean;
@@ -85,7 +86,7 @@ export default function PackOpeningModal({
           aria-label="Đóng mở gói bài"
           className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer"
         >
-          ✕
+          <IconClose size={14} aria-hidden />
         </button>
 
         <h2 id="pack-opening-title" className="font-display font-black text-2xl sm:text-3xl text-[#16141A] dark:text-[#E8EAE0] mb-2">
@@ -122,7 +123,7 @@ export default function PackOpeningModal({
 
               <div className="w-full text-center border-t-2 border-white/30 pt-2">
                 <span className="text-xs font-bold bg-[#F2B632] text-[#16141A] px-3 py-1 rounded inline-block">
-                  ✂ Bấm để xé gói
+                  Bấm để xé gói
                 </span>
               </div>
             </button>
@@ -140,6 +141,8 @@ export default function PackOpeningModal({
                         element={inst.element}
                         tone={inst.tone}
                         noteName={inst.noteName}
+                        instrumentId={inst.id}
+                        variant={index % 3}
                         size="sm"
                         isInteractive={false}
                       />
@@ -150,7 +153,7 @@ export default function PackOpeningModal({
                       onClick={() => handleRevealCard(index)}
                       className="w-28 h-40 rounded-[4px] border-[3px] border-[#16141A] bg-[#16141A] text-[#F2B632] shadow-[3px_3px_0px_#16141A] flex flex-col items-center justify-center p-2 cursor-pointer hover:-translate-y-1 hover:shadow-[4px_6px_0px_#16141A] transition-all"
                     >
-                      <span className="text-2xl mb-1">🎴</span>
+                      <IconCardBack size={28} aria-hidden className="mb-1" />
                       <span className="text-[10px] font-bold">Bấm để lật</span>
                     </button>
                   )}
@@ -172,7 +175,7 @@ export default function PackOpeningModal({
                   }}
                   className="px-4 py-2 text-xs font-bold bg-[#3F7D3B] text-white rounded border-2 border-[#16141A] shadow-[2px_2px_0px_#16141A] hover:bg-[#346a30] cursor-pointer"
                 >
-                  🎁 Mở tiếp gói khác
+                  <span className="inline-flex items-center gap-1.5"><IconGift size={14} aria-hidden /> Mở tiếp gói khác</span>
                 </button>
                 <button
                   onClick={onClose}

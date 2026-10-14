@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import UniverseRoot from "@/components/UniverseRoot";
+import BottomNav from "@/components/BottomNav";
 
 const beVietnamPro = Be_Vietnam_Pro({
   weight: ["400", "500", "600", "700", "800"],
@@ -132,9 +134,12 @@ export default function RootLayout({
           Bỏ qua đến nội dung chính
         </a>
 
-        <div id="main-content" className="flex-1 flex flex-col" suppressHydrationWarning>
-          {children}
-        </div>
+        <UniverseRoot>
+          <div id="main-content" className="flex-1 flex flex-col pb-16 md:pb-0" suppressHydrationWarning>
+            {children}
+          </div>
+          <BottomNav />
+        </UniverseRoot>
 
         {/* PWA Service Worker Registration */}
         <Script id="register-sw" strategy="afterInteractive">

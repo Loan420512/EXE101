@@ -12,6 +12,7 @@
  */
 
 import React, { useState } from "react";
+import { IconSparkles, IconWarning } from "@/components/icons";
 
 export default function RegisterForm() {
   const [fullName, setFullName] = useState("");
@@ -48,7 +49,7 @@ export default function RegisterForm() {
 
           {submittedMessage ? (
             <div className="p-4 rounded bg-[#3F7D3B]/15 border-2 border-[#3F7D3B] text-center space-y-3">
-              <span className="text-3xl">🎉</span>
+              <IconSparkles size={30} className="text-[#F2B632]" aria-hidden />
               <p className="text-sm font-bold text-[#16141A] dark:text-[#E8EAE0]">
                 {submittedMessage}
               </p>
@@ -110,7 +111,7 @@ export default function RegisterForm() {
 
               {/* DÒNG NHẮC PHỤ HUYNH THEO YÊU CẦU */}
               <div className="p-3 rounded bg-amber-50 dark:bg-stone-900 border border-amber-200 dark:border-stone-700 text-[11px] text-[#524F59] dark:text-[#A8A6B0]">
-                ⚠️ <strong>Lưu ý:</strong> Học sinh dưới 18 tuổi cần có sự đồng ý của phụ huynh trước khi đăng ký tham gia buổi chơi thử nghiệm offline.
+                <span className="inline-flex items-center gap-1 align-[-2px]"><IconWarning size={14} aria-hidden /></span> <strong>Lưu ý:</strong> Học sinh dưới 18 tuổi cần có sự đồng ý của phụ huynh trước khi đăng ký tham gia buổi chơi thử nghiệm offline.
               </div>
 
               {/* NÚT GỬI */}

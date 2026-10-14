@@ -30,16 +30,17 @@ interface HeroProps {
 const FAN_CARDS: {
   element: ElementType;
   instrumentName: string;
+  instrumentId: string;
   tone: string;
   rotation: number;
   translateX: number;
   translateY: number;
 }[] = [
-  { element: "tho",  instrumentName: "Đàn đá",     tone: "Cung",   rotation: -20, translateX: -60, translateY: 15 },
-  { element: "kim",  instrumentName: "Cồng chiêng", tone: "Thương", rotation: -10, translateX: -30, translateY: 5  },
-  { element: "moc",  instrumentName: "Sáo trúc",    tone: "Giốc",   rotation:   0, translateX:   0, translateY: 0  },
-  { element: "hoa",  instrumentName: "Đàn tỳ bà",   tone: "Chủy",   rotation:  10, translateX:  30, translateY: 5  },
-  { element: "thuy", instrumentName: "Đàn bầu",     tone: "Vũ",     rotation:  20, translateX:  60, translateY: 15 },
+  { element: "tho",  instrumentName: "Đàn đá",      instrumentId: "dan-da",      tone: "Cung",   rotation: -20, translateX: -60, translateY: 15 },
+  { element: "kim",  instrumentName: "Cồng chiêng", instrumentId: "cong-chieng", tone: "Thương", rotation: -10, translateX: -30, translateY: 5  },
+  { element: "moc",  instrumentName: "Sáo trúc",    instrumentId: "sao-truc",    tone: "Giốc",   rotation:   0, translateX:   0, translateY: 0  },
+  { element: "hoa",  instrumentName: "Đàn tỳ bà",   instrumentId: "dan-ty-ba",   tone: "Chủy",   rotation:  10, translateX:  30, translateY: 5  },
+  { element: "thuy", instrumentName: "Đàn bầu",     instrumentId: "dan-bau",     tone: "Vũ",     rotation:  20, translateX:  60, translateY: 15 },
 ];
 
 // Halo sát chữ + hào quang đa tầng — nổi bật trên nền giấy điệp sáng lẫn tối, giữ nét chữ sắc sảo
@@ -286,6 +287,7 @@ export default function Hero({ onTriggerEffect, isEffectRunning }: HeroProps) {
                         name={card.instrumentName}
                         element={card.element}
                         tone={card.tone}
+                        instrumentId={card.instrumentId}
                         size="md"
                         isAnimating={isCurrentAnimating}
                         onClick={(rect) => handleCardClick(card.element, rect)}

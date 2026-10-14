@@ -16,6 +16,7 @@ import TeamFaqFooter from "@/components/TeamFaqFooter";
 import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import { RULES_CONTENT } from "@/data/content";
+import { IconCardBack, IconLibrary, IconMusicNote, IconBolt, IconGrid, IconChild, IconScroll, IconBalloon, IconStar, IconGift, IconCrown, IconTrophy } from "@/components/icons";
 
 export default function LuatChoiPage() {
   const [tab, setTab] = useState<"standard" | "kids">("kids");
@@ -67,7 +68,7 @@ export default function LuatChoiPage() {
                   : "text-[#1A1720] dark:text-[#EAE8D8] hover:text-[#CC3520]"
               }`}
             >
-              🧒 Dành cho bé (7+) & Người mới
+              <span className="inline-flex items-center gap-1.5"><IconChild size={16} aria-hidden /> Dành cho bé (7+) & Người mới</span>
             </button>
             <button
               onClick={() => setTab("standard")}
@@ -77,7 +78,7 @@ export default function LuatChoiPage() {
                   : "text-[#1A1720] dark:text-[#EAE8D8] hover:text-[#CC3520]"
               }`}
             >
-              📜 Luật thi đấu chuẩn
+              <span className="inline-flex items-center gap-1.5"><IconScroll size={16} aria-hidden /> Luật thi đấu chuẩn</span>
             </button>
           </div>
         </div>
@@ -89,7 +90,7 @@ export default function LuatChoiPage() {
           <div className="space-y-8 animate-fade-in">
             {/* THÔNG ĐIỆP BÉ 7+ */}
             <div className="p-4 rounded bg-amber-50 dark:bg-amber-950/40 border-2 border-[#F2B632] flex items-center gap-3">
-              <span className="text-3xl">🎈</span>
+              <IconBalloon size={30} className="text-[#D23A22] shrink-0" aria-hidden />
               <p className="text-xs sm:text-sm font-semibold text-[#16141A] dark:text-[#E8EAE0]">
                 Chào các bạn nhỏ! Trò chơi Ngũ Cung rất dễ và vui. Bé chỉ cần nhớ <strong>3 việc trong mỗi lượt</strong> và ghép các bản nhạc hay để ghi điểm thôi!
               </p>
@@ -101,21 +102,21 @@ export default function LuatChoiPage() {
                 className="font-display font-black text-xl text-[#CC3520] mb-3 flex items-center gap-2"
                 style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
               >
-                <span>1️⃣</span> Bắt đầu ván chơi như thế nào?
+                <span className="inline-flex w-7 h-7 items-center justify-center rounded-full border-2 border-current text-sm">1</span> Bắt đầu ván chơi như thế nào?
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
                 <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
-                  <span className="text-2xl block mb-1">🃏</span>
+                  <IconCardBack size={28} aria-hidden className="mb-1" />
                   <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Mỗi người 5 lá</strong>
                   <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Bé cầm kín trên tay, không cho bạn khác nhìn nhé.</p>
                 </div>
                 <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
-                  <span className="text-2xl block mb-1">🏪</span>
+                  <IconGrid size={28} aria-hidden className="mb-1" />
                   <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Chợ Nhạc 5 lá</strong>
                   <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Lật ngửa 5 lá ở giữa bàn để ai cũng chọn được.</p>
                 </div>
                 <div className="p-3 rounded bg-[#E8EAE0]/40 dark:bg-stone-800 border-2 border-[#1A1720]/20 dark:border-[#EAE8D8]/20">
-                  <span className="text-2xl block mb-1">📚</span>
+                  <IconLibrary size={28} aria-hidden className="mb-1" />
                   <strong className="text-[#1A1720] dark:text-[#EAE8D8]">Chồng bài rút</strong>
                   <p className="text-[#534E5C] dark:text-[#A8A4B2] mt-1" style={{ lineHeight: "var(--lh-body)" }}>Để úp ở giữa bàn để rút bù khi Chợ hết lá.</p>
                 </div>
@@ -128,11 +129,11 @@ export default function LuatChoiPage() {
                 className="font-display font-black text-xl text-[#3A7535] mb-4 flex items-center gap-2"
                 style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
               >
-                <span>2️⃣</span> Đến lượt mình, bé chọn 1 việc duy nhất:
+                <span className="inline-flex w-7 h-7 items-center justify-center rounded-full border-2 border-current text-sm">2</span> Đến lượt mình, bé chọn 1 việc duy nhất:
               </h2>
               <div className="space-y-4 text-xs sm:text-sm">
                 <div className="p-4 rounded bg-stone-50 dark:bg-stone-800 border-2 border-[#16141A] flex gap-3">
-                  <span className="text-3xl">🛒</span>
+                  <IconGrid size={28} aria-hidden className="flex-shrink-0" />
                   <div>
                     <h3 className="font-bold text-sm text-[#16141A] dark:text-[#E8EAE0]">A. Chọn nhạc cụ (Lấy bài)</h3>
                     <p className="text-stone-600 dark:text-stone-300 mt-0.5">
@@ -142,7 +143,7 @@ export default function LuatChoiPage() {
                 </div>
 
                 <div className="p-4 rounded bg-stone-50 dark:bg-stone-800 border-2 border-[#16141A] flex gap-3">
-                  <span className="text-3xl">🎶</span>
+                  <IconMusicNote size={28} aria-hidden className="flex-shrink-0" />
                   <div>
                     <h3 className="font-bold text-sm text-[#16141A] dark:text-[#E8EAE0]">B. Trình tấu (Ghi điểm)</h3>
                     <p className="text-stone-600 dark:text-stone-300 mt-0.5">
@@ -152,7 +153,7 @@ export default function LuatChoiPage() {
                 </div>
 
                 <div className="p-4 rounded bg-stone-50 dark:bg-stone-800 border-2 border-[#16141A] flex gap-3">
-                  <span className="text-3xl">⚡</span>
+                  <IconBolt size={28} aria-hidden className="flex-shrink-0" />
                   <div>
                     <h3 className="font-bold text-sm text-[#16141A] dark:text-[#E8EAE0]">C. Phá âm (Khắc chế đối thủ)</h3>
                     <p className="text-stone-600 dark:text-stone-300 mt-0.5">
@@ -166,7 +167,7 @@ export default function LuatChoiPage() {
             {/* BƯỚC 3: CÁCH TÍNH ĐIỂM DỄ NHỚ */}
             <div className="bg-white dark:bg-[#1D1B22] p-6 rounded-[6px] border-[3px] border-[#16141A] dark:border-[#E8EAE0] shadow-[4px_4px_0px_#16141A]">
               <h2 className="font-display font-black text-xl text-[#F2B632] mb-3 flex items-center gap-2">
-                <span>3️⃣</span> Ghép bài thế nào được nhiều điểm nhất?
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F2B632] text-[#16141A] text-base font-black border-2 border-[#16141A]">3</span> Ghép bài thế nào được nhiều điểm nhất?
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
                 <div className="p-3.5 rounded bg-amber-50/70 dark:bg-stone-800 border border-[#16141A]/20">
@@ -177,19 +178,19 @@ export default function LuatChoiPage() {
                 </div>
                 <div className="p-3.5 rounded bg-amber-50/70 dark:bg-stone-800 border border-[#16141A]/20">
                   <span className="font-bold text-sm text-[#16141A] dark:text-[#E8EAE0] block">
-                    Hợp tấu: 4 điểm ⭐
+                    Hợp tấu: 4 điểm <span className="inline-flex items-center align-[-1px]"><IconStar size={14} className="text-[#F2B632]" aria-hidden /></span>
                   </span>
                   <p className="text-stone-600 dark:text-stone-300 mt-1">3 lá cùng màu nhưng 3 nhạc cụ khác nhau hoàn toàn!</p>
                 </div>
                 <div className="p-3.5 rounded bg-amber-50/70 dark:bg-stone-800 border border-[#16141A]/20">
                   <span className="font-bold text-sm text-[#16141A] dark:text-[#E8EAE0] block">
-                    Liên hoàn: 2 điểm + Lấy thêm 1 lá 🎁
+                    Liên hoàn: 2 điểm + Lấy thêm 1 lá <span className="inline-flex items-center align-[-1px]"><IconGift size={14} aria-hidden /></span>
                   </span>
                   <p className="text-stone-600 dark:text-stone-300 mt-1">2 lá đi liền nhau theo vòng tương sinh (Mộc sinh Hỏa, Hỏa sinh Thổ...).</p>
                 </div>
                 <div className="p-3.5 rounded bg-amber-100 dark:bg-amber-950/60 border-2 border-[#16141A]">
                   <span className="font-bold text-sm text-[#D23A22] block">
-                    Ngũ Cung: 8 điểm 👑 (Siêu điểm!)
+                    Ngũ Cung: 8 điểm <span className="inline-flex items-center align-[-1px]"><IconCrown size={14} aria-hidden /></span> (Siêu điểm!)
                   </span>
                   <p className="text-stone-600 dark:text-stone-300 mt-1">Đủ 5 lá của cả 5 màu (Thổ, Kim, Mộc, Hỏa, Thủy)!</p>
                 </div>
@@ -199,7 +200,7 @@ export default function LuatChoiPage() {
             {/* BƯỚC 4: KHI NÀO CHIẾN THẮNG? */}
             <div className="p-4 rounded bg-[#3F7D3B] text-white border-2 border-[#16141A] shadow-[3px_3px_0px_#16141A]">
               <h2 className="font-display font-black text-lg mb-1 flex items-center gap-2">
-                <span>🏆</span> Ai đạt 15 điểm trước sẽ thắng cuộc!
+                <IconTrophy size={20} aria-hidden /> Ai đạt 15 điểm trước sẽ thắng cuộc!
               </h2>
               <p className="text-xs sm:text-sm opacity-90">
                 Khi có bạn chạm mốc 15 điểm, mọi người chơi nốt lượt trong vòng đó. Bạn nào nhiều điểm nhất sẽ là người chiến thắng vẻ vang!

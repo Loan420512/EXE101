@@ -67,7 +67,7 @@ describe("Ngũ Cung Rules Engine", () => {
   });
 
   it("không cho phép chọn từ Chợ khi tay đã đạt 7 lá", () => {
-    let game = createGame({ playerCount: 2, seed: 99 });
+    const game = createGame({ playerCount: 2, seed: 99 });
     // Bổ sung cho người 0 đủ 7 lá
     while (game.players[0]!.hand.length < HAND_LIMIT) {
       game.players[0]!.hand.push(game.deck.pop()!);

@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { WUXING_DATA } from "@/data/content";
 import { ElementType } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
+import { IconLeaf, IconBolt, IconVolume } from "@/components/icons";
 
 export default function WuXingDiagram() {
   const [relationMode, setRelationMode] = useState<"sheng" | "ke">("sheng");
@@ -65,7 +66,7 @@ export default function WuXingDiagram() {
                 : "bg-white dark:bg-[#1D1B22] text-[#16141A] dark:text-[#E8EAE0]"
             }`}
           >
-            🌿 Vòng Tương Sinh (Nuôi dưỡng)
+            <span className="inline-flex items-center gap-1.5"><IconLeaf size={14} aria-hidden /> Vòng Tương Sinh (Nuôi dưỡng)</span>
           </button>
           <button
             onClick={() => setRelationMode("ke")}
@@ -75,7 +76,7 @@ export default function WuXingDiagram() {
                 : "bg-white dark:bg-[#1D1B22] text-[#16141A] dark:text-[#E8EAE0]"
             }`}
           >
-            ⚡ Sao Tương Khắc (Chế ngự)
+            <span className="inline-flex items-center gap-1.5"><IconBolt size={14} aria-hidden /> Sao Tương Khắc (Chế ngự)</span>
           </button>
         </div>
 
@@ -297,7 +298,7 @@ export default function WuXingDiagram() {
                   onClick={() => soundEngine.playElementTone(activeElementId, true)}
                   className="px-2.5 py-1 rounded bg-[#16141A] text-white dark:bg-[#E8EAE0] dark:text-[#16141A] text-xs font-bold flex items-center gap-1"
                 >
-                  <span>🔊 {currentElement.note}</span>
+                  <span className="inline-flex items-center gap-1"><IconVolume size={12} aria-hidden /> {currentElement.note}</span>
                 </button>
               </div>
 
@@ -314,7 +315,7 @@ export default function WuXingDiagram() {
               <div className="mt-2 p-3 rounded bg-white dark:bg-[#1D1B22] border border-[#16141A]/20 dark:border-[#E8EAE0]/20">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-black uppercase text-[#D23A22]">
-                    {relationMode === "sheng" ? "🌿 Quy luật Tương sinh:" : "⚡ Quy luật Tương khắc:"}
+                    {relationMode === "sheng" ? "Quy luật Tương sinh:" : "Quy luật Tương khắc:"}
                   </span>
                 </div>
                 <p className="text-xs font-bold text-[#16141A] dark:text-[#E8EAE0]">

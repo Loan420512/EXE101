@@ -1,190 +1,222 @@
 "use client";
 
 /**
- * ==============================================================================
  * FILE: components/Header.tsx
- * MỤC ĐÍCH: Header điều hướng phong cách Đông Hồ và nút Bật/Tắt âm thanh tổng hợp WebAudio.
- * QUY CÁCH:
- * - Thanh trên cùng: 'Bản demo: nội dung là bản nháp'
- * - Nút âm thanh mặc định: TẮT (người dùng bấm để bật)
- * - Điều hướng cuộn mượt tới các phần chính của trang và liên kết /bo-bai
- * ==============================================================================
+ * Thanh điều hướng streaming-era × Đông Hồ:
+ * - Logo cân đối, nav gọn, bộ chọn vũ trụ 5 hành, tìm kiếm, âm thanh, hồ sơ
+ * - Ẩn khi cuộn xuống, hiện lại khi cuộn lên
+ * - Không có thanh "Bản demo" màu vàng (đã bỏ theo review)
+ * - Dải màu 5 hành vẫn giữ ở đáy header
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { soundEngine } from "@/lib/audio";
-import { SITE_METADATA } from "@/data/content";
+import { UNIVERSES } from "@/config/universes";
+import type { UniverseId } from "@/config/universes";
+import { useUniverse } from "@/lib/useUniverse";
+import {
+  IconVolume, IconVolumeMute, IconSearch, IconGamepad,
+  IconMusicNote, IconCompass, IconLibrary, IconUser, IconDrum,
+  IconEarth, IconMetal, IconLeaf, IconFire, IconWave, IconPentagon,
+} from "@/components/icons";
 
 interface HeaderProps {
   onOpenPack?: () => void;
   onOpenCollection?: () => void;
 }
 
+const NAV_LINKS = [
+  { label: "Khám phá", href: "/", icon: <IconCompass size={16} aria-hidden /> },
+  { label: "Duyệt", href: "/bo-bai", icon: <IconLibrary size={16} aria-hidden /> },
+  { label: "Chơi", href: "/choi-thu-ngay", icon: <IconGamepad size={16} aria-hidden /> },
+  { label: "Nhạc", href: "/san-choi-ngu-am", icon: <IconMusicNote size={16} aria-hidden /> },
+  { label: "Luật", href: "/luat-choi", icon: <IconDrum size={16} aria-hidden /> },
+];
+
+const UNIVERSE_ICONS: Record<UniverseId, React.ReactNode> = {
+  tho: <IconEarth size={14} aria-hidden />,
+  kim: <IconMetal size={14} aria-hidden />,
+  moc: <IconLeaf size={14} aria-hidden />,
+  hoa: <IconFire size={14} aria-hidden />,
+  thuy: <IconWave size={14} aria-hidden />,
+  united: <IconPentagon size={14} aria-hidden />,
+};
+
 export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {}) {
   const [isMuted, setIsMuted] = useState(() => soundEngine.getIsMuted());
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const { universeId, setUniverse } = useUniverse();
+
+  // Ẩn/hiện khi cuộn
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 60) { setVisible(true); }
+      else if (y > lastScrollY.current + 8) { setVisible(false); }
+      else if (y < lastScrollY.current - 4) { setVisible(true); }
+      lastScrollY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleToggleSound = () => {
     const nextMuted = soundEngine.toggleMute();
     setIsMuted(nextMuted);
-    // Nếu vừa bật, phát thử một nốt Thổ để xác nhận kích hoạt AudioContext
-    if (!nextMuted) {
-      soundEngine.playElementTone("tho", true);
-    }
+    if (!nextMuted) soundEngine.playElementTone("tho", true);
   };
 
-  const navLinks = [
-    { label: "Giới thiệu", href: "/#hero" },
-    { label: "Bộ bài", href: "/bo-bai" },
-    { label: "Ngũ hành", href: "/ngu-hanh" },
-    { label: "Luật chơi", href: "/luat-choi" },
-    { label: "Ngũ âm", href: "/san-choi-ngu-am" },
-    { label: "Quiz", href: "/quiz" },
-    { label: "Đăng ký", href: "/#dang-ky" },
-  ];
+  const uKit = UNIVERSES[universeId];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#E8EAE0]/88 dark:bg-[#141318]/88 backdrop-blur-md border-b-[3px] border-[#16141A] dark:border-[#E8EAE0]">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+        visible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      {/* MAIN NAV */}
+      <div
+        className="bg-[#0B0C14]/92 backdrop-blur-md border-b border-white/8"
+        style={{ borderBottomColor: uKit.colors.border + "30" }}
+      >
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-3">
 
-
-      {/* 2. THANH ĐIỀU HƯỚNG CHÍNH */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
-        {/* LOGO CHÍNH THỨC NGŨ CUNG */}
-        <Link href="/" className="flex-shrink-0 flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D23A22] rounded py-1">
-          <picture className="group-hover:scale-105 transition-transform">
-            <source type="image/webp" srcSet="/images/logo/logongucung.webp" />
-            <img
-              src="/images/logo/logongucung.png"
-              alt="Logo Ngũ Cung Card Game"
-              className="h-9 sm:h-10 w-auto object-contain dark:brightness-110"
-              width={80}
-              height={44}
-            />
-          </picture>
-          <span className="font-display font-black text-base tracking-tight text-[#16141A] dark:text-[#E8EAE0] leading-none whitespace-nowrap">
-            NGŨ CUNG
-          </span>
-        </Link>
-
-        {/* MENU DESKTOP – căn giữa, chiếm phần còn lại */}
-        <nav className="hidden lg:flex flex-1 items-center justify-center gap-5 text-[13px] font-semibold">
-          {navLinks.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-[#16141A] dark:text-[#E8EAE0] hover:text-[#D23A22] dark:hover:text-[#F2B632] transition-colors whitespace-nowrap"
+          {/* LOGO */}
+          <Link
+            href="/"
+            className="flex-shrink-0 flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-[#D23A22] rounded-sm"
+            aria-label="Ngũ Cung — Trang chủ"
+          >
+            <picture>
+              <source type="image/webp" srcSet="/images/logo/logongucung.webp" />
+              <img
+                src="/images/logo/logongucung.png"
+                alt=""
+                aria-hidden
+                className="h-8 w-auto object-contain"
+                width={56}
+                height={32}
+              />
+            </picture>
+            <span
+              className="hidden sm:block font-display font-black text-[15px] tracking-tight whitespace-nowrap"
+              style={{ color: uKit.colors.textPrimary }}
             >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+              NGŨ CUNG
+            </span>
+          </Link>
 
-        {/* CỤM NÚT TÁC VỤ: BẬT/TẮT ÂM THANH & CTA */}
-        <div className="flex-shrink-0 flex items-center gap-3">
-          {/* NÚT ÂM THANH (MẶC ĐỊNH TẮT) */}
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-1 ml-4" aria-label="Điều hướng chính">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-[13px] font-semibold
+                  text-white/70 hover:text-white hover:bg-white/8 transition-all duration-150
+                  focus-visible:outline-2 focus-visible:outline-[#D23A22] whitespace-nowrap"
+              >
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* SPACER */}
+          <div className="flex-1" />
+
+          {/* BỘ CHỌN VŨ TRỤ */}
+          <div
+            className="flex items-center gap-0.5 p-0.5 sm:p-1 rounded-[4px] border border-white/10"
+            role="group"
+            aria-label="Chọn vũ trụ ngũ hành (phím 1–5, 0)"
+          >
+            {(["tho", "kim", "moc", "hoa", "thuy", "united"] as UniverseId[]).map((id) => {
+              const u = UNIVERSES[id];
+              const isActive = universeId === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setUniverse(id)}
+                  title={`${u.label} — phím ${u.shortcut}`}
+                  aria-label={`${u.label} — phím ${u.shortcut}`}
+                  aria-pressed={isActive}
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-[3px] flex items-center justify-center
+                    transition-all duration-150
+                    focus-visible:outline-2 focus-visible:outline-[#D23A22]
+                    ${isActive
+                      ? "scale-110 shadow-[0_0_8px_2px_var(--glow)]"
+                      : "opacity-50 hover:opacity-80"
+                    }`}
+                  style={{
+                    backgroundColor: isActive ? u.colors.accent : u.colors.accent + "40",
+                    color: isActive ? u.colors.textOnAccent : u.colors.accent,
+                    ["--glow" as string]: u.colors.glow,
+                  }}
+                >
+                  {UNIVERSE_ICONS[id]}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* TÌM KIẾM */}
+          <button
+            aria-label="Tìm kiếm (Ctrl+K)"
+            title="Tìm kiếm Ctrl+K"
+            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-[4px] text-white/60 hover:text-white
+              hover:bg-white/8 transition-all focus-visible:outline-2 focus-visible:outline-[#D23A22]"
+          >
+            <IconSearch size={18} aria-hidden />
+          </button>
+
+          {/* ÂM THANH */}
           <button
             onClick={handleToggleSound}
-            title={isMuted ? "Bật âm thanh nốt ngũ cung" : "Tắt âm thanh"}
-            className={`px-3 py-1.5 rounded-[4px] border-[2px] border-[#16141A] dark:border-[#E8EAE0] 
-              text-xs font-bold flex items-center gap-2 shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] 
-              transition-all duration-150 active:translate-x-[1px] active:translate-y-[1px] ${
-                isMuted
-                  ? "bg-stone-200 dark:bg-stone-800 text-[#524F59] dark:text-[#A8A6B0]"
-                  : "bg-[#3F7D3B] text-white"
+            aria-label={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
+            aria-pressed={!isMuted}
+            title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
+            className={`w-9 h-9 flex items-center justify-center rounded-[4px] transition-all
+              focus-visible:outline-2 focus-visible:outline-[#D23A22]
+              ${isMuted
+                ? "text-white/40 hover:text-white/70 hover:bg-white/8"
+                : "text-[#3F7D3B] hover:bg-[#3F7D3B]/15"
               }`}
           >
-            {isMuted ? (
-              <>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                </svg>
-                <span>Âm thanh: Tắt</span>
-              </>
-            ) : (
-              <>
-                <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-                <span>Âm thanh: Bật</span>
-              </>
-            )}
+            {isMuted ? <IconVolumeMute size={18} aria-hidden /> : <IconVolume size={18} aria-hidden />}
           </button>
 
-          {/* NÚT MỞ GÓI BÀI */}
-          {onOpenPack && (
-            <button
-              onClick={onOpenPack}
-              className="px-2.5 py-1.5 rounded-[4px] bg-[#F2B632] text-[#16141A] border-[2px] border-[#16141A] dark:border-[#E8EAE0] text-xs font-black shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1"
-              title="Mở gói 5 lá bài ngẫu nhiên"
-            >
-              <span>🎁</span>
-              <span className="hidden md:inline">Mở gói</span>
-            </button>
-          )}
-
-          {/* NÚT BỘ SƯU TẬP */}
-          {onOpenCollection && (
-            <button
-              onClick={onOpenCollection}
-              className="px-2.5 py-1.5 rounded-[4px] bg-white dark:bg-stone-800 text-[#16141A] dark:text-[#E8EAE0] border-[2px] border-[#16141A] dark:border-[#E8EAE0] text-xs font-bold shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1"
-              title="Xem bộ sưu tập và huy hiệu"
-            >
-              <span>🎴</span>
-              <span className="hidden md:inline">Bộ sưu tập</span>
-            </button>
-          )}
-
-          {/* NÚT THỬ NGAY */}
-          <a
-            href="#dang-ky"
-            className="hidden sm:inline-flex px-3.5 py-1.5 rounded-[4px] bg-[#D23A22] text-white 
-              border-[2px] border-[#16141A] dark:border-[#E8EAE0] text-xs font-bold 
-              shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:-translate-y-0.5"
+          {/* HỒ SƠ */}
+          <Link
+            href="/ho-so"
+            aria-label="Hồ sơ của tôi"
+            className="w-9 h-9 flex items-center justify-center rounded-[4px] text-white/60
+              hover:text-white hover:bg-white/8 transition-all
+              focus-visible:outline-2 focus-visible:outline-[#D23A22]"
           >
-            Chơi thử
-          </a>
+            <IconUser size={18} aria-hidden />
+          </Link>
 
-          {/* NÚT HAMBURGER MOBILE */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded border-2 border-[#16141A] dark:border-[#E8EAE0]"
-            aria-label="Menu"
+          {/* NÚT CHƠI — CTA chính */}
+          <Link
+            href="/choi-thu-ngay"
+            className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-[4px] text-[13px] font-black
+              border-2 border-[#D23A22] bg-[#D23A22] text-white
+              shadow-[2px_2px_0px_#7A1E10] hover:-translate-y-px hover:shadow-[3px_3px_0px_#7A1E10]
+              active:translate-y-px active:shadow-none transition-all duration-120
+              focus-visible:outline-2 focus-visible:outline-white whitespace-nowrap"
           >
-            <svg className="w-5 h-5 text-[#16141A] dark:text-[#E8EAE0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+            <IconGamepad size={14} aria-hidden />
+            Chơi ngay
+          </Link>
         </div>
       </div>
 
-      {/* MOBILE MENU DROPDOWN */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#E8EAE0] dark:bg-[#141318] border-t-2 border-[#16141A] dark:border-[#E8EAE0] px-4 py-3 flex flex-col gap-2">
-          {navLinks.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1.5 text-sm font-bold text-[#16141A] dark:text-[#E8EAE0] border-b border-black/10 dark:border-white/10"
-            >
-              {item.label}
-            </a>
-          ))}
-          <Link
-            href="/bo-bai"
-            onClick={() => setMobileMenuOpen(false)}
-            className="py-1.5 text-sm font-bold text-[#D23A22]"
-          >
-            → Xem toàn bộ thư viện 15 nhạc cụ (/bo-bai)
-          </Link>
-        </div>
-      )}
+      {/* DẢI 5 MÀU NGŨ HÀNH — signature Ngũ Cung */}
+      <div className="five-element-ribbon" aria-hidden="true" />
     </header>
   );
 }

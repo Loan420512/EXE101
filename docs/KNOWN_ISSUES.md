@@ -26,3 +26,14 @@ Tài liệu này ghi lại các vấn đề đã biết, điểm mất cân bằ
    - Khi chưa có khóa `RESEND_API_KEY`: Hệ thống tự động chuyển sang chế độ in nội dung email ra Console và ghi log vào file `storage/emails.log`, mã xác thực OTP/link double opt-in vẫn hoạt động bình thường.
    - Khi chưa có khóa Cloudflare Turnstile: Biểu mẫu tự động chấp nhận token kiểm thử `1x00000000000000000000AA` của Cloudflare.
    - Rate limit: Sử dụng in-memory LRU token bucket khi chưa kết nối Redis/Upstash.
+
+---
+
+## 3. Ghi nhận đợt U1/U2 (2026-10-14)
+
+1. **Hai lỗi eslint có trước, nằm ngoài phạm vi U1/U2 (chưa sửa để không đổi hành vi)**:
+   - `app/admin/page.tsx:61` — `react-hooks/set-state-in-effect`: admin gọi `setLoading(true)` đồng bộ trong effect fetch.
+   - `app/choi-thu-ngay/page.tsx:206` — cùng rule: cờ `setIsBotThinking(true)` đồng bộ trong effect bot.
+   - Kế hoạch sửa: chuyển cờ sang ref-guard hoặc `useSyncExternalStore` như `lib/favorites.ts` khi làm U6 (bàn chơi mới).
+2. **Chưa chụp được ảnh màn hình tự động**: in-app browser của phiên làm việc không cấp viewport nhìn thấy (viewport 0x0), mọi kiểm chứng U1/U2 chạy qua DOM scan + evaluate script. Việc chấm điểm thị giác (cột "rớt dòng 360→1920") cần QA chạy Playwright hoặc mắt người ở vòng tiếp theo.
+3. **U2.3 còn dở**: bottom sheet xem trước trên cảm ứng và preload dữ liệu chi tiết khi hover chưa làm (ghi rõ trong docs/TASKS.md).

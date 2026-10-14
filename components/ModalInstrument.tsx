@@ -18,6 +18,7 @@ import { Instrument } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
 import { EffectTargetRect } from "@/effects/types";
 import WaveformVisualizer from "@/components/WaveformVisualizer";
+import { IconMusicNote, IconBook, IconBlocks, IconHand, IconScore, IconTaiji, IconClose } from "@/components/icons";
 
 interface ModalInstrumentProps {
   instrument: Instrument | null;
@@ -72,7 +73,7 @@ export default function ModalInstrument({
             hover:bg-[#D23A22] hover:text-white transition-colors"
           aria-label="Đóng"
         >
-          ✕
+          <IconClose size={16} aria-hidden />
         </button>
 
         {/* HEADER MODAL */}
@@ -117,7 +118,7 @@ export default function ModalInstrument({
               onClick={handlePlaySound}
               className="dongho-btn px-4 py-2 bg-[#D23A22] text-white text-xs font-bold flex items-center gap-2 hover:bg-[#b52a14] cursor-pointer"
             >
-              <span>🎵 Nghe âm thử ({instrument.noteName})</span>
+              <span className="inline-flex items-center gap-1"><IconMusicNote size={14} aria-hidden /> Nghe âm thử ({instrument.noteName})</span>
             </button>
           </div>
         </div>
@@ -132,7 +133,7 @@ export default function ModalInstrument({
           {/* 1. GIỚI THIỆU */}
           <div>
             <h4 className="font-display font-black text-sm uppercase text-[#16141A] dark:text-[#E8EAE0] mb-1">
-              📖 Giới thiệu
+              <span className="inline-flex items-center gap-1.5"><IconBook size={16} aria-hidden /> Giới thiệu</span>
             </h4>
             <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
               {instrument.description}
@@ -142,7 +143,7 @@ export default function ModalInstrument({
           {/* 2. CẤU TẠO */}
           <div>
             <h4 className="font-display font-black text-sm uppercase text-[#16141A] dark:text-[#E8EAE0] mb-1">
-              🪵 Cấu tạo
+              <span className="inline-flex items-center gap-1.5"><IconBlocks size={16} aria-hidden /> Cấu tạo</span>
             </h4>
             <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
               {instrument.structure}
@@ -152,7 +153,7 @@ export default function ModalInstrument({
           {/* 3. CÁCH CHƠI */}
           <div>
             <h4 className="font-display font-black text-sm uppercase text-[#16141A] dark:text-[#E8EAE0] mb-1">
-              🖐️ Cách chơi
+              <span className="inline-flex items-center gap-1.5"><IconHand size={16} aria-hidden /> Cách chơi</span>
             </h4>
             <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
               {instrument.playMethod}
@@ -162,7 +163,7 @@ export default function ModalInstrument({
           {/* 4. ÂM SẮC */}
           <div>
             <h4 className="font-display font-black text-sm uppercase text-[#16141A] dark:text-[#E8EAE0] mb-1">
-              🎶 Âm sắc
+              <span className="inline-flex items-center gap-1.5"><IconScore size={16} aria-hidden /> Âm sắc</span>
             </h4>
             <p className="text-[#524F59] dark:text-[#A8A6B0] leading-relaxed">
               {instrument.timbre}
@@ -172,7 +173,7 @@ export default function ModalInstrument({
           {/* 5. VÌ SAO THUỘC HÀNH ĐÓ */}
           <div className="p-3 rounded bg-amber-50 dark:bg-stone-900 border border-amber-200 dark:border-stone-700">
             <h4 className="font-display font-black text-sm uppercase text-[#B3821B] dark:text-[#F2B632] mb-1">
-              ☯️ Vì sao thuộc hành {instrument.elementName}?
+              <span className="inline-flex items-center gap-1.5"><IconTaiji size={16} aria-hidden /> Vì sao thuộc hành {instrument.elementName}?</span>
             </h4>
             <p className="text-[#16141A] dark:text-[#E8EAE0] leading-relaxed">
               {instrument.elementReason}
