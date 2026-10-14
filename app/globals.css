@@ -473,9 +473,62 @@ p, li, td, th {
 }
 
 /* ============================================================
-   12. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
-
+   12. UNIVERSE KIT — biến do UniverseRoot gán lên <html>
    ============================================================ */
+html {
+  --uni-bg: #0B0C14;
+  --uni-surface: #14161E;
+  --uni-accent: #F2B632;
+  --uni-accent-muted: #524F59;
+  --uni-text: #E8EAE0;
+  --uni-text-muted: #A8A6B0;
+  --uni-text-on-accent: #0B0C14;
+  --uni-border: #E8EAE0;
+  --uni-shadow: #16141A;
+  --uni-glow: rgba(242,182,50,0.4);
+}
+
+html.universe-tho,
+html.universe-kim,
+html.universe-moc,
+html.universe-hoa,
+html.universe-thuy,
+html.universe-united {
+  transition: background-color 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   13. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
+   ============================================================ */
+
+/* Billboard thanh tiến độ */
+@keyframes billboard-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* Header hide/show (dùng translate trong Tailwind, không cần thêm) */
+
+/* Universe portal ripple */
+@keyframes universe-ripple {
+  0%   { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Skeleton loading pulse */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 100%);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Scrollbar ẩn cho InstrumentRow */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

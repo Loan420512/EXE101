@@ -14,6 +14,7 @@
 import React, { useState, useEffect } from "react";
 import { GAMEPLAY_30S_STEPS } from "@/data/content";
 import { ElementType } from "@/data/instruments";
+import { IconPause, IconPlay, IconLightbulb, IconStore, IconHand, IconScore, IconTrophy } from "@/components/icons";
 
 // Helper map tên nhạc cụ sang Element để gắn màu trực quan
 const INSTRUMENT_ELEMENT_MAP: Record<string, { element: ElementType; color: string; tone: string }> = {
@@ -132,14 +133,16 @@ export default function GameGuide30s() {
               onClick={() => setIsPlaying(!isPlaying)}
               className="text-xs font-bold px-2.5 py-1 rounded border border-[#16141A] dark:border-[#E8EAE0] bg-stone-100 dark:bg-stone-800 text-[#16141A] dark:text-[#E8EAE0]"
             >
-              {isPlaying ? "Tạm dừng ⏸" : "Tự chạy ▶"}
+              <span className="inline-flex items-center gap-1">
+                {isPlaying ? <><IconPause size={12} aria-hidden /> Tạm dừng</> : <><IconPlay size={12} aria-hidden /> Tự chạy</>}
+              </span>
             </button>
           </div>
         </div>
 
         {/* MÔ TẢ HÀNH ĐỘNG CỦA BƯỚC HIỆN TẠI */}
         <div className="mb-6 p-4 rounded bg-[#E8EAE0]/60 dark:bg-stone-800/60 border-l-4 border-l-[#F2B632] flex items-center gap-3">
-          <span className="text-xl">💡</span>
+          <IconLightbulb size={20} aria-hidden className="flex-shrink-0" />
           <p className="text-sm font-semibold text-[#16141A] dark:text-[#E8EAE0]">
             {stepData.actionText}
           </p>
@@ -152,7 +155,7 @@ export default function GameGuide30s() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase text-[#16141A] dark:text-[#E8EAE0]">
-                  🏪 Chợ Nhạc (Ngửa trên bàn)
+                  <span className="inline-flex items-center gap-1.5"><IconStore size={16} aria-hidden /> Chợ Nhạc (Ngửa trên bàn)</span>
                 </span>
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
                   {stepData.marketCards.length} lá
@@ -178,7 +181,7 @@ export default function GameGuide30s() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase text-[#16141A] dark:text-[#E8EAE0]">
-                  🖐️ Bài trên tay bạn
+                  <span className="inline-flex items-center gap-1.5"><IconHand size={16} aria-hidden /> Bài trên tay bạn</span>
                 </span>
                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10">
                   {stepData.handCards.length} lá
@@ -206,7 +209,7 @@ export default function GameGuide30s() {
           <div className="md:col-span-8 p-4 rounded-[4px] border-2 border-[#16141A] dark:border-[#E8EAE0] bg-white dark:bg-stone-900">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-black uppercase text-[#D23A22]">
-                🎼 Bản nhạc đã đặt (Trình tấu hợp lệ)
+                <span className="inline-flex items-center gap-1.5"><IconScore size={16} aria-hidden /> Bản nhạc đã đặt (Trình tấu hợp lệ)</span>
               </span>
               <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#3F7D3B] text-white">
                 {stepData.playedCards.length > 0 ? "Bộ 3 Họ Thủy (Hợp tấu)" : "Chưa hạ bài"}
@@ -229,7 +232,7 @@ export default function GameGuide30s() {
           {/* KHU VỰC 4: ĐIỂM SỐ */}
           <div className="md:col-span-4 p-4 rounded-[4px] border-2 border-[#16141A] dark:border-[#E8EAE0] bg-[#F2B632]/25 dark:bg-[#F2B632]/10 flex flex-col items-center justify-center text-center">
             <span className="text-xs font-black uppercase text-[#16141A] dark:text-[#E8EAE0]">
-              🏆 Điểm tích lũy
+              <span className="inline-flex items-center gap-1.5"><IconTrophy size={16} aria-hidden /> Điểm tích lũy</span>
             </span>
             <span className="font-display font-black text-4xl text-[#D23A22] my-1">
               +{stepData.points}

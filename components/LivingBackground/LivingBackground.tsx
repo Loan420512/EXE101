@@ -352,7 +352,7 @@ export default function LivingBackground({
       />
 
       {/* 6. Nút tiện ích Tạm dừng nền cố định góc dưới bên phải màn hình */}
-      <div className="fixed bottom-3 right-3 z-40">
+      <div className="fixed bottom-20 right-3 md:bottom-3 z-40">
         <button
           onClick={togglePause}
           className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold rounded-[3px] bg-white/90 dark:bg-stone-900/90 text-[#16141A] dark:text-[#E8EAE0] border-[1.5px] border-[#16141A] dark:border-[#E8EAE0] shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] hover:bg-stone-100 transition-all cursor-pointer backdrop-blur-sm"
@@ -360,7 +360,7 @@ export default function LivingBackground({
           aria-label={isPaused ? "Tiếp tục chuyển động nền sống" : "Tạm dừng chuyển động nền"}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#3F7D3B] dark:bg-[#F2B632] animate-pulse" />
-          <span>{isPaused ? "▶ Tiếp tục nền" : "⏸ Tạm dừng nền"}</span>
+          <span>{isPaused ? "Tiếp tục nền" : "Tạm dừng nền"}</span>
         </button>
       </div>
     </>

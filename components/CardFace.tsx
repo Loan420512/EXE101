@@ -16,6 +16,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
+import InstrumentIllustration from "@/components/InstrumentIllustration";
 
 interface CardFaceProps {
   name: string;
@@ -27,6 +28,9 @@ interface CardFaceProps {
   className?: string;
   size?: "sm" | "md" | "lg";
   isInteractive?: boolean;
+  instrumentId?: string;
+  /** 0–2: biến thể tranh cho các lá cùng nhạc cụ */
+  variant?: number;
 }
 
 // Map hành → CSS variable glow
@@ -56,6 +60,8 @@ export default function CardFace({
   className = "",
   size = "md",
   isInteractive = true,
+  instrumentId,
+  variant = 0,
 }: CardFaceProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const cfg = ELEMENT_CONFIG[element];
@@ -219,19 +225,29 @@ export default function CardFace({
         </div>
       </div>
 
-      {/* 6. PHẦN GIỮA: HOA VĂN THỊ SAI */}
+      {/* 6. PHẦN GIỮA: TRANH NHẠC CỤ */}
       <div
-        className="my-auto flex flex-col items-center justify-center py-2 relative z-10 transition-transform duration-75"
+        className="my-auto flex flex-col items-center justify-center py-1 relative z-10 transition-transform duration-75"
         style={{ transform: isHovered ? `translate3d(${tilt.y * 0.4}px, ${-tilt.x * 0.4}px, 0)` : "none" }}
       >
-        <div className="flex flex-col gap-1 items-center w-full my-2 opacity-75">
-          <div className="w-12 h-[2px] bg-current rounded-full" />
-          <div className="w-8  h-[2px] bg-current rounded-full" />
-          <div className="w-16 h-[2px] bg-current rounded-full" />
-          <div className="w-10 h-[2px] bg-current rounded-full" />
-          <div className="w-14 h-[2px] bg-current rounded-full" />
-        </div>
-        <div className="mt-1 px-2.5 py-1 rounded border-2 border-current font-display font-black text-sm tracking-widest bg-black/10">
+        {instrumentId ? (
+          <InstrumentIllustration
+            instrumentId={instrumentId}
+            element={element}
+            variant={variant}
+            size={size === "lg" ? 120 : size === "sm" ? 64 : 88}
+            className="drop-shadow-[2px_2px_0_rgba(0,0,0,0.35)]"
+          />
+        ) : (
+          <div className="flex flex-col gap-1 items-center w-full my-2 opacity-75">
+            <div className="w-12 h-[2px] bg-current rounded-full" />
+            <div className="w-8  h-[2px] bg-current rounded-full" />
+            <div className="w-16 h-[2px] bg-current rounded-full" />
+            <div className="w-10 h-[2px] bg-current rounded-full" />
+            <div className="w-14 h-[2px] bg-current rounded-full" />
+          </div>
+        )}
+        <div className="mt-1 px-2.5 py-1 rounded border-2 border-current font-display font-black text-[10px] md:text-xs tracking-widest bg-black/10">
           {cfg.name}
         </div>
       </div>

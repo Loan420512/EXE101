@@ -14,6 +14,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "@/components/Header";
+import { IconBook, IconBlocks, IconHand } from "@/components/icons";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
 import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
@@ -91,6 +92,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                 element={inst.element}
                 tone={inst.tone}
                 noteName={inst.noteName}
+                instrumentId={inst.id}
                 size="lg"
                 isInteractive={true}
               />
@@ -153,7 +155,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                   className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
                   style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
                 >
-                  <span>📖</span> Giới thiệu lịch sử
+                  <IconBook size={18} aria-hidden /> Giới thiệu lịch sử
                 </h2>
                 <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.description}
@@ -165,7 +167,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                   className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
                   style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
                 >
-                  <span>🪵</span> Cấu tạo nhạc cụ
+                  <IconBlocks size={18} aria-hidden /> Cấu tạo nhạc cụ
                 </h2>
                 <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.structure}
@@ -180,7 +182,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                   className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
                   style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
                 >
-                  <span>🖐️</span> Kỹ thuật diễn tấu
+                  <IconHand size={18} aria-hidden /> Kỹ thuật diễn tấu
                 </h2>
                 <p className="text-[#534E5C] dark:text-[#A8A4B2]" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.playMethod}
@@ -192,7 +194,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                   className="font-display font-black text-base uppercase text-[#1A1720] dark:text-[#EAE8D8] mb-2 flex items-center gap-2"
                   style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em" }}
                 >
-                  <span>⚡</span> Vì sao thuộc hành {inst.elementName}?
+                  Vì sao thuộc hành {inst.elementName}?
                 </h2>
                 <p className="text-[#534E5C] dark:text-[#A8A4B2] bg-amber-50/60 dark:bg-stone-800/60 p-3 rounded-[4px] border-2 border-amber-200 dark:border-stone-700" style={{ lineHeight: "var(--lh-body)" }}>
                   {inst.elementReason}
@@ -225,6 +227,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
                   element={r.element}
                   tone={r.tone}
                   noteName={r.noteName}
+                  instrumentId={r.id}
                   size="sm"
                   isInteractive={true}
                 />

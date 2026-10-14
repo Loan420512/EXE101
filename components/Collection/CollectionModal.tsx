@@ -13,6 +13,7 @@
 import React, { useState } from "react";
 import { INSTRUMENTS, ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import CardFace from "@/components/CardFace";
+import { IconQuestion, IconClose, IconGift, IconMedal, IconLock, IconCrown } from "@/components/icons";
 
 interface CollectionModalProps {
   isOpen: boolean;
@@ -85,7 +86,7 @@ export default function CollectionModal({
           aria-label="Đóng Bộ sưu tập"
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer z-10"
         >
-          ✕
+          <IconClose size={14} aria-hidden />
         </button>
 
         {/* TIÊU ĐỀ & TIẾN ĐỘ TỔNG */}
@@ -107,7 +108,7 @@ export default function CollectionModal({
               }}
               className="px-3 py-1.5 text-xs font-bold bg-[#D23A22] text-white rounded border-2 border-[#16141A] shadow-[2px_2px_0px_#16141A] hover:bg-[#b8311c] cursor-pointer"
             >
-              🎁 Mở gói bài mới
+              <span className="inline-flex items-center gap-1.5"><IconGift size={14} aria-hidden /> Mở gói bài mới</span>
             </button>
           </div>
         </div>
@@ -123,7 +124,7 @@ export default function CollectionModal({
                   : "border-dashed border-stone-300 dark:border-stone-700 opacity-60"
               }`}
             >
-              <span className="text-xl mb-0.5">{b.isComplete ? "🏅" : "🔒"}</span>
+              <span className="mb-0.5">{b.isComplete ? <IconMedal size={20} className="text-[#F2B632]" aria-hidden /> : <IconLock size={20} aria-hidden />}</span>
               <span className="text-[10px] font-bold leading-tight">{b.name}</span>
               <span className="text-[9px] mt-0.5 opacity-80">
                 {b.count}/{b.total} lá
@@ -139,7 +140,7 @@ export default function CollectionModal({
                 : "border-dashed border-stone-300 dark:border-stone-700 opacity-50"
             }`}
           >
-            <span className="text-xl mb-0.5">{isGrandMaster ? "👑" : "🔒"}</span>
+            <span className="mb-0.5">{isGrandMaster ? <IconCrown size={20} className="text-[#F2B632]" aria-hidden /> : <IconLock size={20} aria-hidden />}</span>
             <span className="text-[10px] font-bold leading-tight">Đại Sứ Toàn Bích</span>
             <span className="text-[9px] mt-0.5">{totalCollected}/15 lá</span>
           </div>
@@ -187,12 +188,13 @@ export default function CollectionModal({
                     element={inst.element}
                     tone={inst.tone}
                     noteName={inst.noteName}
+                    instrumentId={inst.id}
                     size="sm"
                     isInteractive={false}
                   />
                 ) : (
                   <div className="w-28 h-40 rounded-[4px] border-[2px] border-dashed border-stone-400 dark:border-stone-600 bg-stone-200/50 dark:bg-stone-800/50 flex flex-col items-center justify-center p-2 text-center text-stone-500">
-                    <span className="text-xl mb-1">❓</span>
+                    <IconQuestion size={22} aria-hidden className="mb-1" />
                     <span className="text-[10px] font-bold">{inst.name}</span>
                     <span className="text-[9px]">Chưa sưu tầm</span>
                   </div>

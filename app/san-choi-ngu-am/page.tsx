@@ -19,6 +19,7 @@ import TeamFaqFooter from "@/components/TeamFaqFooter";
 import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import WaveformVisualizer from "@/components/WaveformVisualizer";
+import { IconLink } from "@/components/icons";
 import { ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { soundEngine, OCTAVE_FREQUENCIES } from "@/lib/audio";
 
@@ -337,7 +338,7 @@ function PlaygroundInner() {
                     onClick={handleShareMelody}
                     className="px-3.5 py-2 bg-white dark:bg-stone-700 text-[#16141A] dark:text-[#E8EAE0] text-xs font-bold rounded border-2 border-[#16141A] shadow-[2px_2px_0px_#16141A] hover:bg-stone-50 cursor-pointer"
                   >
-                    {shareCopied ? "✓ Đã copy link!" : "🔗 Chia sẻ giai điệu"}
+                    {shareCopied ? "✓ Đã copy link!" : <span className="inline-flex items-center gap-1.5"><IconLink size={13} aria-hidden /> Chia sẻ giai điệu</span>}
                   </button>
                 </>
               )}

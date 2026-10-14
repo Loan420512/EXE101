@@ -54,6 +54,7 @@ import {
 } from "@/lib/rules/engine";
 import { decideBotMove, executeBotTurn } from "@/lib/rules/bot";
 import { soundEngine } from "@/lib/audio";
+import { IconWarning, IconStar, IconClose } from "@/components/icons";
 
 const ELEMENT_LABELS: Record<ElementType, { name: string; note: string; color: string; bg: string; border: string }> = {
   tho: { name: "Thổ", note: "Cung (C4)", color: "text-[#B45309]", bg: "bg-[#F2B632]", border: "border-[#B45309]" },
@@ -438,7 +439,7 @@ export default function ChoiThuNgayPage() {
 
             {onlineError && (
               <div className="p-3 bg-red-50 border-2 border-red-500 rounded-xl text-red-800 text-xs font-bold">
-                ⚠️ {onlineError}
+                <span className="inline-flex items-center gap-1.5 align-[-2px]"><IconWarning size={14} aria-hidden /></span> {onlineError}
               </div>
             )}
 
@@ -600,7 +601,7 @@ export default function ChoiThuNgayPage() {
                 </div>
                 {p.hopTauCount > 0 && (
                   <div className="mt-1 text-[11px] font-bold text-emerald-700">
-                    ★ {p.hopTauCount} Hợp tấu
+                    <span className="inline-flex items-center gap-1 align-[-1px]"><IconStar size={12} aria-hidden /></span> {p.hopTauCount} Hợp tấu
                   </div>
                 )}
               </div>
@@ -956,9 +957,10 @@ export default function ChoiThuNgayPage() {
               </h3>
               <button
                 onClick={() => setShowTutorial(false)}
-                className="text-stone-400 hover:text-black font-black text-xl p-1 min-h-[44px] min-w-[44px]"
+                className="text-stone-400 hover:text-black font-black p-1 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+                aria-label="Đóng hướng dẫn"
               >
-                ✕
+                <IconClose size={18} aria-hidden />
               </button>
             </div>
 

@@ -36,7 +36,9 @@ export default function EffectCanvas({
 }: EffectCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
     if (!activeEffect) return;
