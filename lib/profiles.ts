@@ -122,6 +122,13 @@ let cache: ProfilesSnapshot | null = null;
 const listeners = new Set<() => void>();
 let bound = false;
 
+/**
+ * Snapshot phía server phải là MỘT object cố định. Trả object mới mỗi lần gọi
+ * khiến React báo "The result of getServerSnapshot should be cached" và dễ
+ * rơi vào vòng lặp render.
+ */
+const SERVER_SNAPSHOT: ProfilesSnapshot = { profiles: [], currentId: null };
+
 function ensureBound() {
   if (bound || typeof window === "undefined") return;
   bound = true;
@@ -141,7 +148,7 @@ function ensureBound() {
 function getSnapshot(): ProfilesSnapshot {
   if (cache === null) {
     if (typeof window === "undefined") {
-      return { profiles: [], currentId: null };
+      return SERVER_SNAPSHOT;
     }
     cache = { profiles: readProfiles(), currentId: readCurrentId() };
   }
@@ -149,7 +156,7 @@ function getSnapshot(): ProfilesSnapshot {
 }
 
 function getServerSnapshot(): ProfilesSnapshot {
-  return { profiles: [], currentId: null };
+  return SERVER_SNAPSHOT;
 }
 
 function subscribe(cb: () => void) {
