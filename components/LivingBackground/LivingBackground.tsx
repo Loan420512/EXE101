@@ -16,24 +16,70 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { readBrowserHints, detectDeviceTier, DeviceTier } from "@/lib/device/tier";
-import { ATMOSPHERE_COLORS } from "@/config/effects";
+import { ATMOSPHERE_COLORS, SCENE_TRANSITION_CONFIG } from "@/config/effects";
 import { SECTION_ATMOSPHERE, SectionId } from "@/config/sections";
+import { SCENES, DRUM_ASSET, type SceneKey, getSceneByElement } from "@/data/scenes";
 import { VERTEX_SHADER, FRAGMENT_SHADER } from "./DiepPaperShader";
 import { ElementalParticleSystem } from "./ParticleSystem";
 import CssFallbackBackground from "./CssFallbackBackground";
 
+const SECTION_SCENE_MAP: Record<SectionId, SceneKey> = {
+  hero: "default",
+  "cau-chuyen": "tho",
+  "choi-30s": "moc",
+  "bo-bai": "thuy",
+  "ngu-hanh": "tho",
+  "luat-choi": "kim",
+  "dang-ky": "hoa",
+  "doi-ngu": "thuy",
+};
+
 interface LivingBackgroundProps {
   currentSection?: SectionId;
   forceAtmosphere?: keyof typeof ATMOSPHERE_COLORS;
+  activeScene?: SceneKey;
 }
 
 export default function LivingBackground({
   currentSection = "hero",
   forceAtmosphere,
+  activeScene,
 }: LivingBackgroundProps) {
   const [deviceTier, setDeviceTier] = useState<DeviceTier>(() => detectDeviceTier(readBrowserHints()));
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isReady, setIsReady] = useState<boolean>(() => detectDeviceTier(readBrowserHints()) === "min");
+  const [overrideScene, setOverrideScene] = useState<SceneKey | null>(null);
+
+  // Lắng nghe sự kiện chuyển cảnh toàn cục (ngucung:set-scene)
+  useEffect(() => {
+    const handleSceneEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ element?: SceneKey; duration?: number }>;
+      if (customEvent.detail?.element && customEvent.detail.element in SCENES) {
+        setOverrideScene(customEvent.detail.element);
+        if (customEvent.detail.duration) {
+          const timeoutId = setTimeout(() => {
+            setOverrideScene((cur) => (cur === customEvent.detail?.element ? null : cur));
+          }, customEvent.detail.duration);
+          return () => clearTimeout(timeoutId);
+        }
+      }
+    };
+
+    window.addEventListener("ngucung:set-scene", handleSceneEvent);
+    return () => {
+      window.removeEventListener("ngucung:set-scene", handleSceneEvent);
+    };
+  }, []);
+
+  const activeSceneKey: SceneKey = (
+    overrideScene ||
+    activeScene ||
+    (forceAtmosphere && forceAtmosphere in SCENES ? (forceAtmosphere as SceneKey) : null) ||
+    (currentSection ? SECTION_SCENE_MAP[currentSection] : "default") ||
+    "default"
+  );
+  const activeSceneData = getSceneByElement(activeSceneKey);
+
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const particleCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -285,26 +331,89 @@ export default function LivingBackground({
   }, []);
 
   if (deviceTier === "min") {
-    return <CssFallbackBackground />;
+    return <CssFallbackBackground currentScene={activeSceneKey} />;
   }
 
   return (
     <>
-      {/* 1. Canvas WebGL nền giấy điệp & họa tiết Đông Hồ */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[-2] w-full h-full"
+      {/* 1. Lớp ảnh quang cảnh thực (6 cảnh: Mặc định + 5 Hành) */}
+      <div
+        className="fixed inset-0 pointer-events-none z-[-4] overflow-hidden select-none bg-[#16141A]"
+        aria-hidden="true"
+      >
+        {Object.entries(SCENES).map(([key, sc]) => {
+          const isActive = key === activeSceneKey;
+          return (
+            <picture
+              key={key}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                isActive ? "opacity-35" : "opacity-0"
+              }`}
+            >
+              <source type="image/avif" srcSet={sc.srcSetAvif} sizes="100vw" />
+              <source type="image/webp" srcSet={sc.srcSetWebp} sizes="100vw" />
+              <img
+                src={sc.webpUrl}
+                alt={sc.alt}
+                className="w-full h-full object-cover object-center filter saturate-[0.85] contrast-[1.05]"
+                loading={key === "default" ? "eager" : "lazy"}
+                decoding="async"
+              />
+            </picture>
+          );
+        })}
+      </div>
+
+      {/* 2. Lớp phủ gradient chuyển cảnh & bảo toàn độ tương phản WCAG */}
+      <div
+        className="fixed inset-0 pointer-events-none z-[-3] transition-all duration-1000 ease-in-out"
+        style={{
+          background: activeSceneData.overlayGradient,
+        }}
         aria-hidden="true"
       />
 
-      {/* 2. Canvas hạt ngũ hành GPU/2D nổi nhẹ phía trên giấy điệp */}
+      {/* 3. Lớp Trống Đồng Đông Sơn thực xoay chậm lệch góc trên bên phải */}
+      <div
+        className="fixed -top-28 md:-top-44 -right-28 md:-right-44 pointer-events-none z-[-2] overflow-hidden w-[550px] h-[550px] md:w-[850px] md:h-[850px] transition-opacity duration-1000"
+        style={{
+          opacity: SCENE_TRANSITION_CONFIG.drum.opacity,
+        }}
+        aria-hidden="true"
+      >
+        <picture
+          className="block w-full h-full animate-drum-spin"
+          style={{
+            animationPlayState: isPaused ? "paused" : "running",
+          }}
+        >
+          <source type="image/avif" srcSet={DRUM_ASSET.srcSetWebp.replace(/\.webp/g, ".avif")} sizes="850px" />
+          <source type="image/webp" srcSet={DRUM_ASSET.srcSetWebp} sizes="850px" />
+          <img
+            src={DRUM_ASSET.webpUrl}
+            alt={DRUM_ASSET.alt}
+            className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(242,182,50,0.25)]"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </div>
+
+      {/* 4. Canvas WebGL nền giấy điệp & họa tiết Đông Hồ */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-[-2] w-full h-full opacity-60 mix-blend-overlay dark:opacity-50 dark:mix-blend-screen"
+        aria-hidden="true"
+      />
+
+      {/* 5. Canvas hạt ngũ hành GPU/2D nổi nhẹ phía trên giấy điệp */}
       <canvas
         ref={particleCanvasRef}
         className="fixed inset-0 pointer-events-none z-[-1] w-full h-full"
         aria-hidden="true"
       />
 
-      {/* 3. Nút tiện ích Tạm dừng nền cố định góc dưới bên phải màn hình */}
+      {/* 6. Nút tiện ích Tạm dừng nền cố định góc dưới bên phải màn hình */}
       <div className="fixed bottom-3 right-3 z-40">
         <button
           onClick={togglePause}
