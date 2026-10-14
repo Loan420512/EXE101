@@ -39,6 +39,15 @@ export default function EffectCanvas({
   useEffect(() => {
     if (!activeEffect) return;
 
+    // Kích hoạt chuyển cảnh nền đồng bộ với hiệu ứng ngũ hành của lá bài
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ngucung:set-scene", {
+          detail: { element: activeEffect.element, duration: 6000 },
+        })
+      );
+    }
+
     // 1. Kiểm tra prefers-reduced-motion
     const prefersReducedMotion =
       typeof window !== "undefined" &&

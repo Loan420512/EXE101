@@ -41,12 +41,32 @@ export default function CardDeck({
       ? INSTRUMENTS
       : INSTRUMENTS.filter((inst) => inst.element === filter);
 
+  const handleFilterChange = (newFilter: ElementType | "all") => {
+    setFilter(newFilter);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ngucung:set-scene", {
+          detail: { element: newFilter === "all" ? "default" : newFilter, duration: 8000 },
+        })
+      );
+    }
+  };
+
   const handleCardClick = (inst: Instrument, rect: EffectTargetRect) => {
     if (isEffectRunning) return; // Chống bấm chồng
 
     // Phát âm thanh của họ
     soundEngine.playElementTone(inst.element);
     setAnimatingCardId(inst.id);
+
+    // Kích hoạt chuyển cảnh nền đồng bộ với họ lá bài
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ngucung:set-scene", {
+          detail: { element: inst.element, duration: 6000 },
+        })
+      );
+    }
 
     // Kích hoạt hiệu ứng canvas toàn màn hình
     onTriggerEffect(inst.element, rect, () => {
@@ -88,7 +108,7 @@ export default function CardDeck({
           return (
             <button
               key={opt.id}
-              onClick={() => setFilter(opt.id)}
+              onClick={() => handleFilterChange(opt.id)}
               style={
                 isActive && opt.color
                   ? { backgroundColor: opt.color, color: opt.id === "kim" || opt.id === "tho" ? "#16141A" : "#FFFFFF" }

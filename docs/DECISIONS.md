@@ -108,6 +108,22 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
      - Trang 404: Tạo trang `app/not-found.tsx` mang nhận diện thương hiệu hoàn chỉnh.
   3. **Bảo vệ tương phản thị giác**: Bọc trong thẻ chứa giấy ngà `#FAFAF5` (nền sáng) và giấy sẫm `#25222E` (nền tối) có viền mực Đông Hồ, đảm bảo nét chữ "NGŨ CUNG CARD GAME" không bao giờ bị chìm trên nền đen.
 
+---
+
+## 8. Đồng Bộ Đa Giác Quan Khi Tương Tác Lá Bài (Card Click Elemental Transition)
+
+- **Vấn đề**: Khi người dùng bấm vào lá bài trên giao diện, cần tạo ra phản hồi tức thì và sống động, gắn kết mật thiết giữa hiệu ứng hạt bao quanh lá bài, âm thanh ngũ âm và quang cảnh nền của hành đó.
+- **Quyết định**:
+  1. **Đồng bộ 3 tầng**:
+     - *Thính giác*: Kích hoạt bộ tổng hợp WebAudio phát nốt tương ứng (Thổ C4, Kim D4, Mộc E4, Hỏa G4, Thủy A4).
+     - *Thị giác cục bộ*: Canvas 2D toàn màn hình vẽ hiệu ứng đặc trưng (Hỏa: lửa bùng + tàn than; Thủy: sóng nước lan tỏa; Mộc: dây leo tre nở; Kim: quét sáng sắc bén; Thổ: đá nứt vỡ).
+     - *Thị giác toàn cảnh*: Phát CustomEvent `ngucung:set-scene` để `LivingBackground` chuyển nền sang ảnh quang cảnh thực tương ứng (`canh-hoa`, `canh-thuy`, `canh-moc`, `canh-kim`, `canh-tho`) trong 6000ms.
+  2. **Tích hợp nhất quán**: Cơ chế này được kích hoạt đồng thời tại:
+     - Lưới 15 lá bài trên trang chủ (`components/CardDeck.tsx`).
+     - Bộ lọc 5 họ nhạc cụ trên trang chủ và trang bộ bài (`app/bo-bai/page.tsx`).
+     - Bất kỳ điểm kích hoạt `EffectCanvas` nào trên toàn hệ thống.
+
+
 
 
 

@@ -57,6 +57,14 @@ export default function BoBaiPage() {
     soundEngine.playElementTone(inst.element);
     setAnimatingCardId(inst.id);
 
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ngucung:set-scene", {
+          detail: { element: inst.element, duration: 6000 },
+        })
+      );
+    }
+
     handleTriggerEffect(inst.element, rect, () => {
       setAnimatingCardId(null);
       setModalOriginRect(rect);
