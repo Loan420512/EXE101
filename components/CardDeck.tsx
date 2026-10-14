@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import CardFace from "./CardFace";
 import ModalInstrument from "./ModalInstrument";
 import { INSTRUMENTS, Instrument, ElementType, ELEMENT_CONFIG } from "@/data/instruments";
+import { dispatchSceneChange } from "@/data/scenes";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";
 
@@ -43,13 +44,6 @@ export default function CardDeck({
 
   const handleFilterChange = (newFilter: ElementType | "all") => {
     setFilter(newFilter);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("ngucung:set-scene", {
-          detail: { element: newFilter === "all" ? "default" : newFilter, duration: 8000 },
-        })
-      );
-    }
   };
 
   const handleCardClick = (inst: Instrument, rect: EffectTargetRect) => {
@@ -59,14 +53,7 @@ export default function CardDeck({
     soundEngine.playElementTone(inst.element);
     setAnimatingCardId(inst.id);
 
-    // Kích hoạt chuyển cảnh nền đồng bộ với họ lá bài
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("ngucung:set-scene", {
-          detail: { element: inst.element, duration: 6000 },
-        })
-      );
-    }
+    dispatchSceneChange(inst.element);
 
     // Kích hoạt hiệu ứng canvas toàn màn hình
     onTriggerEffect(inst.element, rect, () => {
@@ -86,17 +73,17 @@ export default function CardDeck({
   ];
 
   return (
-    <section id="bo-bai" className="py-20 realm-thuy relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
+    <section id="bo-bai" className="py-20 realm-thuy relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* TIÊU ĐỀ */}
       <div className="text-center max-w-3xl mx-auto mb-10">
-        <span className="text-xs font-black tracking-widest uppercase text-[#1B3B7A] dark:text-[#7CB9E8] block mb-2" style={{ lineHeight: "var(--lh-caption)" }}>
+        <span className="text-xs font-black tracking-widest uppercase text-[#7CB9E8] on-photo-kicker block mb-2" style={{ lineHeight: "var(--lh-caption)" }}>
           THƯ VIỆN BÀI NGŨ CUNG
         </span>
-        <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]" style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em", paddingBottom: "0.05em" }}>
+        <h2 className="font-display font-black text-3xl sm:text-4xl on-photo-heading" style={{ lineHeight: "var(--lh-heading)", paddingTop: "0.05em", paddingBottom: "0.05em" }}>
           Mười lăm nhạc cụ truyền thống
         </h2>
-        <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]" style={{ lineHeight: "var(--lh-body)" }}>
+        <p className="mt-2 text-sm on-photo-muted" style={{ lineHeight: "var(--lh-body)" }}>
           Mỗi nhạc cụ gồm 3 lá bài, tổng cộng 45 lá bài trong một bộ. Bấm vào từng lá bài để chiêm ngưỡng hiệu ứng biến ảo ngũ hành và nghe thử âm nốt.
         </p>
       </div>
@@ -143,7 +130,7 @@ export default function CardDeck({
               onClick={(rect) => handleCardClick(inst, rect)}
             />
             <div className="mt-2 text-center">
-              <span className="text-[11px] font-semibold text-[#524F59] dark:text-[#A8A6B0]">
+              <span className="text-[11px] font-semibold on-photo-muted">
                 3 lá trong bộ
               </span>
             </div>
@@ -158,6 +145,7 @@ export default function CardDeck({
         onClose={() => {
           setActiveModalInstrument(null);
           setModalOriginRect(null);
+          dispatchSceneChange("default");
         }}
       />
       </div>

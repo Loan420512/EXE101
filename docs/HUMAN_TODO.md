@@ -33,3 +33,8 @@ Tài liệu này ghi nhận các công việc bắt buộc phải do con ngườ
 7. **Đăng ký tên miền & Chứng chỉ bảo mật**:
    - Đăng ký tên miền chính thức (ví dụ: `ngucunggame.vn` hoặc `ngucung.edu.vn`).
    - Thiết lập bản ghi DNS, TLS/SSL certificate và CDN caching trên Vercel / Cloudflare.
+
+8. **Thẩm định mỹ thuật & Bản quyền bộ ảnh nền, logo**:
+   - Rà soát bản quyền xuất bản thương mại của bộ 7 ảnh nền quang cảnh và trống đồng (`assets-src/backgroundweb/`).
+   - Chuẩn bị file vector SVG / AI độ phân giải cao của logo `logongucung.png` phục vụ in ấn bao bì hộp bài vật lý và ấn phẩm triển lãm.
+

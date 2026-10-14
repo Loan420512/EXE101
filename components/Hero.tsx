@@ -20,6 +20,7 @@ import { ElementType } from "@/data/instruments";
 import { HERO_CONTENT, WUXING_DATA } from "@/data/content";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";
+import { dispatchSceneChange } from "@/data/scenes";
 
 interface HeroProps {
   onTriggerEffect: (element: ElementType, rect: EffectTargetRect, onFinish: () => void) => void;
@@ -118,6 +119,7 @@ export default function Hero({ onTriggerEffect, isEffectRunning }: HeroProps) {
     if (isEffectRunning) return;
     soundEngine.playElementTone(element);
     setAnimatingCard(element);
+    dispatchSceneChange(element);
     onTriggerEffect(element, rect, () => {
       setAnimatingCard(null);
       setSelectedElement(element);
@@ -177,7 +179,7 @@ export default function Hero({ onTriggerEffect, isEffectRunning }: HeroProps) {
             {/* Tiêu đề — "bảng giấy" yên tĩnh, glow nhẹ là hiệu ứng */}
             <h1
               ref={titleRef}
-              className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#1A1720] dark:text-[#EAE8D8]"
+              className="font-display font-black text-4xl sm:text-5xl lg:text-6xl on-photo-heading"
               style={{
                 lineHeight: "var(--lh-heading-tight)",
                 textShadow: selectedElement ? ELEMENT_TEXT_GLOW[selectedElement] : "none",
@@ -188,7 +190,7 @@ export default function Hero({ onTriggerEffect, isEffectRunning }: HeroProps) {
             </h1>
 
             <p
-              className="text-base sm:text-lg text-[#534E5C] dark:text-[#A8A4B2] max-w-2xl"
+              className="text-base sm:text-lg on-photo-muted max-w-2xl"
               style={{ lineHeight: "var(--lh-body)" }}
             >
               {HERO_CONTENT.description}

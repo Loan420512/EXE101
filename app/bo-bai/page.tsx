@@ -21,6 +21,7 @@ import CollectionModal from "@/components/Collection/CollectionModal";
 import { INSTRUMENTS, Instrument, ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
 import { soundEngine } from "@/lib/audio";
+import { dispatchSceneChange } from "@/data/scenes";
 
 export default function BoBaiPage() {
   const [filter, setFilter] = useState<ElementType | "all">("all");
@@ -57,13 +58,7 @@ export default function BoBaiPage() {
     soundEngine.playElementTone(inst.element);
     setAnimatingCardId(inst.id);
 
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("ngucung:set-scene", {
-          detail: { element: inst.element, duration: 6000 },
-        })
-      );
-    }
+    dispatchSceneChange(inst.element);
 
     handleTriggerEffect(inst.element, rect, () => {
       setAnimatingCardId(null);
@@ -82,8 +77,7 @@ export default function BoBaiPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
-      {/* NỀN SỐNG WEBGL ĐỒNG BỘ VỚI BỘ LỌC HÀNH */}
+    <div className="min-h-screen flex flex-col bg-transparent text-[#16141A] dark:text-[#E8EAE0]">
       <LivingBackground forceAtmosphere={filter === "all" ? "mix" : filter} />
 
       <Header
@@ -108,13 +102,13 @@ export default function BoBaiPage() {
             THƯ VIỆN ĐẦY ĐỦ 45 LÁ BÀI
           </span>
           <h1
-            className="font-display font-black text-3xl sm:text-5xl text-[#1A1720] dark:text-[#EAE8D8]"
+            className="font-display font-black text-3xl sm:text-5xl on-photo-heading"
             style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
           >
             Bộ bài Ngũ Cung
           </h1>
           <p
-            className="mt-3 text-sm sm:text-base text-[#534E5C] dark:text-[#A8A4B2]"
+            className="mt-3 text-sm sm:text-base on-photo-muted"
             style={{ lineHeight: "var(--lh-body)" }}
           >
             Mỗi bộ bài gồm 15 nhạc cụ thuộc 5 hành. Mỗi nhạc cụ được in 3 bản sao giống nhau, tạo thành bộ 45 lá tiêu chuẩn cho 2 đến 5 người chơi.
@@ -187,10 +181,10 @@ export default function BoBaiPage() {
                 onClick={(rect) => handleCardClick(inst, rect)}
               />
               <div className="mt-2 text-center text-xs font-semibold">
-                <span className="block text-[#16141A] dark:text-[#E8EAE0] font-bold">
+                <span className="block on-photo-heading font-bold">
                   {inst.name}
                 </span>
-                <span className="text-[10px] text-[#524F59] dark:text-[#A8A6B0]">
+                <span className="text-[10px] on-photo-muted">
                   3 lá / bộ (45 lá)
                 </span>
               </div>
@@ -205,6 +199,7 @@ export default function BoBaiPage() {
           onClose={() => {
             setActiveModalInstrument(null);
             setModalOriginRect(null);
+            dispatchSceneChange("default");
           }}
         />
 

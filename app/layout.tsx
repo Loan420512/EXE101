@@ -116,6 +116,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/nen-mac-dinh-1280.webp" />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/canh-tho-1280.webp" />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/canh-kim-1280.webp" />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/canh-moc-1280.webp" />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/canh-hoa-1280.webp" />
+        <link rel="preload" as="image" type="image/webp" href="/images/backgroundweb/canh-thuy-1280.webp" />
       </head>
       <body className="min-h-full flex flex-col font-sans selection:bg-[#F2B632] selection:text-[#16141A]" suppressHydrationWarning>
         {/* WCAG 2.2 AA Skip Link */}

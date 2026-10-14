@@ -100,7 +100,7 @@ export default function Home() {
   }, [activeEffect]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#16141A] dark:text-[#E8EAE0]">
       {/* 0. NỀN SỐNG WEBGL NGŨ HÀNH & GIẤY ĐIỆP */}
       <LivingBackground currentSection={currentSection} />
 

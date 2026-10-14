@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function NguHanhPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
+    <div className="min-h-screen flex flex-col bg-transparent text-[#16141A] dark:text-[#E8EAE0]">
       <LivingBackground forceAtmosphere="mix" />
 
       <Header />

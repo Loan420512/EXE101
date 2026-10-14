@@ -20,7 +20,6 @@ export default function Story() {
     <section
       id="cau-chuyen"
       className="py-20 realm-tho relative overflow-hidden"
-      style={{ backgroundColor: "var(--bg-diep)" }}
     >
       {/* Hoa văn trang trí rìa trái */}
       <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#F2B632]/40 dark:bg-[#F5C040]/30" aria-hidden="true" />

@@ -62,9 +62,8 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
   const cfg = ELEMENT_CONFIG[inst.element];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#E8EAE0] dark:bg-[#141318] text-[#16141A] dark:text-[#E8EAE0]">
-      {/* NỀN SỐNG WEBGL THEO HÀNH CỦA NHẠC CỤ */}
-      <LivingBackground forceAtmosphere={inst.element} />
+    <div className="min-h-screen flex flex-col bg-transparent text-[#16141A] dark:text-[#E8EAE0]">
+      <LivingBackground forceAtmosphere={inst.element} activeScene={inst.element} />
 
       <Header />
 

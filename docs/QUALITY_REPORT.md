@@ -55,5 +55,24 @@ Dự án Web App "Ngũ Cung" đã hoàn thành toàn diện toàn bộ 7 mốc p
 
 ---
 
-## 5. Kết Luận & Nghiệm Thu
-Sản phẩm web app "Ngũ Cung" đã sẵn sàng triển khai thực tế và bàn giao hoàn tất.
+## 5. Mốc M8 & M9: Cõi Ngũ Âm & Bộ Ảnh Nền, Logo, Chuyển Cảnh
+
+1. **Bộ Ảnh Nền & Trống Đồng Đông Sơn (M9)**:
+   - 7 ảnh nền nguồn chuyển vào `assets-src/` nguyên bản, nén đa tầng thành 57 file AVIF + WebP (640w, 1280w, 2560w) bằng Sharp với `npm run images`.
+   - Lớp Trống đồng Đông Sơn (`trong-dong`) xoay chậm 240s/vòng ở góc trên bên phải màn hình, tự động tạm dừng khi bật nút tạm dừng hoặc `prefers-reduced-motion`.
+   - Giữ nguyên nội dung chữ, dữ liệu 15 nhạc cụ, luật chơi và thanh thông báo "Bản nháp".
+2. **Logo Chính Thức**:
+   - Gắn logo tranh khắc gỗ `logongucung.webp/png` trên Header, Footer, OpenGraph metadata, PWA manifest (icon 192/512) và trang lỗi 404 (`app/not-found.tsx`).
+   - Khung giấy ngà viền mực Đông Hồ đảm bảo logo nổi bật trên cả nền sáng và nền tối.
+3. **Hiệu Ứng Chuyển Cảnh Ngũ Hành**:
+   - Tương tác bấm lá bài và bộ lọc hành kích hoạt tức thời 3 tầng: âm thanh ngũ âm WebAudio, hoạt họa hạt 2D trên `EffectCanvas.tsx`, và chuyển cảnh nền sang cảnh tương ứng (`canh-tho`, `canh-kim`, `canh-moc`, `canh-hoa`, `canh-thuy`).
+4. **Kiểm Thử Toàn Diện**:
+   - `npx tsc --noEmit`: PASS (0 lỗi).
+   - `npm test`: PASS (10/10 tests, gồm 1,000 ván đấu Bot AI và WebSocket test).
+   - `next build`: PASS (33 routes tối ưu hóa Turbopack).
+
+---
+
+## 6. Kết Luận & Nghiệm Thu
+Sản phẩm web app "Ngũ Cung" đã hoàn thành trọn vẹn 9/9 mốc phát triển (M1 – M9), tích hợp bộ ảnh nền, logo chính thức và hiệu ứng chuyển cảnh ngũ hành hoàn mỹ, sẵn sàng bàn giao cho người dùng.
+

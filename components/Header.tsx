@@ -45,7 +45,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#E8EAE0] dark:bg-[#141318] border-b-[3px] border-[#16141A] dark:border-[#E8EAE0]">
+    <header className="sticky top-0 z-40 w-full bg-[#E8EAE0]/88 dark:bg-[#141318]/88 backdrop-blur-md border-b-[3px] border-[#16141A] dark:border-[#E8EAE0]">
 
 
       {/* 2. THANH ĐIỀU HƯỚNG CHÍNH */}
