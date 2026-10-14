@@ -109,6 +109,7 @@ export default function RootLayout({
     <html
       lang="vi"
       className={`${beVietnamPro.variable} ${playfairDisplay.variable} h-full scroll-smooth`}
+      suppressHydrationWarning
     >
       <head>
         <script
@@ -116,7 +117,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans selection:bg-[#F2B632] selection:text-[#16141A]">
+      <body className="min-h-full flex flex-col font-sans selection:bg-[#F2B632] selection:text-[#16141A]" suppressHydrationWarning>
         {/* WCAG 2.2 AA Skip Link */}
         <a
           href="#main-content"
@@ -125,7 +126,7 @@ export default function RootLayout({
           Bỏ qua đến nội dung chính
         </a>
 
-        <div id="main-content" className="flex-1 flex flex-col">
+        <div id="main-content" className="flex-1 flex flex-col" suppressHydrationWarning>
           {children}
         </div>
 
