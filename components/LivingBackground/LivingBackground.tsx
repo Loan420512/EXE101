@@ -16,23 +16,13 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { readBrowserHints, detectDeviceTier, DeviceTier } from "@/lib/device/tier";
-import { ATMOSPHERE_COLORS, SCENE_TRANSITION_CONFIG } from "@/config/effects";
+import { ATMOSPHERE_COLORS } from "@/config/effects";
 import { SECTION_ATMOSPHERE, SectionId } from "@/config/sections";
-import { SCENES, DRUM_ASSET, type SceneKey, getSceneByElement } from "@/data/scenes";
+import { SCENES, type SceneKey, getSceneByElement } from "@/data/scenes";
 import { VERTEX_SHADER, FRAGMENT_SHADER } from "./DiepPaperShader";
 import { ElementalParticleSystem } from "./ParticleSystem";
 import CssFallbackBackground from "./CssFallbackBackground";
-
-const SECTION_SCENE_MAP: Record<SectionId, SceneKey> = {
-  hero: "default",
-  "cau-chuyen": "tho",
-  "choi-30s": "moc",
-  "bo-bai": "thuy",
-  "ngu-hanh": "tho",
-  "luat-choi": "kim",
-  "dang-ky": "hoa",
-  "doi-ngu": "thuy",
-};
+import { ScenePhotoStack } from "./ScenePhotoStack";
 
 interface LivingBackgroundProps {
   currentSection?: SectionId;
@@ -52,32 +42,40 @@ export default function LivingBackground({
 
   // Lắng nghe sự kiện chuyển cảnh toàn cục (ngucung:set-scene)
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const handleSceneEvent = (e: Event) => {
       const customEvent = e as CustomEvent<{ element?: SceneKey; duration?: number }>;
-      if (customEvent.detail?.element && customEvent.detail.element in SCENES) {
-        setOverrideScene(customEvent.detail.element);
-        if (customEvent.detail.duration) {
-          const timeoutId = setTimeout(() => {
-            setOverrideScene((cur) => (cur === customEvent.detail?.element ? null : cur));
-          }, customEvent.detail.duration);
-          return () => clearTimeout(timeoutId);
-        }
+      const next = customEvent.detail?.element;
+      if (!next || !(next in SCENES)) return;
+      if (timeoutId) clearTimeout(timeoutId);
+      if (next === "default") {
+        setOverrideScene(null);
+        return;
+      }
+      setOverrideScene(next);
+      if (customEvent.detail?.duration) {
+        timeoutId = setTimeout(() => {
+          setOverrideScene((cur) => (cur === next ? null : cur));
+        }, customEvent.detail.duration);
       }
     };
 
     window.addEventListener("ngucung:set-scene", handleSceneEvent);
     return () => {
       window.removeEventListener("ngucung:set-scene", handleSceneEvent);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
 
-  const activeSceneKey: SceneKey = (
-    overrideScene ||
-    activeScene ||
-    (forceAtmosphere && forceAtmosphere in SCENES ? (forceAtmosphere as SceneKey) : null) ||
-    (currentSection ? SECTION_SCENE_MAP[currentSection] : "default") ||
-    "default"
-  );
+  // Tải trước 6 ảnh nền để bấm thẻ là đổi ngay, không 404 nếu thiếu file
+  useEffect(() => {
+    Object.values(SCENES).forEach((sc) => {
+      const img = new Image();
+      img.src = `/images/backgroundweb/${sc.baseFile}-1280.webp`;
+    });
+  }, []);
+
+  const activeSceneKey: SceneKey = overrideScene || activeScene || "default";
   const activeSceneData = getSceneByElement(activeSceneKey);
 
 
@@ -336,73 +334,13 @@ export default function LivingBackground({
 
   return (
     <>
-      {/* 1. Lớp ảnh quang cảnh thực (6 cảnh: Mặc định + 5 Hành) */}
-      <div
-        className="fixed inset-0 pointer-events-none z-[-4] overflow-hidden select-none bg-[#16141A]"
-        aria-hidden="true"
-      >
-        {Object.entries(SCENES).map(([key, sc]) => {
-          const isActive = key === activeSceneKey;
-          return (
-            <picture
-              key={key}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-                isActive ? "opacity-35" : "opacity-0"
-              }`}
-            >
-              <source type="image/avif" srcSet={sc.srcSetAvif} sizes="100vw" />
-              <source type="image/webp" srcSet={sc.srcSetWebp} sizes="100vw" />
-              <img
-                src={sc.webpUrl}
-                alt={sc.alt}
-                className="w-full h-full object-cover object-center filter saturate-[0.85] contrast-[1.05]"
-                loading={key === "default" ? "eager" : "lazy"}
-                decoding="async"
-              />
-            </picture>
-          );
-        })}
-      </div>
+      {/* 1. Ảnh quang cảnh (mặc định + 5 họ). Trống đồng chưa dùng ở bước này. */}
+      <ScenePhotoStack activeSceneKey={activeSceneKey} overlay={activeSceneData.overlayGradient} />
 
-      {/* 2. Lớp phủ gradient chuyển cảnh & bảo toàn độ tương phản WCAG */}
-      <div
-        className="fixed inset-0 pointer-events-none z-[-3] transition-all duration-1000 ease-in-out"
-        style={{
-          background: activeSceneData.overlayGradient,
-        }}
-        aria-hidden="true"
-      />
-
-      {/* 3. Lớp Trống Đồng Đông Sơn thực xoay chậm lệch góc trên bên phải */}
-      <div
-        className="fixed -top-28 md:-top-44 -right-28 md:-right-44 pointer-events-none z-[-2] overflow-hidden w-[550px] h-[550px] md:w-[850px] md:h-[850px] transition-opacity duration-1000"
-        style={{
-          opacity: SCENE_TRANSITION_CONFIG.drum.opacity,
-        }}
-        aria-hidden="true"
-      >
-        <picture
-          className="block w-full h-full animate-drum-spin"
-          style={{
-            animationPlayState: isPaused ? "paused" : "running",
-          }}
-        >
-          <source type="image/avif" srcSet={DRUM_ASSET.srcSetWebp.replace(/\.webp/g, ".avif")} sizes="850px" />
-          <source type="image/webp" srcSet={DRUM_ASSET.srcSetWebp} sizes="850px" />
-          <img
-            src={DRUM_ASSET.webpUrl}
-            alt={DRUM_ASSET.alt}
-            className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(242,182,50,0.25)]"
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
-      </div>
-
-      {/* 4. Canvas WebGL nền giấy điệp & họa tiết Đông Hồ */}
+      {/* 2. Canvas WebGL giấy điệp — mờ để ảnh nền còn nhìn rõ */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[-2] w-full h-full opacity-60 mix-blend-overlay dark:opacity-50 dark:mix-blend-screen"
+        className="fixed inset-0 pointer-events-none z-[-2] w-full h-full opacity-20 mix-blend-overlay dark:opacity-15 dark:mix-blend-screen"
         aria-hidden="true"
       />
 

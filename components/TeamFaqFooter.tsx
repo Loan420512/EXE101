@@ -22,7 +22,7 @@ export default function TeamFaqFooter() {
   };
 
   return (
-    <footer id="doi-ngu" className="pt-20 pb-12 realm-thuy relative overflow-hidden border-t-[3px] border-[#1A1720] dark:border-[#EAE8D8]" style={{ backgroundColor: "var(--bg-diep)" }}>
+    <footer id="doi-ngu" className="pt-20 pb-12 realm-thuy relative overflow-hidden border-t-[3px] border-[#EAE8D8]/40">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ================= PHẦN 1: ĐỘI NGŨ TEAM 35 ================= */}
         <div className="mb-20">
@@ -30,10 +30,10 @@ export default function TeamFaqFooter() {
             <span className="text-xs font-black tracking-widest uppercase text-[#3F7D3B] block mb-2">
               NHỮNG NGƯỜI SÁNG TẠO
             </span>
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+            <h2 className="font-display font-black text-3xl sm:text-4xl on-photo-heading">
               Đội ngũ Team 35
             </h2>
-            <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]">
+            <p className="mt-2 text-sm on-photo-muted">
               Nhóm sinh viên nhiệt huyết với tình yêu âm nhạc dân tộc và khao khát đưa văn hóa vào đời sống đương đại.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function TeamFaqFooter() {
             <span className="text-xs font-black tracking-widest uppercase text-[#D23A22] block mb-2">
               GIẢI ĐÁP THẮC MẮC
             </span>
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+            <h2 className="font-display font-black text-3xl sm:text-4xl on-photo-heading">
               Câu hỏi thường gặp
             </h2>
           </div>

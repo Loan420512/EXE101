@@ -49,7 +49,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/nen-mac-dinh.avif",
     srcSetWebp: "/images/backgroundweb/nen-mac-dinh-640.webp 640w, /images/backgroundweb/nen-mac-dinh-1280.webp 1280w, /images/backgroundweb/nen-mac-dinh-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/nen-mac-dinh-640.avif 640w, /images/backgroundweb/nen-mac-dinh-1280.avif 1280w, /images/backgroundweb/nen-mac-dinh-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(22, 20, 26, 0.78) 0%, rgba(30, 27, 36, 0.82) 50%, rgba(22, 20, 26, 0.92) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(22, 20, 26, 0.55) 0%, rgba(30, 27, 36, 0.60) 50%, rgba(22, 20, 26, 0.75) 100%)",
     accentColor: "#F2B632",
     glowColor: "rgba(242, 182, 50, 0.28)",
     credit: {
@@ -73,7 +73,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/canh-tho.avif",
     srcSetWebp: "/images/backgroundweb/canh-tho-640.webp 640w, /images/backgroundweb/canh-tho-1280.webp 1280w, /images/backgroundweb/canh-tho-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/canh-tho-640.avif 640w, /images/backgroundweb/canh-tho-1280.avif 1280w, /images/backgroundweb/canh-tho-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(45, 30, 10, 0.75) 0%, rgba(35, 24, 12, 0.82) 50%, rgba(20, 15, 10, 0.94) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(45, 30, 10, 0.50) 0%, rgba(35, 24, 12, 0.58) 50%, rgba(20, 15, 10, 0.72) 100%)",
     accentColor: ELEMENT_COLORS.tho.fill,
     glowColor: ELEMENT_COLORS.tho.glow,
     credit: {
@@ -97,7 +97,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/canh-kim.avif",
     srcSetWebp: "/images/backgroundweb/canh-kim-640.webp 640w, /images/backgroundweb/canh-kim-1280.webp 1280w, /images/backgroundweb/canh-kim-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/canh-kim-640.avif 640w, /images/backgroundweb/canh-kim-1280.avif 1280w, /images/backgroundweb/canh-kim-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(30, 28, 20, 0.75) 0%, rgba(25, 23, 20, 0.84) 50%, rgba(15, 15, 18, 0.94) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(30, 28, 20, 0.50) 0%, rgba(25, 23, 20, 0.58) 50%, rgba(15, 15, 18, 0.72) 100%)",
     accentColor: ELEMENT_COLORS.kim.fill,
     glowColor: ELEMENT_COLORS.kim.glow,
     credit: {
@@ -121,7 +121,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/canh-moc.avif",
     srcSetWebp: "/images/backgroundweb/canh-moc-640.webp 640w, /images/backgroundweb/canh-moc-1280.webp 1280w, /images/backgroundweb/canh-moc-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/canh-moc-640.avif 640w, /images/backgroundweb/canh-moc-1280.avif 1280w, /images/backgroundweb/canh-moc-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(12, 35, 18, 0.76) 0%, rgba(10, 28, 16, 0.84) 50%, rgba(8, 20, 14, 0.95) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(12, 35, 18, 0.50) 0%, rgba(10, 28, 16, 0.58) 50%, rgba(8, 20, 14, 0.72) 100%)",
     accentColor: ELEMENT_COLORS.moc.fill,
     glowColor: ELEMENT_COLORS.moc.glow,
     credit: {
@@ -145,7 +145,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/canh-hoa.avif",
     srcSetWebp: "/images/backgroundweb/canh-hoa-640.webp 640w, /images/backgroundweb/canh-hoa-1280.webp 1280w, /images/backgroundweb/canh-hoa-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/canh-hoa-640.avif 640w, /images/backgroundweb/canh-hoa-1280.avif 1280w, /images/backgroundweb/canh-hoa-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(48, 12, 10, 0.76) 0%, rgba(36, 10, 10, 0.84) 50%, rgba(20, 8, 8, 0.95) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(48, 12, 10, 0.50) 0%, rgba(36, 10, 10, 0.58) 50%, rgba(20, 8, 8, 0.72) 100%)",
     accentColor: ELEMENT_COLORS.hoa.fill,
     glowColor: ELEMENT_COLORS.hoa.glow,
     credit: {
@@ -169,7 +169,7 @@ export const SCENES: Record<SceneKey, SceneData> = {
     avifUrl: "/images/backgroundweb/canh-thuy.avif",
     srcSetWebp: "/images/backgroundweb/canh-thuy-640.webp 640w, /images/backgroundweb/canh-thuy-1280.webp 1280w, /images/backgroundweb/canh-thuy-2560.webp 2560w",
     srcSetAvif: "/images/backgroundweb/canh-thuy-640.avif 640w, /images/backgroundweb/canh-thuy-1280.avif 1280w, /images/backgroundweb/canh-thuy-2560.avif 2560w",
-    overlayGradient: "linear-gradient(180deg, rgba(8, 22, 42, 0.76) 0%, rgba(7, 18, 36, 0.85) 50%, rgba(6, 12, 24, 0.96) 100%)",
+    overlayGradient: "linear-gradient(180deg, rgba(8, 22, 42, 0.50) 0%, rgba(7, 18, 36, 0.58) 50%, rgba(6, 12, 24, 0.72) 100%)",
     accentColor: ELEMENT_COLORS.thuy.fill,
     glowColor: ELEMENT_COLORS.thuy.glow,
     credit: {
@@ -218,4 +218,14 @@ export function getSceneByElement(element?: string | null): SceneData {
     return SCENES.default;
   }
   return SCENES[element as SceneKey];
+}
+
+/** Chuyển cảnh nền toàn trang. Truyền `"default"` để về ảnh mặc định. */
+export function dispatchSceneChange(element: SceneKey) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent("ngucung:set-scene", {
+      detail: { element },
+    })
+  );
 }

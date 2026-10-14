@@ -17,17 +17,17 @@ import { RULES_CONTENT } from "@/data/content";
 
 export default function RulesSection() {
   return (
-    <section id="luat-choi" className="py-20 realm-kim relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
+    <section id="luat-choi" className="py-20 realm-kim relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* TIÊU ĐỀ */}
       <div className="text-center max-w-3xl mx-auto mb-12">
         <span className="text-xs font-black tracking-widest uppercase text-[#D23A22] block mb-2">
           HỆ THỐNG CƠ CHẾ BÀI
         </span>
-        <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+        <h2 className="font-display font-black text-3xl sm:text-4xl on-photo-heading">
           {RULES_CONTENT.title}
         </h2>
-        <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]">
+        <p className="mt-2 text-sm on-photo-muted">
           {RULES_CONTENT.subtitle}
         </p>
       </div>

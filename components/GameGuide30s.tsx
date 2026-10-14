@@ -81,17 +81,17 @@ export default function GameGuide30s() {
   const stepData = GAMEPLAY_30S_STEPS[currentStep];
 
   return (
-    <section id="choi-30s" className="py-20 realm-moc relative overflow-hidden" style={{ backgroundColor: "var(--bg-diep)" }}>
+    <section id="choi-30s" className="py-20 realm-moc relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* TIÊU ĐỀ */}
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <span className="text-xs font-black tracking-widest uppercase text-[#3F7D3B] block mb-2">
+        <span className="text-xs font-black tracking-widest uppercase text-[#8FD98A] on-photo-kicker block mb-2">
           HƯỚNG DẪN SIÊU TỐC
         </span>
-        <h2 className="font-display font-black text-3xl sm:text-4xl text-[#16141A] dark:text-[#E8EAE0]">
+        <h2 className="font-display font-black text-3xl sm:text-4xl on-photo-heading">
           Chơi trong 30 giây
         </h2>
-        <p className="mt-2 text-sm text-[#524F59] dark:text-[#A8A6B0]">
+        <p className="mt-2 text-sm on-photo-muted">
           Xem một lượt đi mẫu điển hình để nắm ngay cơ chế kết hợp ngũ âm và ghi điểm.
         </p>
       </div>

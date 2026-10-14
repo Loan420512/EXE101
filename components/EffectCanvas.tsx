@@ -35,18 +35,11 @@ export default function EffectCanvas({
   onComplete,
 }: EffectCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (!activeEffect) return;
-
-    // Kích hoạt chuyển cảnh nền đồng bộ với hiệu ứng ngũ hành của lá bài
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("ngucung:set-scene", {
-          detail: { element: activeEffect.element, duration: 6000 },
-        })
-      );
-    }
 
     // 1. Kiểm tra prefers-reduced-motion
     const prefersReducedMotion =
@@ -131,7 +124,7 @@ export default function EffectCanvas({
         animId = requestAnimationFrame(renderFrame);
       } else {
         ctx.clearRect(0, 0, width, height);
-        onComplete();
+        onCompleteRef.current();
       }
     };
 
@@ -141,7 +134,7 @@ export default function EffectCanvas({
       cancelAnimationFrame(animId);
       if (ctx) ctx.clearRect(0, 0, width, height);
     };
-  }, [activeEffect, onComplete]);
+  }, [activeEffect]);
 
   if (!activeEffect) return null;
 
