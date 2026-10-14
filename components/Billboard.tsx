@@ -11,16 +11,15 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { INSTRUMENTS, type Instrument, type ElementType, ELEMENT_CONFIG } from "@/data/instruments";
-import { SCENES, type SceneKey } from "@/data/scenes";
+import { type SceneKey } from "@/data/scenes";
 import { dispatchSceneChange } from "@/data/scenes";
 import { soundEngine } from "@/lib/audio";
 import InstrumentIllustration from "@/components/InstrumentIllustration";
 import {
-  IconPlay, IconPause, IconMusicNote, IconGamepad,
-  IconHeart, IconInfo, IconChevronLeft, IconChevronRight,
+  IconMusicNote, IconGamepad,
+  IconInfo, IconChevronLeft, IconChevronRight,
 } from "@/components/icons";
 
 // Một đại diện cho mỗi hành — lấy nhạc cụ đầu tiên của mỗi họ
@@ -40,11 +39,10 @@ const SCENE_KEY: Record<ElementType, SceneKey> = {
   hoa: "hoa", thuy: "thuy", moc: "moc", tho: "tho", kim: "kim",
 };
 
-const AUTO_INTERVAL = 6000; // ms
+const AUTO_INTERVAL = 4000; // ms — billboard tự chuyển, không có nút dừng
 
 export default function Billboard() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,12 +64,12 @@ export default function Billboard() {
     goTo((activeIdx - 1 + FEATURED.length) % FEATURED.length);
   }, [activeIdx, goTo]);
 
-  // Auto-advance
+  // Tự chuyển sau AUTO_INTERVAL; chỉ dừng khi chuột đang rê trên billboard
   useEffect(() => {
-    if (isPaused || isHovered) return;
+    if (isHovered) return;
     timerRef.current = setTimeout(next, AUTO_INTERVAL);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [activeIdx, isPaused, isHovered, next]);
+  }, [activeIdx, isHovered, next]);
 
   // Phím mũi tên
   useEffect(() => {
@@ -264,7 +262,7 @@ export default function Billboard() {
         })}
       </div>
 
-      {/* ── NÚTCHUYỂN TRÁI/PHẢI ── */}
+      {/* ── NÚT CHUYỂN TRÁI/PHẢI ── */}
       <button
         onClick={prev}
         aria-label="Hành trước"
@@ -283,32 +281,6 @@ export default function Billboard() {
       >
         <IconChevronRight size={20} aria-hidden />
       </button>
-
-      {/* ── NÚT TẠM DỪNG ── */}
-      <button
-        onClick={() => setIsPaused((p) => !p)}
-        aria-label={isPaused ? "Tiếp tục tự chuyển" : "Tạm dừng tự chuyển"}
-        aria-pressed={isPaused}
-        className="absolute bottom-6 right-6 z-20 w-9 h-9 flex items-center justify-center
-          rounded-full bg-black/40 border border-white/20 text-white hover:bg-black/60
-          transition-all focus-visible:outline-2 focus-visible:outline-white"
-      >
-        {isPaused ? <IconPlay size={14} aria-hidden /> : <IconPause size={14} aria-hidden />}
-      </button>
-
-      {/* ── THANH TIẾN ĐỘ — chạy theo interval ── */}
-      {!isPaused && !isHovered && (
-        <div className="absolute bottom-0 left-0 right-0 z-20 h-0.5 bg-white/10" aria-hidden>
-          <div
-            key={`progress-${activeIdx}`}
-            className="h-full rounded-r"
-            style={{
-              backgroundColor: elCfg.color,
-              animation: `billboard-progress ${AUTO_INTERVAL}ms linear`,
-            }}
-          />
-        </div>
-      )}
     </section>
   );
 }

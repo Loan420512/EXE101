@@ -501,12 +501,6 @@ html.universe-united {
    13. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
    ============================================================ */
 
-/* Billboard thanh tiến độ */
-@keyframes billboard-progress {
-  from { width: 0%; }
-  to   { width: 100%; }
-}
-
 /* Header hide/show (dùng translate trong Tailwind, không cần thêm) */
 
 /* Universe portal ripple */
