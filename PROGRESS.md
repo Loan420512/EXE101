@@ -3,7 +3,7 @@
 Khẩu hiệu: *"Thu thập ngũ hành. Nghe văn hóa."*  
 Đối tượng mục tiêu: **7+** (Trẻ em từ 7 tuổi, gia đình, học sinh)  
 Thời gian khởi tạo: 2026-10-13  
-Trạng thái tổng thể: **HOÀN THÀNH 8/8 MỐC (M1 – M8) — CÕI NGŨ ÂM ĐÃ SỐNG**
+Trạng thái tổng thể: **HOÀN THÀNH M1–M9 — NỀN ẢNH NGŨ HÀNH HOẠT ĐỘNG ĐẦY ĐỦ**
 
 ---
 
@@ -65,5 +65,6 @@ open http://localhost:3000/dev/typography
 - **2026-10-14 13:52**: **M9 - Hạng mục 3 (Nền Web LivingBackground & Trống Đồng)**: Nâng cấp kiến trúc nền 5 tầng: (1) 6 cảnh quang cảnh thực AVIF/WebP crossfade, (2) gradient overlay bảo vệ contrast WCAG, (3) Trống đồng Đông Sơn `trong-dong` xoay chậm 240s lệch góc trên phải, (4) WebGL shader giấy điệp & vệt mực loang, (5) hạt linh khí instanced; hỗ trợ sự kiện `ngucung:set-scene` chuyển cảnh toàn cục; cập nhật fallback `CssFallbackBackground`.
 - **2026-10-14 13:55**: **M9 - Hạng mục 4 (Gắn Logo Duy Nhất)**: Thay thế hoàn toàn các ô placeholder bằng logo chính thức `logongucung.webp/png` trên Header, Footer, OpenGraph metadata, PWA manifest (icon 192/512) và trang 404 `app/not-found.tsx` với khung viền giấy điệp bảo vệ tương phản sáng/tối.
 - **2026-10-14 13:57**: **M9 - Hạng mục 5 (Hiệu Ứng Chuyển Cảnh Khi Bấm Lá Bài)**: Kết nối trọn vẹn 3 tầng tương tác khi bấm lá bài và bộ lọc hành: phát âm sắc ngũ hành (C4/D4/E4/G4/A4), bùng nổ hoạt họa hạt ngũ hành trên `EffectCanvas.tsx`, và tự động chuyển cảnh nền sang cảnh tương ứng (`canh-hoa`, `canh-thuy`, `canh-moc`, `canh-kim`, `canh-tho`) trong 6000ms.
+- **2026-10-14**: **M9 - Commit nền ảnh đầy đủ**: Hoàn chỉnh và commit toàn bộ pipeline nền ảnh ngũ hành: `ScenePhotoStack` mới (xếp chồng 6 ảnh, crossfade CSS 1000ms), `LivingBackground` lắng nghe `ngucung:set-scene`, preload 6 ảnh 1280.webp trong `layout.tsx`, `CardDeck`/`Hero` gọi `dispatchSceneChange` khi bấm lá và reset khi đóng modal. Build pass 33 routes, TypeScript pass.
 
 
