@@ -55,20 +55,30 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
 
       {/* 2. THANH ĐIỀU HƯỚNG CHÍNH */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* LOGO NGŨ CUNG */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded bg-[#D23A22] border-2 border-[#16141A] dark:border-[#E8EAE0] flex items-center justify-center shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] group-hover:scale-105 transition-transform">
-            <span className="font-display font-black text-white text-base leading-none">ngũ</span>
+        {/* LOGO CHÍNH THỨC NGŨ CUNG */}
+        <Link href="/" className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D23A22] rounded py-1">
+          <div className="h-10 w-auto aspect-[676/369] bg-[#FAFAF5] dark:bg-[#25222E] px-1 py-0.5 rounded border-2 border-[#16141A] dark:border-[#E8EAE0] shadow-[2px_2px_0px_#16141A] dark:shadow-[2px_2px_0px_#E8EAE0] group-hover:scale-105 transition-transform flex items-center justify-center overflow-hidden">
+            <picture>
+              <source type="image/webp" srcSet="/images/logo/logongucung.webp" />
+              <img
+                src="/images/logo/logongucung.png"
+                alt="Logo Ngũ Cung Card Game"
+                className="h-full w-auto object-contain dark:brightness-110"
+                width={72}
+                height={40}
+              />
+            </picture>
           </div>
           <div className="flex flex-col">
             <span className="font-display font-black text-lg tracking-tight text-[#16141A] dark:text-[#E8EAE0] leading-none">
               NGŨ CUNG
             </span>
-            <span className="text-[10px] tracking-wider text-[#524F59] dark:text-[#A8A6B0] uppercase font-bold">
-              Five Tones • Card Game
+            <span className="text-[10px] tracking-wider text-[#524F59] dark:text-[#A8A6B0] uppercase font-bold mt-0.5">
+              Five Tones • Card Game (7+)
             </span>
           </div>
         </Link>
+
 
         {/* MENU DESKTOP */}
         <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold">
