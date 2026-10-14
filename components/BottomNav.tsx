@@ -18,10 +18,10 @@ import {
 const TABS = [
   { href: "/", label: "Khám phá", Icon: IconCompass, match: (p: string) => p === "/" },
   {
-    href: "/bo-bai",
+    href: "/duyet",
     label: "Duyệt",
     Icon: IconLibrary,
-    match: (p: string) => p.startsWith("/bo-bai") || p.startsWith("/nhac-cu"),
+    match: (p: string) => p.startsWith("/duyet") || p.startsWith("/bo-bai") || p.startsWith("/nhac-cu"),
   },
   {
     href: "/choi-thu-ngay",

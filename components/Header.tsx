@@ -15,11 +15,14 @@ import { soundEngine } from "@/lib/audio";
 import { UNIVERSES } from "@/config/universes";
 import type { UniverseId } from "@/config/universes";
 import { useUniverse } from "@/lib/useUniverse";
+import { useProfiles, GUEST_PROFILE } from "@/lib/profiles";
+import { SHOW_PROFILES_EVENT } from "@/components/WhoIsPlaying";
+import { OPEN_PALETTE_EVENT } from "@/components/CommandPalette";
 import {
   IconVolume, IconVolumeMute, IconSearch, IconGamepad,
   IconMusicNote, IconCompass, IconLibrary, IconUser, IconDrum,
-  IconEarth, IconMetal, IconLeaf, IconFire, IconWave, IconPentagon,
 } from "@/components/icons";
+import { UniverseAvatar, UniverseGlyph } from "@/components/UniverseGlyph";
 
 interface HeaderProps {
   onOpenPack?: () => void;
@@ -28,26 +31,19 @@ interface HeaderProps {
 
 const NAV_LINKS = [
   { label: "Khám phá", href: "/", icon: <IconCompass size={16} aria-hidden /> },
-  { label: "Duyệt", href: "/bo-bai", icon: <IconLibrary size={16} aria-hidden /> },
+  { label: "Duyệt", href: "/duyet", icon: <IconLibrary size={16} aria-hidden /> },
   { label: "Chơi", href: "/choi-thu-ngay", icon: <IconGamepad size={16} aria-hidden /> },
   { label: "Nhạc", href: "/san-choi-ngu-am", icon: <IconMusicNote size={16} aria-hidden /> },
   { label: "Luật", href: "/luat-choi", icon: <IconDrum size={16} aria-hidden /> },
 ];
-
-const UNIVERSE_ICONS: Record<UniverseId, React.ReactNode> = {
-  tho: <IconEarth size={14} aria-hidden />,
-  kim: <IconMetal size={14} aria-hidden />,
-  moc: <IconLeaf size={14} aria-hidden />,
-  hoa: <IconFire size={14} aria-hidden />,
-  thuy: <IconWave size={14} aria-hidden />,
-  united: <IconPentagon size={14} aria-hidden />,
-};
 
 export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {}) {
   const [isMuted, setIsMuted] = useState(() => soundEngine.getIsMuted());
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
   const { universeId, setUniverse } = useUniverse();
+  const { current: profile, hasChosen } = useProfiles();
+  const activeProfile = profile ?? GUEST_PROFILE;
 
   // Ẩn/hiện khi cuộn
   useEffect(() => {
@@ -157,7 +153,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
                     ["--glow" as string]: u.colors.glow,
                   }}
                 >
-                  {UNIVERSE_ICONS[id]}
+                  <UniverseGlyph avatar={id} />
                 </button>
               );
             })}
@@ -165,6 +161,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
 
           {/* TÌM KIẾM */}
           <button
+            onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
             aria-label="Tìm kiếm (Ctrl+K)"
             title="Tìm kiếm Ctrl+K"
             className="hidden sm:flex w-9 h-9 items-center justify-center rounded-[4px] text-white/60 hover:text-white
@@ -189,16 +186,26 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
             {isMuted ? <IconVolumeMute size={18} aria-hidden /> : <IconVolume size={18} aria-hidden />}
           </button>
 
-          {/* HỒ SƠ */}
-          <Link
-            href="/ho-so"
-            aria-label="Hồ sơ của tôi"
-            className="w-9 h-9 flex items-center justify-center rounded-[4px] text-white/60
+          {/* HỒ SƠ — hiện avatar hành của người đang chơi */}
+          <button
+            onClick={() => window.dispatchEvent(new Event(SHOW_PROFILES_EVENT))}
+            aria-label={hasChosen ? `Hồ sơ: ${activeProfile.name} — đổi hồ sơ` : "Chọn hồ sơ người chơi"}
+            title={hasChosen ? `Đang chơi: ${activeProfile.name} — bấm để đổi hồ sơ` : "Ai đang chơi?"}
+            className="h-9 min-w-9 px-1.5 flex items-center justify-center gap-1.5 rounded-[4px] text-white/60
               hover:text-white hover:bg-white/8 transition-all
               focus-visible:outline-2 focus-visible:outline-[#D23A22]"
           >
-            <IconUser size={18} aria-hidden />
-          </Link>
+            {!hasChosen || activeProfile.avatar === "united" ? (
+              <IconUser size={18} aria-hidden />
+            ) : (
+              <UniverseAvatar avatar={activeProfile.avatar} size={24} />
+            )}
+            {hasChosen && (
+              <span className="hidden lg:block text-[12px] font-bold max-w-[90px] truncate">
+                {activeProfile.name}
+              </span>
+            )}
+          </button>
 
           {/* NÚT CHƠI — CTA chính */}
           <Link

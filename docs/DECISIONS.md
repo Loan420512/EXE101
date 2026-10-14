@@ -127,3 +127,25 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
 
 
 
+
+---
+
+## 9. Tìm Kiếm Tiếng Việt Không Dấu — Thang Điểm Theo Token
+
+- **Vấn đề**: Cổng U3 đòi gõ "dan bau" phải ra Đàn bầu, nhưng "dan" cũng khớp "dân", "hoa" khớp cả "Hỏa" lẫn "hóa" trong "văn hóa". So khớp chuỗi trực tiếp trên máy dev (Node 24/Windows) cho kết quả sai ở vài phép thử `startsWith`/`charCodeAt` (ghi ở `docs/KNOWN_ISSUES.md`).
+- **Quyết định**: chỉ số hóa theo **token** rồi tra bằng `Set` (không tin so sánh chuỗi):
+  1. `normalizeVi`: lowercase → NFD → bỏ dấu kết hợp → `đ`→`d` → **NFC** (bước NFC là bắt buộc, nếu không "hoac".startsWith("hoa") thành true thật).
+  2. Mỗi mục mang hai khóa: `haystack` (có dấu) và `haystackNoflat` (không dấu).
+  3. Thang điểm: 100 = token có dấu khớp nguyên từ; 95 = token không dấu khớp nguyên từ; 80 = tiền tố từ; 70 = substring; 35 = subsequence (gõ sai nhẹ). Queries nhiều từ yêu cầu mọi từ đều khớp, không cộng điểm substring.
+  4. Chấp nhận nhầm lẫn "đàn"/"dân" ở tầng 95 — đánh đổi để cổng "dan bau" luôn đạt; xếp hạng theo điểm rồi theo `rank` nên Đàn bầu vẫn đứng đầu.
+- **Hệ quả**: `lib/search.test.ts` (16 test) khóa hành vi, gồm test cổng U3 và test thứ tự xếp hạng.
+
+---
+
+## 10. Trạng Thái Chỉ Đọc Được Trên Trình Duyệt — Không setState Trong Effect
+
+- **Vấn đề**: màn "Ai đang chơi?" tự hiện khi chưa có hồ sơ, và bottom sheet chỉ dành cho máy cảm ứng. Cả hai phụ thuộc localStorage/`matchMedia`, dễ gây hydration mismatch và dính lỗi lint `react-hooks/set-state-in-effect`.
+- **Quyết định**: đọc chúng như **store ngoài** qua `useSyncExternalStore` (`lib/useIsClient.ts`, `lib/useMediaQuery.ts`), rồi **suy ra** (`derive`) trạng thái hiển thị thay vì setState trong effect:
+  - `visible = open || (isClient && !hasChosen)` — server không vẽ lớp phủ, client chỉ hiện khi thật sự chưa chọn hồ sơ.
+  - Bottom sheet chỉ bật trên `(hover: none) and (pointer: coarse)`; desktop giữ panel hover.
+- **Hệ quả**: hết lỗi lint ở code mới; `UniverseGlyph.tsx` thành một nguồn glyph hành duy nhất cho Header và `/ho-so`.

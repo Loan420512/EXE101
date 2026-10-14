@@ -4,6 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import UniverseRoot from "@/components/UniverseRoot";
 import BottomNav from "@/components/BottomNav";
+import WhoIsPlaying from "@/components/WhoIsPlaying";
+import CommandPalette from "@/components/CommandPalette";
 
 const beVietnamPro = Be_Vietnam_Pro({
   weight: ["400", "500", "600", "700", "800"],
@@ -139,6 +141,8 @@ export default function RootLayout({
             {children}
           </div>
           <BottomNav />
+          <WhoIsPlaying />
+          <CommandPalette />
         </UniverseRoot>
 
         {/* PWA Service Worker Registration */}
