@@ -61,9 +61,9 @@
 |---|---|---|---|---|
 | 2.1 | Xây Billboard toàn màn hình với auto-rotate, nút pause, text board | Experience | ✅ | `Billboard.tsx`: xoay 6s, pause, dừng khi hover, mũi tên + phím, progress bar, câu giá trị 3 giây |
 | 2.2 | Hàng ngang InstrumentRow: snap cuộn, arrow nav, edge peek | Experience | ✅ | `InstrumentRow.tsx`: snap-x, nút mũi tên có can-scroll, preview panel hover |
-| 2.3 | Thẻ xem trước CardPreview: hover expand, preview panel | Experience | 🔄 | Hover phóng 1.25× + panel (nghe thử, yêu thích, chi tiết) đã chạy; **còn thiếu**: bottom sheet cảm ứng, preload dữ liệu khi hover |
+| 2.3 | Thẻ xem trước CardPreview: hover expand, preview panel | Experience | ✅ | Hover phóng 1.25× + panel (nghe thử, yêu thích, chi tiết); `router.prefetch` trang chi tiết khi hover/focus (Set chống gọi trùng); `components/CardSheet.tsx` bottom sheet cho máy cảm ứng (một chạm, vuốt xuống/Esc/nền để đóng) |
 | 2.4 | Dải xen kẽ: Story strip, Ngũ hành xoay, "Chơi 30s", ô duyệt màu | Experience | 🔄 | Ô duyệt màu + GameGuide30s + Story + WuXing đã nối trên trang chủ; nhịp dải tùy biến chưa hết |
-| 2.5 | Màn "Ai đang chơi?" (profile picker) | Experience | ⏳ Chờ | Tạm có `/ho-so` tối thiểu |
+| 2.5 | Màn "Ai đang chơi?" (profile picker) | Experience | ✅ | `components/WhoIsPlaying.tsx` + `lib/profiles.ts` (tối đa 5 hồ sơ, localStorage try/catch); tự hiện lần đầu, mở lại qua event/`/ho-so`; Header hiện avatar hành + tên; DOM verify: tạo "Bé Bống" hành Hỏa → `ngucung_profiles` có bản ghi, header đổi nhãn |
 
 ### U2 Cổng kiểm tra
 - [ ] Người mới hiểu sản phẩm trong 3 giây nhìn billboard — cần test 5 người xem lạ (vòng QA)
@@ -81,13 +81,13 @@
 
 | # | Việc | Agent | Trạng thái | Bằng chứng |
 |---|---|---|---|---|
-| 3.1 | Trang chi tiết nhạc cụ tràn lề, tab layout | Experience | ⏳ | — |
-| 3.2 | Tìm kiếm Ctrl+K toàn màn hình | Experience | ⏳ | — |
-| 3.3 | Trang Duyệt với ô màu lớn + bộ lọc | Experience | ⏳ | — |
-| 3.4 | View Transitions giữa trang | Experience | ⏳ | — |
+| 3.1 | Trang chi tiết nhạc cụ tràn lề, tab layout | Experience | ✅ | Hero tràn lề nhuộm gradient màu hành + 5 tab `InstrumentTabs.tsx` (Giới thiệu/Cấu tạo/Cách chơi/Âm sắc/Ngũ hành), ARIA tablist + ←→/Home/End, panel trống hiện "Đang cập nhật" |
+| 3.2 | Tìm kiếm Ctrl+K toàn màn hình | Experience | ✅ | `components/CommandPalette.tsx` (Ctrl/Cmd K, "/", Esc, ↑↓ Enter, lịch sử trên máy) + `lib/search.ts`; DOM verify: Ctrl K → "dan bau" → Enter ra `/nhac-cu/dan-bau`, đúng 1 kết quả |
+| 3.3 | Trang Duyệt với ô màu lớn + bộ lọc | Experience | ✅ | `app/duyet/page.tsx`: 6 ô màu lớn (Tất cả + 5 hành), chip lọc theo Âm, ô tìm không dấu, gợi ý hành theo vũ trụ đang chọn; Header + BottomNav + "Xem tất cả" cùng trỏ `/duyet` |
+| 3.4 | View Transitions giữa trang | Experience | ✅ | `<ViewTransition name={card-${id}}>` ở lưới `/duyet`, hero và lá liên quan ở trang chi tiết; `PrevNextNav.tsx` thêm link rel prev/next + phím ← → |
 
 ### U3 Cổng
-- [ ] Gõ "dan bau" → thấy Đàn bầu trong <3 thao tác
+- [x] Gõ "dan bau" → thấy Đàn bầu trong <3 thao tác (Ctrl K = 1, gõ = 2, Enter = 3; DOM ghi nhận `/nhac-cu/dan-bau`)
 
 ---
 

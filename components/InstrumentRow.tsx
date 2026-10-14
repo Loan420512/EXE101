@@ -8,16 +8,20 @@
  * - Phím mũi tên khi focus trong hàng
  * - Nhớ vị trí cuộn
  * - Thẻ phóng to 1.25× khi hover, hiện preview info
+ * - (U2.3) preload trang chi tiết khi rê chuột/focus; một chạm mở bottom sheet trên máy cảm ứng
  */
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type Instrument, ELEMENT_CONFIG } from "@/data/instruments";
 import { dispatchSceneChange } from "@/data/scenes";
 import { type SceneKey } from "@/data/scenes";
 import { soundEngine } from "@/lib/audio";
 import InstrumentIllustration from "@/components/InstrumentIllustration";
+import CardSheet from "@/components/CardSheet";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
+import { useIsTouch } from "@/lib/useMediaQuery";
 import { IconChevronLeft, IconChevronRight, IconMusicNote, IconHeart, IconHeartFilled, IconArrowRight } from "@/components/icons";
 
 interface InstrumentRowProps {
@@ -33,6 +37,9 @@ interface InstrumentRowProps {
 const CARD_W = 160; // px — chiều rộng mỗi thẻ (desktop)
 const CARD_GAP = 12; // px — khoảng cách giữa thẻ
 
+/** Những trang đã xin preload — tránh gọi lại nhiều lần khi rê chuột qua lại */
+const prefetchedHrefs = new Set<string>();
+
 export default function InstrumentRow({
   title,
   subtitle,
@@ -42,9 +49,23 @@ export default function InstrumentRow({
   onCardClick,
 }: InstrumentRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const isTouch = useIsTouch();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [sheetInst, setSheetInst] = useState<Instrument | null>(null);
+
+  /** Rê chuột hoặc focus vào thẻ: bật panel + preload trang chi tiết (U2.3) */
+  const handleHover = useCallback((inst: Instrument) => {
+    setHoveredId(inst.id);
+    const href = `/nhac-cu/${inst.slug}`;
+    if (prefetchedHrefs.has(href)) return;
+    prefetchedHrefs.add(href);
+    router.prefetch(href);
+  }, [router]);
+
+  const handleLeave = useCallback(() => setHoveredId(null), []);
 
   const checkScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -85,7 +106,7 @@ export default function InstrumentRow({
         )}
         {instruments.length > 5 && (
           <Link
-            href="/bo-bai"
+            href="/duyet"
             className="ml-auto text-xs font-bold flex items-center gap-1 hover:underline focus-visible:outline-2 focus-visible:outline-[#D23A22]"
             style={{ color: accentColor }}
           >
@@ -127,9 +148,11 @@ export default function InstrumentRow({
               key={inst.id}
               instrument={inst}
               isHovered={hoveredId === inst.id}
-              onHover={(id) => setHoveredId(id)}
-              onLeave={() => setHoveredId(null)}
+              isTouch={isTouch}
+              onHover={handleHover}
+              onLeave={handleLeave}
               onClick={onCardClick}
+              onOpenSheet={setSheetInst}
             />
           ))}
         </div>
@@ -148,6 +171,9 @@ export default function InstrumentRow({
           </button>
         )}
       </div>
+
+      {/* (U2.3) Phiếu xem trước cho thiết bị cảm ứng */}
+      <CardSheet instrument={sheetInst} onClose={() => setSheetInst(null)} />
     </section>
   );
 }
@@ -158,18 +184,25 @@ export default function InstrumentRow({
 interface CardProps {
   instrument: Instrument;
   isHovered: boolean;
-  onHover: (id: string) => void;
+  /** máy chạm: một chạm mở bottom sheet thay vì chỉ đổi cảnh */
+  isTouch: boolean;
+  onHover: (inst: Instrument) => void;
   onLeave: () => void;
   onClick?: (inst: Instrument) => void;
+  onOpenSheet?: (inst: Instrument) => void;
 }
 
-function InstrumentCard({ instrument: inst, isHovered, onHover, onLeave, onClick }: CardProps) {
+function InstrumentCard({ instrument: inst, isHovered, isTouch, onHover, onLeave, onClick, onOpenSheet }: CardProps) {
   const cfg = ELEMENT_CONFIG[inst.element];
   const favorites = useFavorites();
   const isFav = favorites.includes(inst.id);
 
   const handleClick = () => {
     dispatchSceneChange(inst.element as SceneKey);
+    if (isTouch && onOpenSheet) {
+      onOpenSheet(inst);
+      return;
+    }
     onClick?.(inst);
   };
 
@@ -192,10 +225,19 @@ function InstrumentCard({ instrument: inst, isHovered, onHover, onLeave, onClick
       role="listitem"
       className="relative flex-shrink-0 snap-start"
       style={{ width: CARD_W }}
-      onMouseEnter={() => onHover(inst.id)}
+      tabIndex={0}
+      aria-label={`${inst.name} — hành ${inst.elementName}. Bấm Enter để xem nhanh`}
+      onMouseEnter={() => onHover(inst)}
       onMouseLeave={onLeave}
-      onFocus={() => onHover(inst.id)}
+      onFocus={() => onHover(inst)}
       onBlur={onLeave}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        dispatchSceneChange(inst.element as SceneKey);
+        if (onOpenSheet) onOpenSheet(inst);
+        else onClick?.(inst);
+      }}
     >
       <div
         className={`relative rounded-[4px] overflow-hidden border-2 cursor-pointer

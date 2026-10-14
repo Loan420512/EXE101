@@ -86,6 +86,19 @@ export function IconSearch({ size = 24, className, ...rest }: IconProps) {
   );
 }
 
+/** Dấu "command" ⌘ — dùng cho bảng lệnh Ctrl/⌘+K */
+export function IconCommand({ size = 24, className, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} className={className} {...rest}>
+      <path d="M15 6a3 3 0 1 1 3 3h-3V6z" />
+      <path d="M9 6a3 3 0 1 0-3 3h3V6z" />
+      <path d="M9 18a3 3 0 1 1-3-3h3v3z" />
+      <path d="M15 18a3 3 0 1 0 3-3h-3v3z" />
+      <rect x="9" y="9" width="6" height="6" />
+    </svg>
+  );
+}
+
 export function IconPlus({ size = 24, className, ...rest }: IconProps) {
   return (
     <svg {...base(size)} className={className} {...rest}>
@@ -375,6 +388,15 @@ export function IconArrowRight({ size = 24, className, ...rest }: IconProps) {
     <svg {...base(size)} className={className} {...rest}>
       <line x1="3" y1="12" x2="21" y2="12" />
       <polyline points="15,6 21,12 15,18" />
+    </svg>
+  );
+}
+
+export function IconArrowLeft({ size = 24, className, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} className={className} {...rest}>
+      <line x1="21" y1="12" x2="3" y2="12" />
+      <polyline points="9,6 3,12 9,18" />
     </svg>
   );
 }
