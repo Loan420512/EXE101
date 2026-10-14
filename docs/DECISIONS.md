@@ -93,5 +93,21 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
      - Tự động chuyển theo section khi cuộn (`SECTION_SCENE_MAP`).
      - Hỗ trợ sự kiện toàn cục `ngucung:set-scene` để các component con (lá bài, sơ đồ ngũ hành, bộ sưu tập) có thể kích hoạt chuyển cảnh theo hành ngay lập tức.
 
+---
+
+## 7. Gắn Logo Chính Thức "Ngũ Cung Card Game"
+
+- **Vấn đề**: Logo là tranh khắc gỗ hình chữ nhật ngang (người gõ cồng, 5 lá bài ngũ hành và chữ "NGŨ CUNG CARD GAME"), nền trong suốt và nét khắc mực đen. Cần hiển thị sắc nét trên cả giao diện sáng lẫn tối mà không làm biến dạng tỷ lệ gốc (676:369).
+- **Quyết định**:
+  1. **Thay thế toàn diện**: Thay thế toàn bộ các placeholder cũ (ô vuông đỏ chữ "ngũ" ở Header, chữ "NC" ở Footer).
+  2. **Vị trí tích hợp**:
+     - Header: Đặt logo tỷ lệ chuẩn với khung viền giấy điệp Đông Hồ, hỗ trợ hover phóng nhẹ.
+     - Footer: Gắn logo tại phần giới thiệu dự án chân trang.
+     - Metadata & OpenGraph: Cấu hình `images` trong `app/layout.tsx` trỏ tới `/images/logo/logongucung.png`.
+     - PWA Manifest: Khai báo icon 192px và 512px trong `manifest.json`.
+     - Trang 404: Tạo trang `app/not-found.tsx` mang nhận diện thương hiệu hoàn chỉnh.
+  3. **Bảo vệ tương phản thị giác**: Bọc trong thẻ chứa giấy ngà `#FAFAF5` (nền sáng) và giấy sẫm `#25222E` (nền tối) có viền mực Đông Hồ, đảm bảo nét chữ "NGŨ CUNG CARD GAME" không bao giờ bị chìm trên nền đen.
+
+
 
 

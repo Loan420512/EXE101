@@ -128,15 +128,28 @@ export default function TeamFaqFooter() {
 
         {/* ================= PHẦN 3: CHÂN TRANG ĐÔNG HỒ ================= */}
         <div className="pt-8 border-t-2 border-[#16141A]/20 dark:border-[#E8EAE0]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#524F59] dark:text-[#A8A6B0]">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[#D23A22] text-white font-display font-black text-xs flex items-center justify-center">
-              NC
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-auto aspect-[676/369] bg-[#FAFAF5] dark:bg-[#25222E] px-1 py-0.5 rounded border border-[#16141A] dark:border-[#E8EAE0] flex items-center justify-center overflow-hidden">
+              <picture>
+                <source type="image/webp" srcSet="/images/logo/logongucung.webp" />
+                <img
+                  src="/images/logo/logongucung.png"
+                  alt="Logo Ngũ Cung"
+                  className="h-full w-auto object-contain dark:brightness-110"
+                  width={56}
+                  height={30}
+                />
+              </picture>
             </div>
-            <span className="font-bold text-[#16141A] dark:text-[#E8EAE0]">
-              Ngũ Cung (Five Tones)
-            </span>
-            <span>— {SITE_METADATA.tagline}</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+              <span className="font-bold text-[#16141A] dark:text-[#E8EAE0]">
+                Ngũ Cung Card Game (Five Tones)
+              </span>
+              <span className="text-[#8C8599] hidden sm:inline">•</span>
+              <span>{SITE_METADATA.tagline}</span>
+            </div>
           </div>
+
 
           <div className="flex items-center gap-4 text-[11px]">
             <span>Đồ án môn học • Team 35</span>

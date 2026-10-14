@@ -44,6 +44,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Ngũ Cung Team" }],
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
   openGraph: {
     title: "Ngũ Cung — Bộ Bài Âm Nhạc Dân Gian (7+)",
     description: "Thu thập ngũ hành. Nghe văn hóa. Khám phá 15 nhạc cụ cổ truyền và thi đấu tương sinh tương khắc.",
@@ -51,11 +58,20 @@ export const metadata: Metadata = {
     siteName: "Ngũ Cung Board Game",
     locale: "vi_VN",
     type: "website",
+    images: [
+      {
+        url: "/images/logo/logongucung.png",
+        width: 676,
+        height: 369,
+        alt: "Logo Ngũ Cung Card Game",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ngũ Cung — Bộ Bài Âm Nhạc Dân Gian (7+)",
     description: "Bộ bài card game giáo dục âm nhạc truyền thống Việt Nam dành cho bé từ 7 tuổi và gia đình.",
+    images: ["/images/logo/logongucung.png"],
   },
 };
 
