@@ -39,7 +39,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
     { label: "Bộ bài", href: "/bo-bai" },
     { label: "Ngũ hành", href: "/ngu-hanh" },
     { label: "Luật chơi", href: "/luat-choi" },
-    { label: "Sân chơi ngũ âm", href: "/san-choi-ngu-am" },
+    { label: "Ngũ âm", href: "/san-choi-ngu-am" },
     { label: "Quiz", href: "/quiz" },
     { label: "Đăng ký", href: "/#dang-ky" },
   ];
@@ -54,32 +54,26 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
       </div>
 
       {/* 2. THANH ĐIỀU HƯỚNG CHÍNH */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
         {/* LOGO CHÍNH THỨC NGŨ CUNG */}
-        <Link href="/" className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D23A22] rounded py-1">
+        <Link href="/" className="flex-shrink-0 flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D23A22] rounded py-1">
           <picture className="group-hover:scale-105 transition-transform">
             <source type="image/webp" srcSet="/images/logo/logongucung.webp" />
             <img
               src="/images/logo/logongucung.png"
               alt="Logo Ngũ Cung Card Game"
-              className="h-10 sm:h-12 w-auto object-contain dark:brightness-110"
-              width={88}
-              height={48}
+              className="h-9 sm:h-10 w-auto object-contain dark:brightness-110"
+              width={80}
+              height={44}
             />
           </picture>
-          <div className="flex flex-col">
-            <span className="font-display font-black text-lg tracking-tight text-[#16141A] dark:text-[#E8EAE0] leading-none">
-              NGŨ CUNG
-            </span>
-            <span className="text-[10px] tracking-wider text-[#524F59] dark:text-[#A8A6B0] uppercase font-bold mt-0.5">
-              Five Tones • Card Game (7+)
-            </span>
-          </div>
+          <span className="font-display font-black text-base tracking-tight text-[#16141A] dark:text-[#E8EAE0] leading-none whitespace-nowrap">
+            NGŨ CUNG
+          </span>
         </Link>
 
-
-        {/* MENU DESKTOP */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold">
+        {/* MENU DESKTOP – căn giữa, chiếm phần còn lại */}
+        <nav className="hidden lg:flex flex-1 items-center justify-center gap-5 text-[13px] font-semibold">
           {navLinks.map((item) => (
             <a
               key={item.href}
@@ -92,7 +86,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
         </nav>
 
         {/* CỤM NÚT TÁC VỤ: BẬT/TẮT ÂM THANH & CTA */}
-        <div className="flex items-center gap-3">
+        <div className="flex-shrink-0 flex items-center gap-3">
           {/* NÚT ÂM THANH (MẶC ĐỊNH TẮT) */}
           <button
             onClick={handleToggleSound}
