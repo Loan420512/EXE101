@@ -84,7 +84,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
             <a
               key={item.href}
               href={item.href}
-              className="text-[#16141A] dark:text-[#E8EAE0] hover:text-[#D23A22] dark:hover:text-[#F2B632] transition-colors"
+              className="text-[#16141A] dark:text-[#E8EAE0] hover:text-[#D23A22] dark:hover:text-[#F2B632] transition-colors whitespace-nowrap"
             >
               {item.label}
             </a>
