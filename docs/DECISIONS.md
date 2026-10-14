@@ -61,3 +61,16 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
   3. **Biểu tượng Favicon & PWA**: Tự động sinh `favicon-32x32.png`, `favicon.ico`, `apple-touch-icon.png` (180x180), `icon-192.png` và `icon-512.png` từ logo chính thức.
   4. **Dọn sạch file rác**: Xóa triệt để 5 file SVG mặc định của Next.js (`file.svg`, `globe.svg`, `next.svg`, `vercel.svg`, `window.svg`) không còn sử dụng.
 
+---
+
+## 5. Cấu Trúc Dữ Liệu Cảnh & Hiệu Ứng Nền (`data/scenes.ts` & `config/effects.ts`)
+
+- **Vấn đề**: Việc chuyển đổi giữa cảnh mặc định và 5 cảnh hành khi tương tác cần đảm bảo liền mạch, không giật cục, duy trì độ tương phản chữ (WCAG 2.2 AA) và có đầy đủ mô tả trợ năng `alt`.
+- **Quyết định**:
+  1. **Nguồn sự thật `data/scenes.ts`**: Tập trung hóa siêu dữ liệu cho 6 cảnh (mặc định + 5 hành) gồm: tên tiếng Việt, cung bậc âm sắc (Cung/Thương/Giốc/Chủy/Vũ), mô tả chi tiết, văn bản trợ năng `alt`, đường dẫn `srcSet` AVIF & WebP, màu phủ gradient và nguồn tài sản.
+  2. **Cấu hình hiệu ứng chuyển cảnh `config/effects.ts` (`SCENE_TRANSITION_CONFIG`)**:
+     - Thời gian chuyển cảnh: 900ms với easing `cubic-bezier(0.22, 1, 0.36, 1)`.
+     - Lớp trống đồng (`trong-dong`): Đặt lệch góc trên bên phải, độ mờ nhẹ (opacity ~0.18), hiệu ứng xoay chậm 240 giây/vòng tĩnh tại, tạo chiều sâu văn hóa Đông Sơn mà không gây phân tâm.
+     - Lớp phủ gradient tương phản (`overlayGradient`): Đậm ở rìa và phía trên để chữ và nội dung bài đọc luôn đạt độ tương phản chuẩn WCAG 2.2 AA.
+
+
