@@ -23,12 +23,13 @@ export default function WuXingDiagram() {
 
   // Vị trí 5 hành trên vòng tròn ngũ giác (tọa độ SVG 320x320)
   // Góc: 0 = đỉnh (Hỏa: -90 deg), sau đó quay theo chiều kim đồng hồ
+  // labelX/Y: nhãn âm đặt ra ngoài đủ xa, tránh chồng chéo với tên hành và đường kẻ
   const nodePositions: Record<ElementType, { cx: number; cy: number; labelX: number; labelY: number }> = {
-    hoa: { cx: 160, cy: 50, labelX: 160, labelY: 28 },   // Đỉnh: Hỏa (Đỏ)
-    tho: { cx: 260, cy: 125, labelX: 285, labelY: 130 }, // Phải trên: Thổ (Vàng)
-    kim: { cx: 225, cy: 245, labelX: 245, labelY: 265 }, // Phải dưới: Kim (Bạc)
-    thuy: { cx: 95, cy: 245, labelX: 75, labelY: 265 },  // Trái dưới: Thủy (Xanh dương)
-    moc: { cx: 60, cy: 125, labelX: 35, labelY: 130 },   // Trái trên: Mộc (Xanh lá)
+    hoa:  { cx: 160, cy: 52,  labelX: 160, labelY: 22  }, // Đỉnh trên — nhãn lên cao
+    tho:  { cx: 258, cy: 126, labelX: 294, labelY: 128 }, // Phải trên — nhãn ra xa phải
+    kim:  { cx: 222, cy: 244, labelX: 248, labelY: 268 }, // Phải dưới — nhãn xuống phải
+    thuy: { cx: 98,  cy: 244, labelX: 72,  labelY: 268 }, // Trái dưới — nhãn xuống trái
+    moc:  { cx: 62,  cy: 126, labelX: 26,  labelY: 128 }, // Trái trên — nhãn ra xa trái
   };
 
   const handleSelectElement = (elemId: ElementType) => {
@@ -124,34 +125,77 @@ export default function WuXingDiagram() {
                   strokeDasharray="4 4"
                 />
 
-                {/* ĐƯỜNG LIÊN KẾT TƯƠNG SINH (Vòng tròn ngoài: Mộc -> Hỏa -> Thổ -> Kim -> Thủy -> Mộc) */}
-                {relationMode === "sheng" && (
-                  <g className="transition-opacity duration-300">
-                    <path
-                      d={`M ${nodePositions.moc.cx} ${nodePositions.moc.cy} L ${nodePositions.hoa.cx} ${nodePositions.hoa.cy} L ${nodePositions.tho.cx} ${nodePositions.tho.cy} L ${nodePositions.kim.cx} ${nodePositions.kim.cy} L ${nodePositions.thuy.cx} ${nodePositions.thuy.cy} Z`}
-                      fill="none"
-                      stroke="#3F7D3B"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </g>
-                )}
+                {/* ĐƯỜNG LIÊN KẾT TƯƠNG SINH (Vòng ngũ giác ngoài: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc)
+                    Mỗi cạnh là một <line> riêng có mũi tên để thấy chiều nuôi dưỡng rõ ràng */}
+                {relationMode === "sheng" && (() => {
+                  const shengPairs: [ElementType, ElementType][] = [
+                    ["moc", "hoa"], ["hoa", "tho"], ["tho", "kim"], ["kim", "thuy"], ["thuy", "moc"],
+                  ];
+                  return (
+                    <g>
+                      {shengPairs.map(([from, to], i) => {
+                        const f = nodePositions[from];
+                        const t = nodePositions[to];
+                        // Rút ngắn đường kẻ để không chui vào bên trong node (r=22)
+                        const dx = t.cx - f.cx;
+                        const dy = t.cy - f.cy;
+                        const len = Math.sqrt(dx * dx + dy * dy);
+                        const pad = 24; // khoảng cách từ tâm node đến đầu đường
+                        const x1 = f.cx + (dx / len) * pad;
+                        const y1 = f.cy + (dy / len) * pad;
+                        const x2 = t.cx - (dx / len) * pad;
+                        const y2 = t.cy - (dy / len) * pad;
+                        return (
+                          <line
+                            key={i}
+                            x1={x1} y1={y1} x2={x2} y2={y2}
+                            stroke="#3F7D3B"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            markerEnd="url(#arrow-sheng)"
+                            opacity="0.9"
+                          />
+                        );
+                      })}
+                    </g>
+                  );
+                })()}
 
-                {/* ĐƯỜNG LIÊN KẾT TƯƠNG KHẮC (Hình sao ngũ giác: Mộc -> Thổ -> Thủy -> Hỏa -> Kim -> Mộc) */}
-                {relationMode === "ke" && (
-                  <g className="transition-opacity duration-300">
-                    <path
-                      d={`M ${nodePositions.moc.cx} ${nodePositions.moc.cy} L ${nodePositions.tho.cx} ${nodePositions.tho.cy} L ${nodePositions.thuy.cx} ${nodePositions.thuy.cy} L ${nodePositions.hoa.cx} ${nodePositions.hoa.cy} L ${nodePositions.kim.cx} ${nodePositions.kim.cy} Z`}
-                      fill="none"
-                      stroke="#D23A22"
-                      strokeWidth="3"
-                      strokeDasharray="6 3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </g>
-                )}
+                {/* ĐƯỜNG LIÊN KẾT TƯƠNG KHẮC (Sao ngũ giác: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc)
+                    Mỗi đường chéo là một <line> riêng — tránh fill ẩn khi dùng path Z */}
+                {relationMode === "ke" && (() => {
+                  const kePairs: [ElementType, ElementType][] = [
+                    ["moc", "tho"], ["tho", "thuy"], ["thuy", "hoa"], ["hoa", "kim"], ["kim", "moc"],
+                  ];
+                  return (
+                    <g>
+                      {kePairs.map(([from, to], i) => {
+                        const f = nodePositions[from];
+                        const t = nodePositions[to];
+                        const dx = t.cx - f.cx;
+                        const dy = t.cy - f.cy;
+                        const len = Math.sqrt(dx * dx + dy * dy);
+                        const pad = 24;
+                        const x1 = f.cx + (dx / len) * pad;
+                        const y1 = f.cy + (dy / len) * pad;
+                        const x2 = t.cx - (dx / len) * pad;
+                        const y2 = t.cy - (dy / len) * pad;
+                        return (
+                          <line
+                            key={i}
+                            x1={x1} y1={y1} x2={x2} y2={y2}
+                            stroke="#D23A22"
+                            strokeWidth="2"
+                            strokeDasharray="5 3"
+                            strokeLinecap="round"
+                            markerEnd="url(#arrow-ke)"
+                            opacity="0.85"
+                          />
+                        );
+                      })}
+                    </g>
+                  );
+                })()}
 
                 {/* 5 NÚT NGŨ HÀNH */}
                 {WUXING_DATA.elements.map((elem) => {
@@ -164,16 +208,17 @@ export default function WuXingDiagram() {
                       onClick={() => handleSelectElement(elem.id as ElementType)}
                       className="cursor-pointer group"
                     >
-                      {/* Vòng hào quang khi chọn */}
+                      {/* Vòng hào quang khi chọn — dùng pulse opacity thay ping scale để không bị lệch trong SVG */}
                       {isSelected && (
                         <circle
                           cx={pos.cx}
                           cy={pos.cy}
-                          r="28"
+                          r="30"
                           fill="none"
                           stroke={elem.color}
-                          strokeWidth="3"
-                          className="animate-ping opacity-75"
+                          strokeWidth="2.5"
+                          strokeOpacity="0.6"
+                          className="animate-pulse"
                         />
                       )}
 
@@ -201,15 +246,21 @@ export default function WuXingDiagram() {
                         {elem.name}
                       </text>
 
-                      {/* Tên âm ở ngoài nút */}
+                      {/* Tên âm ở ngoài nút — căn theo hướng của từng node */}
                       <text
                         x={pos.labelX}
                         y={pos.labelY}
-                        textAnchor="middle"
+                        textAnchor={
+                          elem.id === "hoa"  ? "middle" :
+                          elem.id === "tho"  ? "start"  :
+                          elem.id === "kim"  ? "start"  :
+                          elem.id === "thuy" ? "end"    :
+                          /* moc */            "end"
+                        }
                         fill="currentColor"
-                        fontWeight="800"
+                        fontWeight="700"
                         fontSize="11"
-                        className="font-display opacity-80 pointer-events-none"
+                        className="font-display pointer-events-none opacity-70"
                       >
                         {elem.tone}
                       </text>
