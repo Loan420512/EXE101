@@ -73,4 +73,25 @@ Tài liệu này ghi nhận toàn bộ các quyết định kỹ thuật, quy t�
      - Lớp trống đồng (`trong-dong`): Đặt lệch góc trên bên phải, độ mờ nhẹ (opacity ~0.18), hiệu ứng xoay chậm 240 giây/vòng tĩnh tại, tạo chiều sâu văn hóa Đông Sơn mà không gây phân tâm.
      - Lớp phủ gradient tương phản (`overlayGradient`): Đậm ở rìa và phía trên để chữ và nội dung bài đọc luôn đạt độ tương phản chuẩn WCAG 2.2 AA.
 
+---
+
+## 6. Kiến Trúc Nền Đa Tầng "Cõi Ngũ Âm" (LivingBackground Multi-Layer)
+
+- **Vấn đề**: Kết hợp đồng thời ảnh phong cảnh thực tế, trống đồng Đông Sơn, shader giấy điệp WebGL và hạt ngũ hành sao cho không làm lu mờ văn bản, không giật lag và đem lại ấn tượng thị giác sâu lắng, đậm chất văn hóa Việt.
+- **Quyết định**:
+  1. **5 Lớp hiển thị chuyên biệt**:
+     - *Lớp 1 (Layer -4)*: 6 ảnh quang cảnh thực (mặc định + 5 hành) crossfade mượt 1000ms, độ mờ 35% trên nền đen sâu (#16141A).
+     - *Lớp 2 (Layer -3)*: Lớp phủ gradient theo hành bảo vệ độ sắc nét của chữ đọc (WCAG 2.2 AA).
+     - *Lớp 3 (Layer -2)*: Mặt Trống Đồng Đông Sơn thực (`trong-dong`) xoay chậm 240 giây/vòng lệch góc trên bên phải, đổ bóng vàng kim mờ ảo.
+     - *Lớp 4 (Layer -2 WebGL)*: Shader giấy điệp fbm với chế độ hòa trộn `mix-blend-overlay` / `mix-blend-screen`, tương tác sóng mực theo chuột và vảy điệp lấp lánh.
+     - *Lớp 5 (Layer -1 2D)*: Hạt ngũ hành linh khí instanced bay lượn.
+  2. **Tương thích & Trợ năng**:
+     - Nút "⏸ Tạm dừng nền" tạm dừng đồng thời cả shader, hạt và chuyển động xoay của trống đồng.
+     - Tôn trọng `prefers-reduced-motion`: triệt tiêu hoàn toàn hiệu ứng xoay.
+     - Dự phòng `CssFallbackBackground`: tải ảnh quang cảnh tĩnh và trống đồng tĩnh khi thiết bị ở phân hạng Min hoặc không hỗ trợ WebGL.
+  3. **Cơ chế chuyển cảnh linh hoạt**:
+     - Tự động chuyển theo section khi cuộn (`SECTION_SCENE_MAP`).
+     - Hỗ trợ sự kiện toàn cục `ngucung:set-scene` để các component con (lá bài, sơ đồ ngũ hành, bộ sưu tập) có thể kích hoạt chuyển cảnh theo hành ngay lập tức.
+
+
 

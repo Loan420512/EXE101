@@ -448,8 +448,20 @@ p, li, td, th {
 .layer-drift-mid   { animation: layer-drift 6s ease-in-out infinite 1s; }
 .layer-drift-fast  { animation: layer-drift 4.5s ease-in-out infinite 0.5s; }
 
+/* Trống đồng Đông Sơn xoay chậm */
+@keyframes drum-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-drum-spin {
+  animation: drum-spin-slow 240s linear infinite;
+  will-change: transform;
+}
+
 /* ============================================================
    12. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
+
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
