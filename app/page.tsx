@@ -28,7 +28,6 @@ import WuXingDiagram from "@/components/WuXingDiagram";
 import RulesSection from "@/components/RulesSection";
 import RegisterForm from "@/components/RegisterForm";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
-import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import PackOpeningModal from "@/components/PackOpening/PackOpeningModal";
@@ -112,7 +111,7 @@ export default function Home() {
         onOpenCollection={() => setIsCollectionModalOpen(true)}
       />
 
-      {/* Offset cho header cố định (56px header + 6px ribbon) */}
+      {/* Offset cho header cố định (đã bỏ ribbon, chừa 6px thở) */}
       <div className="h-[62px]" aria-hidden />
 
       <main id="main-content" className="flex-1 flex flex-col">
@@ -232,16 +231,12 @@ export default function Home() {
           <GameGuide30s />
         </div>
 
-        <ColorRibbon />
-
         {/* ══════════════════════════════════════════
             6. DẢI CÂU CHUYỆN
         ══════════════════════════════════════════ */}
         <div id="cau-chuyen">
           <Story />
         </div>
-
-        <ColorRibbon />
 
         {/* ══════════════════════════════════════════
             7. BỘ BÀI 15 NHẠC CỤ (lưới chi tiết + modal)
@@ -251,16 +246,12 @@ export default function Home() {
           isEffectRunning={!!activeEffect}
         />
 
-        <ColorRibbon />
-
         {/* ══════════════════════════════════════════
             8. NGŨ ÂM & NGŨ HÀNH (sơ đồ tương tác)
         ══════════════════════════════════════════ */}
         <div id="ngu-hanh">
           <WuXingDiagram />
         </div>
-
-        <ColorRibbon />
 
         {/* ══════════════════════════════════════════
             9. DẢI CTA CHƠI NGAY
@@ -302,8 +293,6 @@ export default function Home() {
           </div>
         </section>
 
-        <ColorRibbon />
-
         {/* ══════════════════════════════════════════
             10. LUẬT CHƠI RÚT GỌN
         ══════════════════════════════════════════ */}
@@ -311,16 +300,12 @@ export default function Home() {
           <RulesSection />
         </div>
 
-        <ColorRibbon />
-
         {/* ══════════════════════════════════════════
             11. ĐĂNG KÝ CHƠI THỬ
         ══════════════════════════════════════════ */}
         <div id="dang-ky">
           <RegisterForm />
         </div>
-
-        <ColorRibbon />
 
         {/* ══════════════════════════════════════════
             12. ĐỘI NGŨ & FOOTER

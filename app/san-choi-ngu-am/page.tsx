@@ -16,7 +16,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
-import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import WaveformVisualizer from "@/components/WaveformVisualizer";
 import { IconLink } from "@/components/icons";
@@ -361,8 +360,6 @@ function PlaygroundInner() {
             </div>
           )}
         </div>
-
-        <ColorRibbon />
       </main>
 
       <TeamFaqFooter />

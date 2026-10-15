@@ -13,7 +13,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
-import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import { RULES_CONTENT } from "@/data/content";
 import { IconCardBack, IconLibrary, IconMusicNote, IconBolt, IconGrid, IconChild, IconScroll, IconBalloon, IconStar, IconGift, IconCrown, IconTrophy } from "@/components/icons";
@@ -300,8 +299,6 @@ export default function LuatChoiPage() {
             </div>
           </div>
         )}
-
-        <ColorRibbon />
       </main>
 
       <TeamFaqFooter />
