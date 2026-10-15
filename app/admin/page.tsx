@@ -58,7 +58,9 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    fetchData();
+    // Trì hoãn một nhịp để không setState đồng bộ ngay trong effect (tránh render dây chuyền)
+    const frame = requestAnimationFrame(() => fetchData());
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   const filteredRecords = records.filter((r) => {

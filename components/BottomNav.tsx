@@ -24,18 +24,18 @@ const TABS = [
     match: (p: string) => p.startsWith("/duyet") || p.startsWith("/bo-bai") || p.startsWith("/nhac-cu"),
   },
   {
-    href: "/choi-thu-ngay",
+    href: "/choi",
     label: "Chơi",
     Icon: IconGamepad,
-    match: (p: string) => p.startsWith("/choi-thu"),
+    match: (p: string) => p.startsWith("/choi"),
   },
   {
-    href: "/san-choi-ngu-am",
+    href: "/phong-nhac",
     label: "Nhạc",
     Icon: IconMusicNote,
-    match: (p: string) => p.startsWith("/san-choi") || p.startsWith("/quiz"),
+    match: (p: string) => p.startsWith("/phong-nhac") || p.startsWith("/san-choi") || p.startsWith("/quiz"),
   },
-  { href: "/ho-so", label: "Tôi", Icon: IconUser, match: (p: string) => p.startsWith("/ho-so") },
+  { href: "/thu-vien", label: "Thư viện", Icon: IconLibrary, match: (p: string) => p.startsWith("/thu-vien") || p.startsWith("/ho-so") },
 ] as const;
 
 export default function BottomNav() {

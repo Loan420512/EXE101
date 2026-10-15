@@ -246,6 +246,39 @@ a, button, [role="button"], summary, input[type="checkbox"], input[type="radio"]
   min-height: var(--tap-min);
 }
 
+/* Control dẹt có chủ đích (switch, slider): đủ 44px NGANG, chiều cao giữ nguyên.
+   Không dùng .tap kẻo nút bị bóp thành ô vuông. */
+.tap-w {
+  min-width: var(--tap-min);
+  min-height: 0 !important;
+}
+
+/* Nút phụ kiểu "viền mờ" — dùng cho liên kết điều hướng trong trạng thái rỗng. */
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap-min);
+  padding: 10px 18px;
+  border-radius: var(--radius-dongho);
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--text-label);
+  transition: border-color var(--dur-comp) var(--ease-out-soft),
+              background-color var(--dur-comp) var(--ease-out-soft),
+              transform var(--dur-tap) var(--ease-out-soft);
+}
+.cta-ghost:hover {
+  border-color: var(--el-tho, #F2B632);
+  background-color: rgba(242, 182, 50, 0.14);
+  transform: translateY(-1px);
+}
+.cta-ghost:focus-visible {
+  outline: 2px solid #D23A22;
+  outline-offset: 2px;
+}
+
 /* Chấm carousel: vùng chạm 44px trong suốt, chấm nhỏ vẽ ở lớp con.
    8 chấm × 44px = 352px, vẫn nằm gọn trong màn 360px. */
 .tap-dot {
@@ -579,7 +612,109 @@ html.universe-united {
 }
 
 /* ============================================================
-   13. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
+   13. CHẾ ĐỘ NGƯỜI DÙNG CHỌN (U7) — lớp do lib/settings.ts gắn lên <html>
+   ============================================================ */
+
+/* Cỡ chữ: mọi cỡ chữ trong project tính bằng rem nên chỉ cần chỉnh gốc.
+   Mặc định 100% = 16px; A+ = 112.5% (18px); A++ = 125% (20px). */
+html { font-size: var(--user-font-scale, 100%); }
+
+/* Sáng / tối chọn tay — ghi đè truyền thông số prefers-color-scheme.
+   Hai bộ token dưới đây trùng với :root (sáng) và khối DARK MODE (tối),
+   chỉ khác là kích hoạt bằng thuộc tính thay vì media query. */
+html[data-color-scheme="light"] { color-scheme: light; }
+html[data-color-scheme="dark"]  { color-scheme: dark; }
+
+html[data-color-scheme="light"] {
+  --bg-diep: #EAE8D8;
+  --bg-diep-warm: #F0EDD9;
+  --bg-card: #FAFAF5;
+  --text-ink: #1A1720;
+  --text-muted: #534E5C;
+  --text-faint: #8C8599;
+  --border-color: #1A1720;
+  --shadow-dongho-xs: 1px 1px 0px #1A1720;
+  --shadow-dongho-sm: 2px 2px 0px #1A1720;
+  --shadow-dongho: 4px 4px 0px #1A1720;
+  --shadow-dongho-lg: 6px 6px 0px #1A1720;
+  --shadow-dongho-xl: 8px 8px 0px #1A1720;
+  --color-tho: #F2B632; --color-kim: #C8D4DC; --color-moc: #3A7535;
+  --color-hoa: #CC3520; --color-thuy: #1B3B7A;
+  --ink-wash-color: rgba(26, 23, 32, 0.06);
+}
+html[data-color-scheme="light"] body { background-color: #EAE8D8; }
+
+html[data-color-scheme="dark"] {
+  --bg-diep: #121016;
+  --bg-diep-warm: #1A1720;
+  --bg-card: #1E1C23;
+  --text-ink: #EAE8D8;
+  --text-muted: #A8A4B2;
+  --text-faint: #7A7688;
+  --border-color: #EAE8D8;
+  --shadow-dongho-xs: 1px 1px 0px #EAE8D8;
+  --shadow-dongho-sm: 2px 2px 0px #EAE8D8;
+  --shadow-dongho: 4px 4px 0px #EAE8D8;
+  --shadow-dongho-lg: 6px 6px 0px #EAE8D8;
+  --shadow-dongho-xl: 8px 8px 0px #EAE8D8;
+  --color-tho: #F5C040; --color-kim: #D0DCE4; --color-moc: #4A9045;
+  --color-hoa: #E04428; --color-thuy: #2A5090;
+  --ink-wash-color: rgba(234, 232, 216, 0.08);
+}
+html[data-color-scheme="dark"] body { background-color: #121016; }
+
+/* Tương phản cao: nền đặc, mực đậm, viền dày hơn — bỏ hết chữ xám nhạt. */
+html.contrast-high {
+  --bg-card: #FFFFFF;
+  --text-ink: #000000;
+  --text-muted: #24212A;
+  --text-faint: #35313C;
+  --border-width-dongho: 4px;
+  --border-dongho: 4px solid var(--border-color);
+}
+html.contrast-high[data-color-scheme="light"] { --bg-diep: #FFFFFF; }
+html.contrast-high[data-color-scheme="dark"],
+html.contrast-high { --bg-diep-contrast: #000000; }
+html.contrast-high .dongho-box,
+html.contrast-high .surface-paper,
+html.contrast-high .surface-night { border-width: 4px; }
+
+/* Giảm / tắt chuyển động tay — cùng tinh thần với prefers-reduced-motion. */
+html.motion-reduced *,
+html.motion-none * {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
+html.motion-none * { animation: none !important; }
+
+/* Hiệu ứng nền: Vừa = bỏ hạt + bỏ grain, Tối giản = bỏ luôn shader giấy điệp,
+   chỉ còn ảnh quang cảnh tĩnh (bản CSS fallback). */
+html.effects-medium .living-bg-particle,
+html.effects-medium .billboard-grain,
+html.effects-minimal .living-bg-particle,
+html.effects-minimal .living-bg-shader,
+html.effects-minimal .billboard-grain {
+  display: none;
+}
+
+/* Chế độ Bé: chữ to thêm một bậc, giãn dòng rộng, vùng chạm rộng hơn,
+   câu dài có đánh dấu .kid-advanced thì ẩn đi và .kid-simple hiện vào. */
+html.kid-mode { --user-font-scale: 118%; --tap-min: 48px; }
+html.kid-mode body { line-height: 1.75; }
+html.kid-mode .hide-in-kid-mode { display: none !important; }
+html.kid-mode .kid-advanced { display: none !important; }
+html:not(.kid-mode) .kid-simple { display: none !important; }
+
+/* Mini-player hiện lên thì nội dung phải chừa chỗ đáy. */
+html.has-player #main-content { padding-bottom: calc(4rem + 72px); }
+@media (min-width: 768px) {
+  html.has-player #main-content { padding-bottom: 72px; }
+}
+
+/* ============================================================
+   14. BỎ ANIMATION KHI PREFERS-REDUCED-MOTION
    ============================================================ */
 
 /* Header hide/show (dùng translate trong Tailwind, không cần thêm) */
@@ -635,6 +770,67 @@ html.universe-united {
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
+}
+
+/* ── U6 Bàn chơi: làm sáng nước hợp lệ + hoạt ảnh ba nước đi ──
+   "Nước hợp lệ" phải nhìn ra trong 1 giây: viền vàng nhấp nháy chậm, không loé.
+   Ba hoạt ảnh nước đi phân biệt rõ hình thái: bay lên (Chọn), bung ra (Trình tấu),
+   gãy đổ (Phá âm). Tất cả tôn trọng giảm chuyển động qua khối 14. */
+.board-legal {
+  animation: board-legal-pulse 1.9s ease-in-out infinite;
+}
+@keyframes board-legal-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(242, 182, 50, 0.55), 3px 4px 0px rgba(22, 20, 26, 0.85); }
+  50%      { box-shadow: 0 0 0 4px rgba(242, 182, 50, 0.95), 3px 4px 0px rgba(22, 20, 26, 0.85); }
+}
+
+/* Lá vừa rút về tay: bay lên khỏi quạt rồi đáp xuống */
+.board-fan-in {
+  animation: board-fan-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes board-fan-in {
+  0%   { filter: brightness(1.25); translate: 0 26px; scale: 0.9; opacity: 0.2; }
+  60%  { translate: 0 -8px; scale: 1.04; opacity: 1; }
+  100% { translate: 0 0; scale: 1; opacity: 1; }
+}
+
+/* Nhãn hoạt ảnh cho ba nước đi */
+[class*="board-flash-"] { position: relative; }
+.board-flash-pick    { animation: board-pop-up   900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.board-flash-present { animation: board-burst-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.board-flash-break   { animation: board-shatter  900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes board-pop-up {
+  0%   { transform: translateY(34px) scale(0.86); opacity: 0; }
+  35%  { transform: translateY(-6px) scale(1.02); opacity: 1; }
+  75%  { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(10px) scale(0.97); opacity: 0; }
+}
+@keyframes board-burst-in {
+  0%   { transform: scale(0.7); opacity: 0; }
+  25%  { transform: scale(1.06); opacity: 1; }
+  70%  { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.04); opacity: 0; }
+}
+@keyframes board-shatter {
+  0%   { transform: translateX(0) rotate(0deg); opacity: 0; }
+  20%  { transform: translateX(-5px) rotate(-2deg); opacity: 1; }
+  45%  { transform: translateX(5px) rotate(2deg); }
+  70%  { transform: translateX(-2px) rotate(-1deg); opacity: 1; }
+  100% { transform: translateX(0) rotate(0deg); opacity: 0; }
+}
+/* Vòng sáng bung sau nhãn Trình tấu */
+.board-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  border-width: 3px;
+  border-style: solid;
+  opacity: 0;
+  animation: board-ring-out 900ms ease-out both;
+}
+@keyframes board-ring-out {
+  0%   { opacity: 0.9; transform: scale(0.85); }
+  100% { opacity: 0; transform: scale(1.25); }
 }
 
 /* ── Khoảng trời cho header cố định ──

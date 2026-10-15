@@ -32,9 +32,9 @@ interface HeaderProps {
 const NAV_LINKS = [
   { label: "Khám phá", href: "/", icon: <IconCompass size={16} aria-hidden /> },
   { label: "Duyệt", href: "/duyet", icon: <IconLibrary size={16} aria-hidden /> },
-  { label: "Chơi", href: "/choi-thu-ngay", icon: <IconGamepad size={16} aria-hidden /> },
-  { label: "Nhạc", href: "/san-choi-ngu-am", icon: <IconMusicNote size={16} aria-hidden /> },
-  { label: "Luật", href: "/luat-choi", icon: <IconDrum size={16} aria-hidden /> },
+  { label: "Chơi", href: "/choi", icon: <IconGamepad size={16} aria-hidden /> },
+  { label: "Nhạc", href: "/phong-nhac", icon: <IconMusicNote size={16} aria-hidden /> },
+  { label: "Thư viện", href: "/thu-vien", icon: <IconDrum size={16} aria-hidden /> },
 ];
 
 export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {}) {
@@ -209,7 +209,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
 
           {/* NÚT CHƠI — CTA chính */}
           <Link
-            href="/choi-thu-ngay"
+            href="/choi"
             className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-[4px] text-[13px] font-black
               border-2 border-[#D23A22] bg-[#D23A22] text-white
               shadow-[2px_2px_0px_#7A1E10] hover:-translate-y-px hover:shadow-[3px_3px_0px_#7A1E10]
