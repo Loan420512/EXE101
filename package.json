@@ -10,6 +10,7 @@
     "setup": "node scripts/setup.js",
     "images": "node scripts/optimize-images.mjs",
     "billboard": "node scripts/prep-billboard.mjs",
+    "shoot": "node scripts/shoot.mjs",
     "test": "vitest run",
     "realtime": "node server/realtime.js"
   },

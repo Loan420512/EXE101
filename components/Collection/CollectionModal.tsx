@@ -84,7 +84,7 @@ export default function CollectionModal({
         <button
           onClick={onClose}
           aria-label="Đóng Bộ sưu tập"
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer z-10"
+          className="absolute top-4 right-4 tap w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer z-10"
         >
           <IconClose size={14} aria-hidden />
         </button>

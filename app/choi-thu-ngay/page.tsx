@@ -15,26 +15,6 @@
 import React, { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import {
-  Users,
-  Bot,
-  HelpCircle,
-  Volume2,
-  VolumeX,
-  RotateCcw,
-  Sparkles,
-  Swords,
-  Trophy,
-  ArrowRight,
-  ShieldAlert,
-  Music,
-  CheckCircle2,
-  ChevronRight,
-  Eye,
-  Globe,
-  Copy,
-  Check,
-} from "lucide-react";
-import {
   GameState,
   CardInstance,
   ComboResult,
@@ -54,7 +34,13 @@ import {
 } from "@/lib/rules/engine";
 import { decideBotMove, executeBotTurn } from "@/lib/rules/bot";
 import { soundEngine } from "@/lib/audio";
-import { IconWarning, IconStar, IconClose } from "@/components/icons";
+import {
+  IconWarning, IconStar, IconClose,
+  IconUsers, IconGamepad, IconQuestion, IconVolume, IconVolumeMute,
+  IconCycle, IconSparkles, IconSwords, IconTrophy, IconArrowRight,
+  IconShield, IconMusicNote, IconCheck, IconChevronRight, IconSearch,
+  IconShare, IconLink, IconCrown,
+} from "@/components/icons";
 
 const ELEMENT_LABELS: Record<ElementType, { name: string; note: string; color: string; bg: string; border: string }> = {
   tho: { name: "Thổ", note: "Cung (C4)", color: "text-[#B45309]", bg: "bg-[#F2B632]", border: "border-[#B45309]" },
@@ -343,7 +329,7 @@ export default function ChoiThuNgayPage() {
                     : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
                 }`}
               >
-                <Bot className="w-4 h-4" />
+              <IconGamepad className="w-4 h-4" />
                 Đấu với Máy
               </button>
               <button
@@ -357,7 +343,7 @@ export default function ChoiThuNgayPage() {
                     : "text-stone-700 hover:text-black"
                 }`}
               >
-                <Users className="w-4 h-4" />
+                <IconUsers className="w-4 h-4" />
                 Chuyền máy
               </button>
               <button
@@ -370,7 +356,7 @@ export default function ChoiThuNgayPage() {
                     : "text-stone-700 hover:text-black"
                 }`}
               >
-                <Globe className="w-4 h-4" />
+                <IconSearch className="w-4 h-4" />
                 Phòng Online
               </button>
             </div>
@@ -399,15 +385,15 @@ export default function ChoiThuNgayPage() {
               className="p-2 sm:px-3 sm:py-2 bg-white border-[2px] border-[#1A1A1A] rounded-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1A1A1A] hover:bg-stone-50"
               title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
             >
-              {isMuted ? <VolumeX className="w-5 h-5 text-stone-500" /> : <Volume2 className="w-5 h-5 text-[#D23A22]" />}
+              {isMuted ? <IconVolumeMute className="w-5 h-5 text-stone-500" /> : <IconVolume className="w-5 h-5 text-[#D23A22]" />}
             </button>
 
             {/* Nút Hướng dẫn */}
             <button
               onClick={() => setShowTutorial(true)}
-              className="p-2 sm:px-3 sm:py-2 bg-[#F2B632] border-[2px] border-[#1A1A1A] rounded-xl font-bold min-h-[44px] flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1A1A1A] hover:brightness-105"
+              className="tap p-2 sm:px-3 sm:py-2 bg-[#F2B632] border-[2px] border-[#1A1A1A] rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1A1A1A] hover:brightness-105"
             >
-              <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
+              <IconQuestion className="w-5 h-5 text-[#1A1A1A]" />
               <span className="hidden sm:inline text-xs font-black">Luật 7+</span>
             </button>
 
@@ -417,7 +403,7 @@ export default function ChoiThuNgayPage() {
               className="p-2 sm:px-3 sm:py-2 bg-white border-[2px] border-[#1A1A1A] rounded-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center gap-1 shadow-[2px_2px_0px_#1A1A1A] hover:bg-stone-50"
               title="Chia ván mới"
             >
-              <RotateCcw className="w-5 h-5 text-stone-700" />
+              <IconCycle className="w-5 h-5 text-stone-700" />
             </button>
           </div>
         </header>
@@ -427,7 +413,7 @@ export default function ChoiThuNgayPage() {
           <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] space-y-5 animate-in fade-in duration-200">
             <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
               <div className="flex items-center gap-2">
-                <Globe className="w-5 h-5 text-[#D23A22]" />
+                <IconSearch className="w-5 h-5 text-[#D23A22]" />
                 <h2 className="text-xl font-black text-[#1A1A1A]">
                   Phòng Chơi Trực Tuyến Thời Gian Thực (WebSocket)
                 </h2>
@@ -523,7 +509,7 @@ export default function ChoiThuNgayPage() {
                       className="p-3 bg-white border-2 border-[#1A1A1A] rounded-xl hover:bg-stone-50 min-h-[44px] min-w-[44px] shadow-[2px_2px_0px_#1A1A1A]"
                       title="Sao chép mã phòng"
                     >
-                      {onlineCopied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5 text-stone-700" />}
+                      {onlineCopied ? <IconCheck size={20} className="text-emerald-600" aria-hidden /> : <IconLink size={20} aria-hidden />}
                     </button>
                   </div>
                   <p className="text-xs text-stone-600 font-medium">
@@ -591,7 +577,7 @@ export default function ChoiThuNgayPage() {
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-sm truncate">{p.name}</span>
-                  {p.isBot && <Bot className="w-3.5 h-3.5 text-stone-500 flex-shrink-0" />}
+                  {p.isBot && <IconGamepad size={14} className="text-stone-500 flex-shrink-0" aria-hidden />}
                 </div>
                 <div className="mt-2 flex items-baseline justify-between">
                   <span className="text-2xl font-black text-[#D23A22]">{p.score} <span className="text-xs font-bold text-stone-500">/ 15đ</span></span>
@@ -649,7 +635,7 @@ export default function ChoiThuNgayPage() {
                   </div>
 
                   <div className="my-auto text-center space-y-1">
-                    <Music className="w-7 h-7 mx-auto text-stone-700 opacity-60 group-hover:scale-110 transition-transform" />
+                    <IconMusicNote size={28} className="mx-auto text-stone-700 opacity-60 group-hover:scale-110 transition" aria-hidden />
                     <h3 className="font-black text-sm sm:text-base leading-tight text-[#1A1A1A]">
                       {card.name}
                     </h3>
@@ -692,7 +678,7 @@ export default function ChoiThuNgayPage() {
             {/* Trạng thái máy suy nghĩ */}
             {isBotThinking && (
               <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-100 border-2 border-amber-600 rounded-lg text-amber-900 font-bold text-xs animate-pulse">
-                <Bot className="w-4 h-4" />
+                <IconGamepad size={16} aria-hidden />
                 {activePlayer.name} đang toan tính nước đi...
               </div>
             )}
@@ -726,7 +712,7 @@ export default function ChoiThuNgayPage() {
           {/* GỢI Ý TỔ HỢP TRÌNH TẤU (DÀNH CHO BÉ 7+ DỄ CHƠI) */}
           <div className="space-y-3 pt-2">
             <h3 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#D23A22]" />
+              <IconSparkles size={16} className="text-[#D23A22]" aria-hidden />
               Tổ Hợp Hòa Thanh Khả Thi Trên Tay ({currentCombos.length})
             </h3>
 
@@ -768,7 +754,7 @@ export default function ChoiThuNgayPage() {
                         onClick={() => handlePresentCombo(combo)}
                         className="w-full py-2 bg-[#1A1A1A] hover:bg-stone-800 text-white font-black text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[44px]"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#F2B632]" />
+                        <IconSparkles size={14} className="text-[#F2B632]" aria-hidden />
                         Trình tấu ngay (+{combo.score}đ)
                       </button>
                     </div>
@@ -781,7 +767,7 @@ export default function ChoiThuNgayPage() {
           {/* HÀNH ĐỘNG PHÁ ÂM TƯƠNG KHẮC */}
           <div className="space-y-3 pt-2 border-t-2 border-stone-200">
             <h3 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
-              <Swords className="w-4 h-4 text-[#1F3F7E]" />
+              <IconSwords size={16} className="text-[#1F3F7E]" aria-hidden />
               Hành Động Phá Âm ({currentBreakOptions.length} Cơ hội khắc chế)
             </h3>
 
@@ -809,7 +795,7 @@ export default function ChoiThuNgayPage() {
                         </div>
                         <div className="flex items-center gap-1 text-[11px] font-medium text-stone-600">
                           <span>Dùng <b>{actingCard.name}</b> ({ELEMENT_LABELS[actingCard.element].name})</span>
-                          <ArrowRight className="w-3 h-3 text-stone-400" />
+                          <IconArrowRight size={12} className="text-stone-400" aria-hidden />
                           <span>Ép bỏ <b>{targetCard.name}</b> ({ELEMENT_LABELS[targetCard.element].name})</span>
                         </div>
                       </div>
@@ -819,7 +805,7 @@ export default function ChoiThuNgayPage() {
                         onClick={() => handleBreakSound(opt)}
                         className="w-full py-2 bg-[#1F3F7E] hover:bg-blue-900 text-white font-black text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[44px]"
                       >
-                        <Swords className="w-3.5 h-3.5" />
+                        <IconSwords size={14} aria-hidden />
                         Phá âm mục tiêu này
                       </button>
                     </div>
@@ -838,7 +824,7 @@ export default function ChoiThuNgayPage() {
           <div className="h-28 overflow-y-auto space-y-1 text-xs font-medium text-stone-700 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
             {game.log.slice().reverse().map((entry, idx) => (
               <div key={idx} className="flex items-start gap-2">
-                <ChevronRight className="w-3 h-3 text-stone-400 mt-0.5 flex-shrink-0" />
+                <IconChevronRight size={12} className="text-stone-400 mt-0.5 flex-shrink-0" aria-hidden />
                 <span>{entry}</span>
               </div>
             ))}
@@ -867,7 +853,7 @@ export default function ChoiThuNgayPage() {
         <div className="fixed inset-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-md w-full shadow-[8px_8px_0px_#1A1A1A] text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
             <div className="w-16 h-16 bg-[#F2B632] border-[3px] border-[#1A1A1A] rounded-2xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_#1A1A1A]">
-              <Eye className="w-8 h-8 text-[#1A1A1A]" />
+              <IconSearch size={32} className="text-[#1A1A1A]" aria-hidden />
             </div>
 
             <div className="space-y-2">
@@ -896,7 +882,7 @@ export default function ChoiThuNgayPage() {
         <div className="fixed inset-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-lg w-full shadow-[8px_8px_0px_#1A1A1A] text-center space-y-6">
             <div className="w-20 h-20 bg-[#F2B632] border-[3px] border-[#1A1A1A] rounded-3xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_#1A1A1A]">
-              <Trophy className="w-10 h-10 text-[#D23A22]" />
+              <IconTrophy size={40} className="text-[#D23A22]" aria-hidden />
             </div>
 
             <div className="space-y-1">
@@ -952,7 +938,7 @@ export default function ChoiThuNgayPage() {
           <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-lg w-full shadow-[8px_8px_0px_#1A1A1A] space-y-5">
             <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
               <h3 className="text-xl font-black text-[#1A1A1A] flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-[#D23A22]" />
+                <IconQuestion size={20} className="text-[#D23A22]" aria-hidden />
                 Luật Chơi Dành Cho Bé 7+
               </h3>
               <button
@@ -1023,3 +1009,4 @@ export default function ChoiThuNgayPage() {
     </div>
   );
 }
+

@@ -140,7 +140,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
                   title={`${u.label} — phím ${u.shortcut}`}
                   aria-label={`${u.label} — phím ${u.shortcut}`}
                   aria-pressed={isActive}
-                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-[3px] flex items-center justify-center
+                  className={`tap w-8 h-8 sm:w-9 sm:h-9 rounded-[3px] flex items-center justify-center
                     transition-all duration-150
                     focus-visible:outline-2 focus-visible:outline-[#D23A22]
                     ${isActive
@@ -164,7 +164,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
             onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
             aria-label="Tìm kiếm (Ctrl+K)"
             title="Tìm kiếm Ctrl+K"
-            className="hidden sm:flex w-9 h-9 items-center justify-center rounded-[4px] text-white/60 hover:text-white
+            className="hidden sm:flex tap w-9 h-9 items-center justify-center rounded-[4px] text-white/60 hover:text-white
               hover:bg-white/8 transition-all focus-visible:outline-2 focus-visible:outline-[#D23A22]"
           >
             <IconSearch size={18} aria-hidden />
@@ -176,7 +176,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
             aria-label={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
             aria-pressed={!isMuted}
             title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
-            className={`w-9 h-9 flex items-center justify-center rounded-[4px] transition-all
+            className={`tap w-9 h-9 flex items-center justify-center rounded-[4px] transition-all
               focus-visible:outline-2 focus-visible:outline-[#D23A22]
               ${isMuted
                 ? "text-white/40 hover:text-white/70 hover:bg-white/8"
@@ -191,7 +191,7 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
             onClick={() => window.dispatchEvent(new Event(SHOW_PROFILES_EVENT))}
             aria-label={hasChosen ? `Hồ sơ: ${activeProfile.name} — đổi hồ sơ` : "Chọn hồ sơ người chơi"}
             title={hasChosen ? `Đang chơi: ${activeProfile.name} — bấm để đổi hồ sơ` : "Ai đang chơi?"}
-            className="h-9 min-w-9 px-1.5 flex items-center justify-center gap-1.5 rounded-[4px] text-white/60
+            className="tap h-9 min-w-9 px-1.5 flex items-center justify-center gap-1.5 rounded-[4px] text-white/60
               hover:text-white hover:bg-white/8 transition-all
               focus-visible:outline-2 focus-visible:outline-[#D23A22]"
           >

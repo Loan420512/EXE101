@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hướng A — Sàn Diễn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tho:#F2B632; --kim:#DDE3E8; --moc:#3F7D3B; --hoa:#D23A22; --thuy:#1F3F7E;
+    --ink:#16141A; --paper:#F4EFE2; --night:#0C0B10;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--night);color:#fff;font:16px/1.65 "Be Vietnam Pro",sans-serif}
+  h1,h2,h3,.display{font-family:"Playfair Display",serif;line-height:1.2}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(12,11,16,.86);backdrop-filter:blur(10px);border-bottom:2px solid var(--ink)}
+  .bar{display:flex;align-items:center;gap:18px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Playfair Display";font-weight:900;font-size:19px;letter-spacing:.02em}
+  .brand img{height:34px}
+  nav{display:flex;gap:4px;margin-left:8px}
+  nav a{color:#fff;opacity:.66;text-decoration:none;font-weight:600;font-size:14px;padding:9px 12px;border-radius:3px}
+  nav a.on{opacity:1;background:#ffffff12;box-shadow:inset 0 -2px 0 var(--hoa)}
+  .tools{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .chip{width:30px;height:30px;border:2px solid var(--ink);border-radius:3px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#0006}
+  .btn{background:var(--hoa);color:#fff;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-weight:800;font-size:14px;padding:10px 16px;border-radius:3px}
+
+  /* BILLBOARD: ảnh điện ảnh + bảng giấy nghiêng bên trái */
+  .bill{position:relative;height:600px;overflow:hidden;border-bottom:3px solid var(--ink)}
+  .bill .ph{position:absolute;inset:0}
+  .bill .ph img{width:100%;height:100%;object-fit:cover;object-position:70% 50%}
+  .bill .ph:after{content:"";position:absolute;inset:0;background:
+    linear-gradient(100deg,rgba(12,11,16,.98) 0 34%,rgba(12,11,16,.72) 48%,rgba(12,11,16,.15) 72%,transparent 88%),
+    linear-gradient(to top,rgba(12,11,16,.9),transparent 45%)}
+  .bill .wrap{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,520px) 1fr;align-items:center;gap:40px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--hoa);color:#fff;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:7px 12px;border-radius:3px}
+  .bill h1{font-size:76px;font-weight:900;margin:18px 0 10px;text-shadow:0 6px 24px #000a}
+  .bill .tag{font-size:20px;font-weight:600;color:#fff;max-width:34ch}
+  .bill .desc{font-size:16px;color:#ffffffbf;max-width:44ch;margin-top:10px}
+  .cta{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .cta .p{background:var(--tho);color:var(--ink)}
+  .cta .s{background:#ffffff14;color:#fff;border-color:#ffffff40;box-shadow:none;backdrop-filter:blur(6px)}
+  .mark{position:absolute;right:40px;bottom:36px;display:flex;gap:10px;align-items:flex-end}
+  .mark i{display:block;width:8px;height:34px;background:#ffffff35;border-radius:2px}
+  .mark i.on{background:var(--tho);height:56px}
+
+  /* HÀNG THẺ: ló mép, thẻ dọc, tên không cắt */
+  .row{padding:44px 0 8px}
+  .row h2{font-size:26px;display:flex;align-items:baseline;gap:12px}
+  .row h2 span{font:600 14px/1.4 "Be Vietnam Pro";color:#ffffff8c}
+  .rail{display:flex;gap:16px;overflow:hidden;margin-top:18px}
+  .card{width:210px;flex:0 0 auto;background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);border-radius:4px;overflow:hidden;transform:rotate(-.5deg)}
+  .card:nth-child(even){transform:rotate(.6deg);box-shadow:5px 5px 0 #000}
+  .card .art{height:150px;background:linear-gradient(160deg,#fff6,#0001);display:grid;place-items:center;border-bottom:2px solid var(--ink)}
+  .card .art img{width:82%;height:82%;object-fit:contain}
+  .card .body{padding:10px 12px 12px}
+  .card .el{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#00000099}
+  .card .nm{font-family:"Playfair Display";font-weight:900;font-size:19px;line-height:1.22;margin-top:2px}
+  .card .nt{font-size:12px;font-weight:700;color:#0000008c;margin-top:4px}
+  .card.ghost{background:#ffffff08;color:#fff8;border-style:dashed;box-shadow:none;display:grid;place-items:center;font-weight:700;font-size:14px}
+
+  /* KHỐI GIẤY: nội dung chữ không bao giờ đè ảnh */
+  .paper{background:var(--paper);color:var(--ink);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);padding:56px 0;margin-top:48px}
+  .paper .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+  .paper h2{font-size:38px;font-weight:900}
+  .paper p{font-size:17px;color:#16141ac9;margin-top:12px;max-width:52ch}
+  .five{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:22px}
+  .five div{border:2px solid var(--ink);border-radius:4px;padding:12px 10px;color:#0e0d12;font-weight:800;font-size:13px;box-shadow:3px 3px 0 var(--ink)}
+  .five small{display:block;font-weight:600;font-size:11px;opacity:.75}
+  .strip{background:#12111a;border-bottom:3px solid var(--ink);padding:0}
+  .strip .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .panel{padding:34px 28px;border-left:1px solid #ffffff14}
+  .panel h3{font-size:22px;margin-bottom:8px}
+  .panel p{font-size:15px;color:#ffffffa6}
+  footer{padding:40px 0;color:#ffffff73;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand"><img src="http://localhost:3000/images/logo/logongucung.png" alt="">NGŨ CUNG</div>
+    <nav><a class="on" href="#">Khám phá</a><a href="#">Duyệt</a><a href="#">Chơi</a><a href="#">Phòng nhạc</a><a href="#">Luật</a></nav>
+    <div class="tools">
+      <span class="chip" style="background:var(--tho)">Thổ</span>
+      <span class="chip" style="background:var(--kim)">Kim</span>
+      <span class="chip" style="background:var(--moc);color:#fff">Mộc</span>
+      <span class="chip" style="background:var(--hoa);color:#fff">Hỏa</span>
+      <span class="chip" style="background:var(--thuy);color:#fff">Thủy</span>
+      <button class="btn">Chơi ngay</button>
+    </div>
+  </div>
+</header>
+
+<section class="bill">
+  <div class="ph"><img src="http://localhost:3000/images/billboard/optimized/ken-bau-1920.webp" alt=""></div>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Họ Hỏa · Âm Chủy · G4</span>
+      <h1>Kèn bầu</h1>
+      <p class="tag">Tiếng kèn xiết vào ngực — âm đầu tiên của bộ bài Ngũ Cung.</p>
+      <p class="desc">Kèn lưỡi gà, loa gỗ bổ đôi, hơi thở của người Ba Na. Nghe 6 giây, rồi mở lá bài của bạn.</p>
+      <div class="cta">
+        <button class="btn p">Nghe thử âm Chủy</button>
+        <button class="btn">Xem chi tiết</button>
+        <button class="btn s">Mở gói bài</button>
+      </div>
+    </div>
+    <div class="mark" aria-hidden>
+      <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+  </div>
+</section>
+
+<section class="row wrap">
+  <h2>Bộ bài của bạn <span>15 nhạc cụ · 5 hành · còn thiếu 11 lá</span></h2>
+  <div class="rail">
+    <article class="card"><div class="art"><img src="http://localhost:3000/images/cards/dan-da.png" alt=""></div><div class="body"><p class="el">Hành Thổ · Cung</p><p class="nm">Đàn đá</p><p class="nt">3 lá / bộ · 45 lá</p></div></article>
+    <article class="card"><div class="art"><img src="http://localhost:3000/images/cards/trong-com.png" alt=""></div><div class="body"><p class="el">Hành Thổ · Cung</p><p class="nm">Trống cơm</p><p class="nt">3 lá / bộ · 45 lá</p></div></article>
+    <article class="card"><div class="art"><img src="http://localhost:3000/images/cards/cong-chieng.png" alt=""></div><div class="body"><p class="el">Hành Kim · Thương</p><p class="nm">Cồng chiêng</p><p class="nt">3 lá / bộ · 45 lá</p></div></article>
+    <article class="card"><div class="art"><img src="http://localhost:3000/images/cards/trong-dong.png" alt=""></div><div class="body"><p class="el">Hành Kim · Thương</p><p class="nm">Trống đồng</p><p class="nt">3 lá / bộ · 45 lá</p></div></article>
+    <article class="card"><div class="art"><img src="http://localhost:3000/images/cards/sao-truc.png" alt=""></div><div class="body"><p class="el">Hành Mộc · Giốc</p><p class="nm">Sáo trúc</p><p class="nt">3 lá / bộ · 45 lá</p></div></article>
+    <article class="card ghost">Xem tất cả 15 →</article>
+  </div>
+</section>
+
+<section class="paper">
+  <div class="wrap grid">
+    <div>
+      <h2>Năm hành là năm thế giới</h2>
+      <p>Mỗi hành có màu, cảnh nền, hạt môi trường và cách sóng âm hiển thị riêng. Chọn một hành, cả trang đổi theo — không có trang nào giống trang nào.</p>
+      <div class="five">
+        <div style="background:var(--tho)">Thổ<small>Cung · C4</small></div>
+        <div style="background:var(--kim)">Kim<small>Thương · D4</small></div>
+        <div style="background:var(--moc);color:#fff">Mộc<small>Giốc · E4</small></div>
+        <div style="background:var(--hoa);color:#fff">Hỏa<small>Chủy · G4</small></div>
+        <div style="background:var(--thuy);color:#fff">Thủy<small>Vũ · A4</small></div>
+      </div>
+    </div>
+    <div>
+      <h2 style="font-size:26px">Chơi được ngay, không cần tải</h2>
+      <p>Bàn chơi 45 lá, 2–5 người, chuyền máy hoặc so với bot. Luật đúng bản in, chữ trên nền giấy đặc để trẻ 7 tuổi đọc được.</p>
+      <div class="cta"><button class="btn">Học chơi trong 30 giây</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="wrap grid">
+    <div class="panel"><h3>Phòng Nhạc</h3><p>Chạm một ngón, nghe đúng âm của nhạc cụ. Bản thử — âm mô phỏng, chưa phải thu âm thật.</p></div>
+    <div class="panel"><h3>Trung tâm Chơi</h3><p>Học chơi, chơi với bot, chuyền máy 2–5 máy. Chơi trực tuyến: Sắp có.</p></div>
+    <div class="panel"><h3>Hồ sơ &amp; Chế độ Bé</h3><p>Chữ to, câu đơn giản, khóa phụ huynh bằng PIN. Không chat, không quảng cáo.</p></div>
+  </div>
+</section>
+
+<footer class="wrap">Bản nháp · Nội dung văn hóa đang chờ thẩm định · Ngũ Cung 2026</footer>
+</body>
+</html>

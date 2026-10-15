@@ -101,7 +101,7 @@ export default function CardSheet({ instrument: inst, onClose }: Props) {
           <button
             onClick={onClose}
             aria-label="Đóng phiếu xem trước"
-            className="shrink-0 w-9 h-9 flex items-center justify-center rounded-[4px] text-white/60
+            className="shrink-0 tap w-9 h-9 flex items-center justify-center rounded-[4px] text-white/60
               hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-2 focus-visible:outline-[#D23A22]"
           >
             <IconClose size={16} aria-hidden />
