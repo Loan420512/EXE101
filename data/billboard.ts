@@ -40,9 +40,12 @@ const SLIDE_ORDER: string[] = [
   "trong-com",   // Thổ  — thêm mới
 ];
 
-/** Ảnh nền theo id nhạc cụ — cứ thêm dòng khi có file trong public/images/billboard */
+/** Ảnh nền theo id nhạc cụ — thêm dòng khi có file trong public/images/billboard */
 const BACKGROUNDS: Record<string, string> = {
-  // "ken-bau": "/images/billboard/ken-bau.jpg",
+  "ken-bau": "/images/billboard/kenbaubackgroundbillboard.jpg",
+  "dan-bau": "/images/billboard/danbaubackgroundbillboard.jpg",
+  "sao-truc": "/images/billboard/saotrucbackgroundbillboard.jpg",
+  "cong-chieng": "/images/billboard/congchiengbackgroundbillboard.jpg",
 };
 
 /** Tagline riêng cho vài nhạc cụ để 2 slide cùng hành không trùng chữ */
