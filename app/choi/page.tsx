@@ -6,7 +6,7 @@
  * Chơi trực tuyến (Sắp có), Thử thách hôm nay.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
@@ -16,10 +16,30 @@ import {
 } from "@/components/icons";
 import { ELEMENT_CONFIG, ELEMENT_ORDER, type ElementType } from "@/data/instruments";
 
-/** Hạt giống thử thách hôm nay — tính từ ngày thật, không bịa số liệu. */
-function todaySeed(): string {
-  const d = new Date();
+/**
+ * Hạt giống thử thách hôm nay — tính từ ngày thật của máy người chơi.
+ * Next chặn đọc đồng hồ lúc prerender ở Client Component, nên chỉ gọi sau khi
+ * máy khách chạy (xem useEffect trong ChoiPage).
+ */
+function todaySeedFrom(d: Date): string {
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/** Ô chờ khi chưa kịp tính hạt giống — không hiện số giả. */
+function ChallengeSkeleton() {
+  return (
+    <div
+      className="flex items-center gap-5 p-5 rounded-[4px] border-2 border-white/10 bg-white/5 animate-pulse"
+      aria-label="Đang tải thử thách hôm nay"
+      role="status"
+    >
+      <div className="w-14 h-14 rounded-full bg-white/10 shrink-0" />
+      <div className="flex-1 space-y-2">
+        <div className="h-3.5 w-40 rounded bg-white/10" />
+        <div className="h-3 w-64 max-w-full rounded bg-white/8" />
+      </div>
+    </div>
+  );
 }
 
 /** Đọc 4 số cuối hạt giống thành một hành — chỉ để đổi màu thẻ, không phải xếp hạng. */
@@ -101,7 +121,13 @@ const GAME_MODES: {
 ];
 
 export default function ChoiPage() {
-  const seed = todaySeed();
+  const [seed, setSeed] = useState<string | null>(null);
+
+  // Đọc ngày của máy người chơi sau khi trang hiện ra (prerender không được đọc đồng hồ)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setSeed(todaySeedFrom(new Date())));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#0B0C14", color: "#E8EAE0" }}>
@@ -184,7 +210,10 @@ export default function ChoiPage() {
             <IconStar size={20} aria-hidden />
             Thử thách hôm nay
           </h2>
-          <ChallengeCard seed={seed} element={seedElement(seed)} />
+          {seed
+            ? <ChallengeCard seed={seed} element={seedElement(seed)} />
+            : <ChallengeSkeleton />
+          }
         </section>
 
         {/* Hướng dẫn nhanh */}
