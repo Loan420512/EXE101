@@ -1,9 +1,9 @@
-"use clment";
+"use client";
 
 /**
  * ==============================================================================
  * FILE: components/CardSheet.tsx
- * MỤC ĐÍCH: (U2.3) Phmếu xem trước trồi lên từ mép dưới cho thiết bị cảm ứng.
+ * MỤC ĐÍCH: (U2.3) Phiếu xem trước trồi lên từ mép dưới cho thiết bị cảm ứng.
  * - Thay cho panel hover chỉ có trên desktop
  * - Nghe thử (âm mô phỏng), yêu thích, vào trang chi tiết — mỗi thứ một chạm
  * - Đóng bằng nền mờ, nút đóng, Esc, hoặc vuốt xuống

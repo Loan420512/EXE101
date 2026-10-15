@@ -1,18 +1,20 @@
-"use clment";
+"use client";
 
 /**
- * FILE: components/Bmllboard.tsx
+ * FILE: components/Billboard.tsx
  * Billboard toàn màn hình phong cách streaming × Đông Hồ.
- * - Tự xoay giữa 5 hành khi không tương tác
- * - Nút pause, dừng khi focus/hover
- * - Lá bài nghiêng 3D, tranh nhạc cụ nổi bật
+ * - Xoay 8 slide (data/billboard.ts), tự chuyển mỗi 4s
+ * - Chỉ dừng khi chuột đang rê trên bảng — không có nút pause, không có thanh tiến độ
+ * - Ảnh nền riêng theo từng nhạc cụ: khai báo trong BACKGROUNDS (data/billboard.ts)
+ * - Lá bài nghiêng 3D, tranh/ảnh nhạc cụ nổi bật
  * - Chữ trên "bảng gradient tối" bên trái — không đặt chữ lên vùng sáng ảnh
- * - Hiểu sản phẩm trong 3 giây: câu giá trị rõ ràng
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { INSTRUMENTS, type Instrument, type ElementType, ELEMENT_CONFIG } from "@/data/instruments";
+import Image from "next/image";
+import { type ElementType, ELEMENT_CONFIG } from "@/data/instruments";
+import { BILLBOARD_SLIDES, ELEMENT_TAGLINES, type BillboardSlide } from "@/data/billboard";
 import { type SceneKey } from "@/data/scenes";
 import { dispatchSceneChange } from "@/data/scenes";
 import { soundEngine } from "@/lib/audio";
@@ -22,18 +24,7 @@ import {
   IconInfo, IconChevronLeft, IconChevronRight,
 } from "@/components/icons";
 
-// Một đại diện cho mỗi hành — lấy nhạc cụ đầu tiên của mỗi họ
-const FEATURED: Instrument[] = (["hoa", "thuy", "moc", "tho", "kim"] as ElementType[])
-  .map((el) => INSTRUMENTS.find((i) => i.element === el)!)
-  .filter(Boolean);
-
-const TAGLINES: Record<ElementType, string> = {
-  hoa: "Bùng cháy, nhiệt huyết, tỏa sáng rực rỡ",
-  thuy: "Mềm mại, sâu lắng, biến ảo khôn lường",
-  moc: "Mộc mạc, tươi mới, tràn trề sức sống",
-  tho: "Trầm hậu, bao dung, vững chãi như đất",
-  kim: "Vang dội, sắc bén, ngân vọng ngàn năm",
-};
+const SLIDES: BillboardSlide[] = BILLBOARD_SLIDES;
 
 const SCENE_KEY: Record<ElementType, SceneKey> = {
   hoa: "hoa", thuy: "thuy", moc: "moc", tho: "tho", kim: "kim",
@@ -47,21 +38,24 @@ export default function Billboard() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const active = FEATURED[activeIdx];
+  const slide = SLIDES[activeIdx];
+  const active = slide.instrument;
   const elCfg = ELEMENT_CONFIG[active.element];
+  const tagline = slide.tagline ?? ELEMENT_TAGLINES[active.element];
 
   const goTo = useCallback((idx: number) => {
-    const next = FEATURED[idx];
+    const next = SLIDES[idx];
+    if (!next) return;
     setActiveIdx(idx);
-    dispatchSceneChange(SCENE_KEY[next.element]);
+    dispatchSceneChange(SCENE_KEY[next.instrument.element]);
   }, []);
 
   const next = useCallback(() => {
-    goTo((activeIdx + 1) % FEATURED.length);
+    goTo((activeIdx + 1) % SLIDES.length);
   }, [activeIdx, goTo]);
 
   const prev = useCallback(() => {
-    goTo((activeIdx - 1 + FEATURED.length) % FEATURED.length);
+    goTo((activeIdx - 1 + SLIDES.length) % SLIDES.length);
   }, [activeIdx, goTo]);
 
   // Tự chuyển sau AUTO_INTERVAL; chỉ dừng khi chuột đang rê trên billboard
@@ -94,9 +88,34 @@ export default function Billboard() {
       onMouseLeave={() => setIsHovered(false)}
       aria-label={`Billboard — đang hiển thị: ${active.name} họ ${active.elementName}`}
     >
-      {/* ── LỚPẢNH NỀN (crossfade qua ScenePhotoStack) ── */}
-      {/* Ảnh nền được xử lý bởi LivingBackground/ScenePhotoStack ở z-[-4] */}
-      {/* Billboard chỉ thêm gradient che phủ và nội dung */}
+      {/* ── LỚP 1: ẢNH NỀN RIÊNG CỦA NHẠC CỤ (nếu có trong BACKGROUNDS) ── */}
+      {/* Chưa có ảnh thì mặc định rơi về ScenePhotoStack của LivingBackground (z-[-4]) */}
+      {slide.backgroundUrl && (
+        <div
+          key={`bg-${active.id}`}
+          className="absolute inset-0 z-0 overflow-hidden billboard-bg-in"
+          aria-hidden
+        >
+          <Image
+            src={slide.backgroundUrl}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/* Dịu bớt nửa trái để chữ không bị chìm trong ảnh */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(to right,
+                rgba(6,6,10,0.55) 0%,
+                rgba(6,6,10,0.25) 45%,
+                transparent 75%)`,
+            }}
+          />
+        </div>
+      )}
 
       {/* ── GRADIENT CHE BÊN TRÁI (text readability) ── */}
       <div
@@ -174,7 +193,7 @@ export default function Billboard() {
 
             {/* Tagline */}
             <p className="text-lg text-white/80 font-medium max-w-md">
-              {TAGLINES[active.element]}
+              {tagline}
             </p>
 
             {/* Mô tả ngắn */}
@@ -244,7 +263,8 @@ export default function Billboard() {
 
       {/* ── CHẤM CHỈ SỐ ── */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-        {FEATURED.map((inst, i) => {
+        {SLIDES.map((s, i) => {
+          const inst = s.instrument;
           const isAct = i === activeIdx;
           const cfg = ELEMENT_CONFIG[inst.element];
           return (
