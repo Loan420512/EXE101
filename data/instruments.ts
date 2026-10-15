@@ -134,6 +134,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Được chế tác hoàn toàn từ đá tự nhiên khai thác từ lòng đất núi rừng (hành Thổ).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-da.png",
   },
   {
     id: "trong-com",
@@ -156,6 +157,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Sử dụng tinh bột lúa gạo - sản vật thuần túy từ đất trồng trọt (hành Thổ) - để định hình âm hưởng.",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/trong-com.png",
   },
   {
     id: "tu-va",
@@ -178,6 +180,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Bắt nguồn từ vật liệu tự nhiên gắn liền với động vật cày cuốc trên đồng ruộng đất đai (hành Thổ).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/tu-va.png",
   },
 
   // ===================== KIM (THƯƠNG) =====================
@@ -202,6 +205,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Đúc bằng kim khí hợp kim đồng đặc trưng (hành Kim).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/cong-chieng.png",
   },
   {
     id: "trong-dong",
@@ -224,6 +228,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Đỉnh cao của kỹ nghệ luyện kim đúc đồng cổ đại của người Việt (hành Kim).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/trong-dong.png",
   },
   {
     id: "thanh-la",
@@ -246,6 +251,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Chế tác từ đồng cán mỏng, đặc trưng cho chất âm thanh khiết của kim loại (hành Kim).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/thanh-la.png",
   },
 
   // ===================== MỘC (GIỐC) =====================
@@ -270,6 +276,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Được làm hoàn toàn từ thân tre nứa thiên nhiên của núi rừng (hành Mộc).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-trung.png",
   },
   {
     id: "sao-truc",
@@ -292,6 +299,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Làm từ ống trúc tự nhiên, biểu trưng cho sức sống dẻo dai của cây cỏ (hành Mộc).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/sao-truc.png",
   },
   {
     id: "phach",
@@ -314,6 +322,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Chế tác từ các loại gỗ và tre chọn lọc lâu năm (hành Mộc).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/phach.png",
   },
 
   // ===================== HỎA (CHỦY) =====================
@@ -338,6 +347,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Âm sắc chói chang, sôi nổi, luôn đốt cháy bầu không khí lễ hội như ngọn lửa bùng phát (hành Hỏa).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/ken-bau.png",
   },
   {
     id: "trong-chau",
@@ -360,6 +370,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Truyền lửa hưng phấn và khen ngợi nồng nhiệt cho cuộc diễn xướng (hành Hỏa).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/trong-chau.png",
   },
   {
     id: "dan-ty-ba",
@@ -382,6 +393,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Kỹ thuật vê dây dồn dập rực rỡ như những đợt sóng lửa bập bùng (hành Hỏa).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-ty-ba.png",
   },
 
   // ===================== THỦY (VŨ) =====================
@@ -406,6 +418,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Âm thanh uốn lượn liên tục không ngắt quãng, mềm mại và uyển chuyển như dòng nước chảy (hành Thủy).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-bau.png",
   },
   {
     id: "dan-tranh",
@@ -428,6 +441,7 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Giai điệu rải chuỗi (arpeggio) mượt mà như những con sóng nước lăn tăn vỗ bờ (hành Thủy).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-tranh.png",
   },
   {
     id: "dan-nhi",
@@ -450,8 +464,14 @@ export const INSTRUMENTS: Instrument[] = [
     elementReason: "Cung vĩ lượn sóng liên hồi không gián đoạn, mang đặc tính dạt dào và biến chuyển của nước (hành Thủy).",
     copiesInDeck: 3,
     status: "Bản nháp",
+    imageUrl: "/images/cards/dan-nhi.png",
   },
 ];
+
+/** Ảnh thật của nhạc cụ trong public/images/cards — null nếu chưa có ảnh */
+export function getInstrumentPhoto(id: string): string | null {
+  return INSTRUMENTS.find((item) => item.id === id)?.imageUrl ?? null;
+}
 
 export function getInstrument(slug: string): Instrument | undefined {
   return INSTRUMENTS.find((item) => item.slug === slug);

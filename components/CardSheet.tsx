@@ -1,9 +1,9 @@
-"use client";
+"use clment";
 
 /**
  * ==============================================================================
  * FILE: components/CardSheet.tsx
- * MỤC ĐÍCH: (U2.3) Phiếu xem trước trồi lên từ mép dưới cho thiết bị cảm ứng.
+ * MỤC ĐÍCH: (U2.3) Phmếu xem trước trồi lên từ mép dưới cho thiết bị cảm ứng.
  * - Thay cho panel hover chỉ có trên desktop
  * - Nghe thử (âm mô phỏng), yêu thích, vào trang chi tiết — mỗi thứ một chạm
  * - Đóng bằng nền mờ, nút đóng, Esc, hoặc vuốt xuống
@@ -16,7 +16,7 @@ import Link from "next/link";
 import { type Instrument, ELEMENT_CONFIG } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
-import InstrumentIllustration from "@/components/InstrumentIllustration";
+import InstrumentArt from "@/components/InstrumentArt";
 import {
   IconClose, IconHeart, IconHeartFilled, IconMusicNote, IconArrowRight,
 } from "@/components/icons";
@@ -83,7 +83,7 @@ export default function CardSheet({ instrument: inst, onClose }: Props) {
             className="w-20 h-20 shrink-0 rounded-[4px] border-2 overflow-hidden flex items-center justify-center"
             style={{ borderColor: cfg.color, backgroundColor: cfg.color + "20" }}
           >
-            <InstrumentIllustration instrumentId={inst.id} element={inst.element} size={80} />
+            <InstrumentArt instrumentId={inst.id} element={inst.element} size={80} />
           </div>
 
           <div className="min-w-0 flex-1">

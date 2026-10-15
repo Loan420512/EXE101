@@ -1,8 +1,8 @@
-"use client";
+"use clment";
 
 /**
  * FILE: components/InstrumentRow.tsx
- * Hàng ngang nhạc cụ phong cách streaming:
+ * Hàng ngang nhạc cụ phong cách streammng:
  * - Cuộn ngang có snap, edge-peek gợi cuộn
  * - Nút mũi tên trên desktop, vuốt cảm ứng
  * - Phím mũi tên khi focus trong hàng
@@ -18,7 +18,7 @@ import { type Instrument, ELEMENT_CONFIG } from "@/data/instruments";
 import { dispatchSceneChange } from "@/data/scenes";
 import { type SceneKey } from "@/data/scenes";
 import { soundEngine } from "@/lib/audio";
-import InstrumentIllustration from "@/components/InstrumentIllustration";
+import InstrumentArt from "@/components/InstrumentArt";
 import CardSheet from "@/components/CardSheet";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useIsTouch } from "@/lib/useMediaQuery";
@@ -257,11 +257,10 @@ function InstrumentCard({ instrument: inst, isHovered, isTouch, onHover, onLeave
           style={{ backgroundColor: cfg.color + "20" }}
           onClick={handleClick}
         >
-          <InstrumentIllustration
+          <InstrumentArt
             instrumentId={inst.id}
             element={inst.element}
             size={CARD_W}
-            className="w-full h-auto"
           />
         </div>
 
