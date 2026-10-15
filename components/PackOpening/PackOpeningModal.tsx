@@ -84,7 +84,7 @@ export default function PackOpeningModal({
         <button
           onClick={onClose}
           aria-label="Đóng mở gói bài"
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer"
+          className="absolute top-3 right-3 tap w-8 h-8 flex items-center justify-center font-bold text-sm bg-white dark:bg-stone-800 border-[2px] border-[#16141A] dark:border-[#E8EAE0] rounded shadow-[2px_2px_0px_#16141A] hover:bg-stone-100 cursor-pointer"
         >
           <IconClose size={14} aria-hidden />
         </button>

@@ -359,8 +359,8 @@ export default function Billboard() {
         aria-hidden
       />
 
-      {/* ── CHẤM CHỈ SỐ ── */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+      {/* ── CHẤM CHỈ SỐ ── mỗi nút rộng 44px để đủ vùng chạm, chấm nhỏ nằm bên trong */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center">
         {SLIDES.map((s, i) => {
           const inst = s.instrument;
           const isAct = i === activeIdx;
@@ -371,11 +371,16 @@ export default function Billboard() {
               onClick={() => goTo(i)}
               aria-label={`Chuyển sang ${inst.name}`}
               aria-current={isAct}
-              className={`rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-white ${
-                isAct ? "w-6 h-2.5" : "w-2.5 h-2.5 opacity-50 hover:opacity-80"
-              }`}
-              style={{ backgroundColor: isAct ? cfg.color : "#E8EAE0" }}
-            />
+              className="tap-dot group focus-visible:outline-2 focus-visible:outline-white"
+            >
+              <span
+                aria-hidden
+                className={`block rounded-full transition-all duration-300 group-hover:opacity-90 ${
+                  isAct ? "tap-dot-bar" : "tap-dot-cell opacity-50"
+                }`}
+                style={{ backgroundColor: isAct ? cfg.color : "#E8EAE0" }}
+              />
+            </button>
           );
         })}
       </div>
@@ -384,7 +389,7 @@ export default function Billboard() {
       <button
         onClick={prev}
         aria-label="Slide trước"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center
           rounded-full bg-black/40 border border-white/20 text-white hover:bg-black/60
           transition-all duration-150 focus-visible:outline-2 focus-visible:outline-white"
       >
@@ -393,7 +398,7 @@ export default function Billboard() {
       <button
         onClick={next}
         aria-label="Slide tiếp theo"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center
           rounded-full bg-black/40 border border-white/20 text-white hover:bg-black/60
           transition-all duration-150 focus-visible:outline-2 focus-visible:outline-white"
       >

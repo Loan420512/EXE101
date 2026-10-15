@@ -109,7 +109,7 @@ export default function GameGuide30s() {
 
           <div className="flex items-center gap-4">
             {/* 4 Chấm bước */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center">
               {GAMEPLAY_30S_STEPS.map((step, idx) => (
                 <button
                   key={idx}
@@ -117,14 +117,19 @@ export default function GameGuide30s() {
                     setCurrentStep(idx);
                     setIsPlaying(false);
                   }}
-                  className={`w-4 h-4 rounded-full border-2 border-[#16141A] transition-all duration-200 ${
-                    currentStep === idx
-                      ? "bg-[#D23A22] scale-125"
-                      : "bg-[#DDE3E8] hover:bg-[#F2B632]"
-                  }`}
+                  className="tap-dot group"
                   aria-label={`Chuyển đến bước ${idx + 1}`}
                   title={`Bước ${idx + 1}`}
-                />
+                >
+                  <span
+                    aria-hidden
+                    className={`block w-4 h-4 rounded-full border-2 border-[#16141A] transition-all duration-200 ${
+                      currentStep === idx
+                        ? "bg-[#D23A22] scale-125"
+                        : "bg-[#DDE3E8] group-hover:bg-[#F2B632]"
+                    }`}
+                  />
+                </button>
               ))}
             </div>
 

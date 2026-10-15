@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hướng C — Bàn Điều Khiển</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--tho:#F2B632;--kim:#DDE3E8;--moc:#3F7D3B;--hoa:#D23A22;--thuy:#1F3F7E;--ink:#16141A;--night:#0B0A0E;--panel:#141219;--line:#ffffff14}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--night);color:#fff;font:16px/1.65 "Be Vietnam Pro",sans-serif}
+  h1,h2,h3{font-family:"Playfair Display",serif;line-height:1.2}
+  .shell{display:grid;grid-template-columns:236px minmax(0,1fr) 320px;min-height:100vh;padding-bottom:88px}
+  /* TRÁI: điều hướng + 5 vũ trụ, luôn thấy */
+  aside{border-right:2px solid var(--ink);background:var(--panel);padding:20px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Playfair Display";font-weight:900;font-size:18px}
+  .brand img{height:36px}
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:4px;color:#ffffffb8;text-decoration:none;font-weight:600;font-size:15px}
+  .nav a.on{background:#ffffff12;color:#fff;box-shadow:inset 3px 0 0 var(--hoa)}
+  .nav a i{width:18px;height:18px;border:2px solid currentColor;border-radius:3px;opacity:.7}
+  .uni{display:flex;flex-direction:column;gap:8px}
+  .uni h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-family:"Be Vietnam Pro";color:#ffffff6b;font-weight:800}
+  .u{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#ffffffcc}
+  .u b{width:22px;height:22px;border:2px solid var(--ink);border-radius:3px}
+  /* GIỮA: canvas đổi màu theo nội dung đang xem */
+  main{padding:26px 28px 8px;display:flex;flex-direction:column;gap:30px;min-width:0}
+  .hero{position:relative;border:2px solid var(--ink);border-radius:6px;overflow:hidden;box-shadow:6px 6px 0 #000a}
+  .hero img{width:100%;height:340px;object-fit:cover;object-position:70% 45%}
+  .hero .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,10,14,.96) 0 40%,rgba(11,10,14,.55) 62%,transparent 88%)}
+  .hero .in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;padding:28px}
+  .eyebrow{align-self:flex-start;background:var(--hoa);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:3px}
+  .hero h1{font-size:56px;font-weight:900}
+  .hero p{color:#ffffffd9;max-width:48ch;font-size:17px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .btn{border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);background:var(--tho);color:var(--ink);font-weight:800;font-size:14px;padding:11px 16px;border-radius:4px}
+  .btn.g{background:#ffffff16;color:#fff;border-color:#ffffff2e;box-shadow:none}
+  /* Bento: nhiều cỡ khối, không lặp một kiểu hộp */
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+  .tile{background:var(--panel);border:2px solid var(--ink);border-radius:6px;padding:16px;min-height:120px;display:flex;flex-direction:column;gap:6px}
+  .tile h2{font-size:20px}
+  .tile p{font-size:14px;color:#ffffffa6}
+  .w3{grid-column:span 3}.w2{grid-column:span 2}.w4{grid-column:span 4}.w6{grid-column:span 6}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+  .card{background:#fdf8ea;color:var(--ink);border:2px solid var(--ink);border-radius:4px;box-shadow:4px 4px 0 var(--ink);padding:8px;transform:rotate(-.6deg)}
+  .card:nth-child(3n){transform:rotate(.8deg)}
+  .card img{width:100%;height:88px;object-fit:contain}
+  .card b{display:block;font-family:"Playfair Display";font-size:15px;line-height:1.2;margin-top:4px}
+  .card i{display:block;font-style:normal;font-size:11px;font-weight:700;opacity:.72}
+  .five{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .five div{border:2px solid var(--ink);border-radius:4px;padding:10px;font-weight:800;font-size:13px;color:var(--ink)}
+  .five small{display:block;font-weight:600;font-size:11px;opacity:.72}
+  /* PHẢI: đang phát + hàng đợi, luôn trực */
+  .side{border-left:2px solid var(--ink);background:var(--panel);padding:22px 18px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+  .side h2{font-size:18px}
+  .now{border:2px solid var(--ink);border-radius:6px;background:linear-gradient(160deg,var(--hoa),#7a1c10);padding:14px;display:flex;gap:12px;align-items:center}
+  .now img{width:64px;height:64px;object-fit:contain;background:#00000022;border:2px solid var(--ink);border-radius:4px}
+  .now b{display:block;font-family:"Playfair Display";font-size:17px}
+  .now span{font-size:12px;opacity:.85;font-weight:600}
+  .wave{display:flex;align-items:flex-end;gap:3px;height:34px}
+  .wave i{width:4px;background:#ffffffb0;border-radius:2px}
+  .q{display:flex;flex-direction:column;gap:8px;font-size:14px}
+  .q div{display:flex;justify-content:space-between;gap:8px;padding:9px 10px;background:#ffffff08;border-radius:4px;color:#ffffffcc}
+  .tag{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#ffffff73}
+  /* DƯỚI: mini-player luôn trực (Spotify) */
+  .player{position:fixed;left:0;right:0;bottom:0;height:80px;background:#0f0e13f2;border-top:2px solid var(--ink);backdrop-filter:blur(12px);display:grid;grid-template-columns:280px 1fr 280px;align-items:center;gap:18px;padding:0 20px;z-index:60}
+  .player .meta{display:flex;gap:10px;align-items:center}
+  .player .meta img{width:48px;height:48px;object-fit:contain;background:#fdf8ea;border:2px solid var(--ink);border-radius:4px}
+  .player b{display:block;font-size:15px}
+  .player small{font-size:12px;color:#ffffff9c}
+  .track{height:6px;background:#ffffff1f;border-radius:3px;overflow:hidden}
+  .track i{display:block;height:100%;width:34%;background:var(--tho)}
+  .ctrl{display:flex;align-items:center;gap:12px;justify-content:center}
+  .ctrl .p{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font-size:15px;border:2px solid var(--ink)}
+  .keys{display:flex;justify-content:flex-end;gap:8px;font-size:12px;color:#ffffff8c;font-weight:700}
+  .keys span{border:1px solid #ffffff2a;border-radius:3px;padding:3px 7px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="brand"><img src="http://localhost:3000/images/logo/logongucung.png" alt="">NGŨ CUNG</div>
+    <nav class="nav">
+      <a class="on" href="#"><i></i>Khám phá</a>
+      <a href="#"><i></i>Duyệt bộ bài</a>
+      <a href="#"><i></i>Phòng Nhạc</a>
+      <a href="#"><i></i>Trung tâm Chơi</a>
+      <a href="#"><i></i>Thư viện</a>
+      <a href="#"><i></i>Hồ sơ</a>
+    </nav>
+    <div class="uni">
+      <h3>Vũ trụ</h3>
+      <div class="u"><b style="background:var(--tho)"></b>Thổ · Cung C4</div>
+      <div class="u"><b style="background:var(--kim)"></b>Kim · Thương D4</div>
+      <div class="u"><b style="background:var(--moc)"></b>Mộc · Giốc E4</div>
+      <div class="u"><b style="background:var(--hoa)"></b>Hỏa · Chủy G4</div>
+      <div class="u"><b style="background:var(--thuy)"></b>Thủy · Vũ A4</div>
+      <div class="u"><b style="background:linear-gradient(135deg,var(--tho),var(--hoa))"></b>Hợp Nhất</div>
+    </div>
+    <p class="tag">Bản nháp · 7+ · không theo dõi bên thứ ba</p>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <img src="http://localhost:3000/images/billboard/optimized/ken-bau-1920.webp" alt="">
+      <div class="veil"></div>
+      <div class="in">
+        <span class="eyebrow">Đang phát trong cõi Hỏa</span>
+        <h1>Kèn bầu</h1>
+        <p>Tiếng kèn xiết vào ngực — âm Chủy của bộ bài Ngũ Cung. Nghe 6 giây rồi mở lá bài.</p>
+        <div class="btns"><button class="btn">Nghe âm Chủy</button><button class="btn g">Xem chi tiết</button><button class="btn g">Chơi ngay</button></div>
+      </div>
+    </section>
+
+    <section class="bento">
+      <div class="tile w3"><h2>Bộ bài của bạn</h2><p>4/15 nhạc cụ đã sưu tập · mỗi nhạc cụ 3 lá</p>
+        <div class="tiles" style="margin-top:8px">
+          <div class="card"><img src="http://localhost:3000/images/cards/dan-da.png" alt=""><b>Đàn đá</b><i>Thổ · Cung</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/cong-chieng.png" alt=""><b>Cồng chiêng</b><i>Kim · Thương</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/sao-truc.png" alt=""><b>Sáo trúc</b><i>Mộc · Giốc</i></div>
+        </div>
+      </div>
+      <div class="tile w3"><h2>Ngũ hành tương sinh</h2><p>Chọn hai hành để xem quan hệ sinh – khắc.</p>
+        <div class="five" style="margin-top:10px">
+          <div style="background:var(--tho)">Thổ<small>sinh Kim</small></div>
+          <div style="background:var(--kim)">Kim<small>sinh Thủy</small></div>
+          <div style="background:var(--moc);color:#fff">Mộc<small>sinh Hỏa</small></div>
+          <div style="background:var(--hoa);color:#fff">Hỏa<small>sinh Thổ</small></div>
+          <div style="background:var(--thuy);color:#fff">Thủy<small>sinh Mộc</small></div>
+        </div>
+      </div>
+      <div class="tile w2"><h2>Phòng Nhạc</h2><p>Bản thử · âm mô phỏng</p></div>
+      <div class="tile w2"><h2>Học chơi 30s</h2><p>3 việc mỗi lượt</p></div>
+      <div class="tile w2"><h2>Chuyền máy</h2><p>2–5 người, 1 thiết bị</p></div>
+    </section>
+
+    <section class="bento">
+      <div class="tile w6"><h2>Hàng ngang theo hành</h2><p>Kéo ngang, lộ mép để gợi cuộn · bàn phím dùng phím mũi tên</p>
+        <div class="tiles" style="margin-top:10px">
+          <div class="card"><img src="http://localhost:3000/images/cards/trong-com.png" alt=""><b>Trống cơm</b><i>Thổ · Cung</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/tu-va.png" alt=""><b>Tù và</b><i>Thổ · Cung</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/dan-tranh.png" alt=""><b>Đàn tranh</b><i>Thủy · Vũ</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/dan-bau.png" alt=""><b>Đàn bầu</b><i>Thủy · Vũ</i></div>
+          <div class="card"><img src="http://localhost:3000/images/cards/dan-nhi.png" alt=""><b>Đàn nhị</b><i>Thủy · Vũ</i></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="side">
+    <h2>Đang phát</h2>
+    <div class="now">
+      <img src="http://localhost:3000/images/cards/ken-bau.png" alt="">
+      <div><b>Kèn bầu</b><span>Họ Hỏa · Âm Chủy · G4</span></div>
+    </div>
+    <div class="wave"><i style="height:30%"></i><i style="height:70%"></i><i style="height:100%"></i><i style="height:52%"></i><i style="height:84%"></i><i style="height:36%"></i><i style="height:66%"></i><i style="height:92%"></i><i style="height:44%"></i><i style="height:74%"></i><i style="height:28%"></i><i style="height:58%"></i></div>
+    <p class="tag">Hàng đợi · bản thử</p>
+    <div class="q">
+      <div><span>Đàn bầu</span><span>Thủy</span></div>
+      <div><span>Sáo trúc</span><span>Mộc</span></div>
+      <div><span>Trống đồng</span><span>Kim</span></div>
+      <div><span>Đàn đá</span><span>Thổ</span></div>
+    </div>
+    <p class="tag">Chưa có thu âm thật — nội dung văn hóa chờ thẩm định</p>
+  </div>
+</div>
+
+<div class="player">
+  <div class="meta">
+    <img src="http://localhost:3000/images/cards/ken-bau.png" alt="">
+    <div><b>Kèn bầu</b><small>Họ Hỏa · Âm Chủy (G4)</small></div>
+  </div>
+  <div>
+    <div class="ctrl"><span>⏮</span><span class="p">▶</span><span>⏭</span></div>
+    <div class="track" style="margin-top:8px"><i></i></div>
+  </div>
+  <div class="keys"><span>/ tìm</span><span>1–5 vũ trụ</span><span>0 Hợp Nhất</span><span>Tạm dừng nền</span></div>
+</div>
+</body>
+</html>

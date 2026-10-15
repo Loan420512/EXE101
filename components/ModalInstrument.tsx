@@ -68,7 +68,7 @@ export default function ModalInstrument({
         {/* NÚT ĐÓNG MODAL */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded bg-[#E8EAE0] dark:bg-stone-800 border-2 border-[#16141A] dark:border-[#E8EAE0] 
+          className="absolute top-4 right-4 tap w-9 h-9 rounded bg-[#E8EAE0] dark:bg-stone-800 border-2 border-[#16141A] dark:border-[#E8EAE0] 
             flex items-center justify-center font-black text-lg text-[#16141A] dark:text-[#E8EAE0] 
             hover:bg-[#D23A22] hover:text-white transition-colors"
           aria-label="Đóng"

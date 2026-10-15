@@ -1,0 +1,903 @@
+[
+  {
+    "name": "home-360-light",
+    "route": "/",
+    "width": 360,
+    "mode": "light",
+    "height": 15549,
+    "issues": {
+      "pageHeight": 15549,
+      "overflow": 0,
+      "tinyText": "12px:121 11px:86 10px:75 9px:30",
+      "tiny": 312,
+      "smallTap": 0,
+      "taps": 62,
+      "clipped": 4,
+      "top": [],
+      "h1": ""
+    },
+    "errors": []
+  },
+  {
+    "name": "home-360-dark",
+    "route": "/",
+    "width": 360,
+    "mode": "dark",
+    "height": 15549,
+    "issues": {
+      "pageHeight": 15549,
+      "overflow": 0,
+      "tinyText": "12px:121 11px:86 10px:75 9px:30",
+      "tiny": 312,
+      "smallTap": 0,
+      "taps": 68,
+      "clipped": 4,
+      "top": [],
+      "h1": ""
+    },
+    "errors": []
+  },
+  {
+    "name": "home-1280-light",
+    "route": "/",
+    "width": 1280,
+    "mode": "light",
+    "height": 10138,
+    "issues": {
+      "pageHeight": 10138,
+      "overflow": 0,
+      "tinyText": "12px:97 11px:81 10px:52 9px:30",
+      "tiny": 260,
+      "smallTap": 0,
+      "taps": 64,
+      "clipped": 1,
+      "top": [],
+      "h1": ""
+    },
+    "errors": []
+  },
+  {
+    "name": "home-1280-dark",
+    "route": "/",
+    "width": 1280,
+    "mode": "dark",
+    "height": 10138,
+    "issues": {
+      "pageHeight": 10138,
+      "overflow": 0,
+      "tinyText": "12px:98 11px:81 10px:52 9px:30",
+      "tiny": 261,
+      "smallTap": 0,
+      "taps": 60,
+      "clipped": 2,
+      "top": [],
+      "h1": ""
+    },
+    "errors": []
+  },
+  {
+    "name": "bo-bai-360-light",
+    "route": "/bo-bai",
+    "width": 360,
+    "mode": "light",
+    "height": 5302,
+    "issues": {
+      "pageHeight": 5302,
+      "overflow": 0,
+      "tinyText": "12px:76 10px:66 9px:30 11px:9",
+      "tiny": 181,
+      "smallTap": 0,
+      "taps": 27,
+      "clipped": 1,
+      "top": [],
+      "h1": "Bộ bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "bo-bai-360-dark",
+    "route": "/bo-bai",
+    "width": 360,
+    "mode": "dark",
+    "height": 5302,
+    "issues": {
+      "pageHeight": 5302,
+      "overflow": 0,
+      "tinyText": "12px:76 10px:66 9px:30 11px:9",
+      "tiny": 181,
+      "smallTap": 0,
+      "taps": 27,
+      "clipped": 1,
+      "top": [],
+      "h1": "Bộ bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "bo-bai-1280-light",
+    "route": "/bo-bai",
+    "width": 1280,
+    "mode": "light",
+    "height": 2856,
+    "issues": {
+      "pageHeight": 2856,
+      "overflow": 0,
+      "tinyText": "12px:63 10px:51 9px:30 11px:4",
+      "tiny": 148,
+      "smallTap": 0,
+      "taps": 29,
+      "clipped": 2,
+      "top": [],
+      "h1": "Bộ bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "bo-bai-1280-dark",
+    "route": "/bo-bai",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2856,
+    "issues": {
+      "pageHeight": 2856,
+      "overflow": 0,
+      "tinyText": "12px:63 10px:51 9px:30 11px:4",
+      "tiny": 148,
+      "smallTap": 0,
+      "taps": 29,
+      "clipped": 2,
+      "top": [],
+      "h1": "Bộ bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "duyet-360-light",
+    "route": "/duyet",
+    "width": 360,
+    "mode": "light",
+    "height": 5085,
+    "issues": {
+      "pageHeight": 5085,
+      "overflow": 0,
+      "tinyText": "12px:66 10px:51 9px:30 11px:14",
+      "tiny": 161,
+      "smallTap": 0,
+      "taps": 47,
+      "clipped": 2,
+      "top": [],
+      "h1": "Duyệt bộ sưu tập"
+    },
+    "errors": []
+  },
+  {
+    "name": "duyet-360-dark",
+    "route": "/duyet",
+    "width": 360,
+    "mode": "dark",
+    "height": 5085,
+    "issues": {
+      "pageHeight": 5085,
+      "overflow": 0,
+      "tinyText": "12px:66 10px:51 9px:30 11px:14",
+      "tiny": 161,
+      "smallTap": 0,
+      "taps": 47,
+      "clipped": 2,
+      "top": [],
+      "h1": "Duyệt bộ sưu tập"
+    },
+    "errors": []
+  },
+  {
+    "name": "duyet-1280-light",
+    "route": "/duyet",
+    "width": 1280,
+    "mode": "light",
+    "height": 2715,
+    "issues": {
+      "pageHeight": 2715,
+      "overflow": 0,
+      "tinyText": "12px:53 10px:36 9px:30 11px:9",
+      "tiny": 128,
+      "smallTap": 0,
+      "taps": 49,
+      "clipped": 3,
+      "top": [],
+      "h1": "Duyệt bộ sưu tập"
+    },
+    "errors": []
+  },
+  {
+    "name": "duyet-1280-dark",
+    "route": "/duyet",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2715,
+    "issues": {
+      "pageHeight": 2715,
+      "overflow": 0,
+      "tinyText": "12px:53 10px:36 9px:30 11px:9",
+      "tiny": 128,
+      "smallTap": 0,
+      "taps": 49,
+      "clipped": 3,
+      "top": [],
+      "h1": "Duyệt bộ sưu tập"
+    },
+    "errors": []
+  },
+  {
+    "name": "ngu-hanh-360-light",
+    "route": "/ngu-hanh",
+    "width": 360,
+    "mode": "light",
+    "height": 4186,
+    "issues": {
+      "pageHeight": 4186,
+      "overflow": 0,
+      "tinyText": "12px:37 11px:15 10px:6",
+      "tiny": 58,
+      "smallTap": 0,
+      "taps": 24,
+      "clipped": 1,
+      "top": [],
+      "h1": "Ngũ Âm & Ngũ Hành"
+    },
+    "errors": []
+  },
+  {
+    "name": "ngu-hanh-360-dark",
+    "route": "/ngu-hanh",
+    "width": 360,
+    "mode": "dark",
+    "height": 4186,
+    "issues": {
+      "pageHeight": 4186,
+      "overflow": 0,
+      "tinyText": "12px:37 11px:15 10px:6",
+      "tiny": 58,
+      "smallTap": 0,
+      "taps": 24,
+      "clipped": 1,
+      "top": [],
+      "h1": "Ngũ Âm & Ngũ Hành"
+    },
+    "errors": []
+  },
+  {
+    "name": "ngu-hanh-1280-light",
+    "route": "/ngu-hanh",
+    "width": 1280,
+    "mode": "light",
+    "height": 2704,
+    "issues": {
+      "pageHeight": 2704,
+      "overflow": 0,
+      "tinyText": "12px:39 11px:10 10px:6",
+      "tiny": 55,
+      "smallTap": 0,
+      "taps": 26,
+      "clipped": 2,
+      "top": [],
+      "h1": "Ngũ Âm & Ngũ Hành"
+    },
+    "errors": []
+  },
+  {
+    "name": "ngu-hanh-1280-dark",
+    "route": "/ngu-hanh",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2704,
+    "issues": {
+      "pageHeight": 2704,
+      "overflow": 0,
+      "tinyText": "12px:39 11px:10 10px:6",
+      "tiny": 55,
+      "smallTap": 0,
+      "taps": 26,
+      "clipped": 2,
+      "top": [],
+      "h1": "Ngũ Âm & Ngũ Hành"
+    },
+    "errors": []
+  },
+  {
+    "name": "luat-choi-360-light",
+    "route": "/luat-choi",
+    "width": 360,
+    "mode": "light",
+    "height": 4720,
+    "issues": {
+      "pageHeight": 4720,
+      "overflow": 0,
+      "tinyText": "12px:43 11px:9 10px:6",
+      "tiny": 58,
+      "smallTap": 0,
+      "taps": 23,
+      "clipped": 1,
+      "top": [],
+      "h1": "Luật chơi Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "luat-choi-360-dark",
+    "route": "/luat-choi",
+    "width": 360,
+    "mode": "dark",
+    "height": 4720,
+    "issues": {
+      "pageHeight": 4720,
+      "overflow": 0,
+      "tinyText": "12px:43 11px:9 10px:6",
+      "tiny": 58,
+      "smallTap": 0,
+      "taps": 23,
+      "clipped": 1,
+      "top": [],
+      "h1": "Luật chơi Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "luat-choi-1280-light",
+    "route": "/luat-choi",
+    "width": 1280,
+    "mode": "light",
+    "height": 3130,
+    "issues": {
+      "pageHeight": 3130,
+      "overflow": 0,
+      "tinyText": "12px:27 10px:6 11px:4",
+      "tiny": 37,
+      "smallTap": 0,
+      "taps": 25,
+      "clipped": 2,
+      "top": [],
+      "h1": "Luật chơi Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "luat-choi-1280-dark",
+    "route": "/luat-choi",
+    "width": 1280,
+    "mode": "dark",
+    "height": 3130,
+    "issues": {
+      "pageHeight": 3130,
+      "overflow": 0,
+      "tinyText": "12px:27 10px:6 11px:4",
+      "tiny": 37,
+      "smallTap": 0,
+      "taps": 25,
+      "clipped": 2,
+      "top": [],
+      "h1": "Luật chơi Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "quiz-360-light",
+    "route": "/quiz",
+    "width": 360,
+    "mode": "light",
+    "height": 3343,
+    "issues": {
+      "pageHeight": 3343,
+      "overflow": 0,
+      "tinyText": "12px:34 11px:10 10px:6",
+      "tiny": 50,
+      "smallTap": 0,
+      "taps": 26,
+      "clipped": 1,
+      "top": [],
+      "h1": "Bạn hợp họ nào trong Ngũ Cung?"
+    },
+    "errors": []
+  },
+  {
+    "name": "quiz-360-dark",
+    "route": "/quiz",
+    "width": 360,
+    "mode": "dark",
+    "height": 3343,
+    "issues": {
+      "pageHeight": 3343,
+      "overflow": 0,
+      "tinyText": "12px:34 11px:10 10px:6",
+      "tiny": 50,
+      "smallTap": 0,
+      "taps": 26,
+      "clipped": 1,
+      "top": [],
+      "h1": "Bạn hợp họ nào trong Ngũ Cung?"
+    },
+    "errors": []
+  },
+  {
+    "name": "quiz-1280-light",
+    "route": "/quiz",
+    "width": 1280,
+    "mode": "light",
+    "height": 2409,
+    "issues": {
+      "pageHeight": 2409,
+      "overflow": 0,
+      "tinyText": "12px:30 10px:6 11px:5",
+      "tiny": 41,
+      "smallTap": 0,
+      "taps": 28,
+      "clipped": 2,
+      "top": [],
+      "h1": "Bạn hợp họ nào trong Ngũ Cung?"
+    },
+    "errors": []
+  },
+  {
+    "name": "quiz-1280-dark",
+    "route": "/quiz",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2409,
+    "issues": {
+      "pageHeight": 2409,
+      "overflow": 0,
+      "tinyText": "12px:30 10px:6 11px:5",
+      "tiny": 41,
+      "smallTap": 0,
+      "taps": 28,
+      "clipped": 2,
+      "top": [],
+      "h1": "Bạn hợp họ nào trong Ngũ Cung?"
+    },
+    "errors": []
+  },
+  {
+    "name": "san-choi-ngu-am-360-light",
+    "route": "/san-choi-ngu-am",
+    "width": 360,
+    "mode": "light",
+    "height": 3721,
+    "issues": {
+      "pageHeight": 3721,
+      "overflow": 0,
+      "tinyText": "12px:43 11px:19 10px:11",
+      "tiny": 73,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân chơi Ngũ Âm"
+    },
+    "errors": []
+  },
+  {
+    "name": "san-choi-ngu-am-360-dark",
+    "route": "/san-choi-ngu-am",
+    "width": 360,
+    "mode": "dark",
+    "height": 3721,
+    "issues": {
+      "pageHeight": 3721,
+      "overflow": 0,
+      "tinyText": "12px:43 11px:19 10px:11",
+      "tiny": 73,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân chơi Ngũ Âm"
+    },
+    "errors": []
+  },
+  {
+    "name": "san-choi-ngu-am-1280-light",
+    "route": "/san-choi-ngu-am",
+    "width": 1280,
+    "mode": "light",
+    "height": 2346,
+    "issues": {
+      "pageHeight": 2346,
+      "overflow": 0,
+      "tinyText": "12px:45 11px:14 10px:11",
+      "tiny": 70,
+      "smallTap": 0,
+      "taps": 37,
+      "clipped": 2,
+      "top": [],
+      "h1": "Sân chơi Ngũ Âm"
+    },
+    "errors": []
+  },
+  {
+    "name": "san-choi-ngu-am-1280-dark",
+    "route": "/san-choi-ngu-am",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2346,
+    "issues": {
+      "pageHeight": 2346,
+      "overflow": 0,
+      "tinyText": "12px:45 11px:14 10px:11",
+      "tiny": 70,
+      "smallTap": 0,
+      "taps": 37,
+      "clipped": 2,
+      "top": [],
+      "h1": "Sân chơi Ngũ Âm"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-360-light",
+    "route": "/choi-thu",
+    "width": 360,
+    "mode": "light",
+    "height": 2106,
+    "issues": {
+      "pageHeight": 2106,
+      "overflow": 0,
+      "tinyText": "11px:8 12px:6",
+      "tiny": 14,
+      "smallTap": 0,
+      "taps": 7,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đăng Ký Chơi Thử Bộ Bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-360-dark",
+    "route": "/choi-thu",
+    "width": 360,
+    "mode": "dark",
+    "height": null,
+    "errors": []
+  },
+  {
+    "name": "choi-thu-1280-light",
+    "route": "/choi-thu",
+    "width": 1280,
+    "mode": "light",
+    "height": 2106,
+    "issues": {
+      "pageHeight": 2106,
+      "overflow": 0,
+      "tinyText": "11px:8 12px:6",
+      "tiny": 14,
+      "smallTap": 0,
+      "taps": 7,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đăng Ký Chơi Thử Bộ Bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-1280-dark",
+    "route": "/choi-thu",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2106,
+    "issues": {
+      "pageHeight": 2106,
+      "overflow": 0,
+      "tinyText": "11px:8 12px:6",
+      "tiny": 14,
+      "smallTap": 0,
+      "taps": 7,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đăng Ký Chơi Thử Bộ Bài Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-ngay-360-light",
+    "route": "/choi-thu-ngay",
+    "width": 360,
+    "mode": "light",
+    "height": 3825,
+    "issues": {
+      "pageHeight": 3825,
+      "overflow": 0,
+      "tinyText": "12px:58 11px:38 10px:19 9px:5",
+      "tiny": 120,
+      "smallTap": 0,
+      "taps": 30,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân Đấu Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-ngay-360-dark",
+    "route": "/choi-thu-ngay",
+    "width": 360,
+    "mode": "dark",
+    "height": 3825,
+    "issues": {
+      "pageHeight": 3825,
+      "overflow": 0,
+      "tinyText": "12px:58 11px:38 10px:19 9px:5",
+      "tiny": 120,
+      "smallTap": 0,
+      "taps": 30,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân Đấu Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-ngay-1280-light",
+    "route": "/choi-thu-ngay",
+    "width": 1280,
+    "mode": "light",
+    "height": 3825,
+    "issues": {
+      "pageHeight": 3825,
+      "overflow": 0,
+      "tinyText": "12px:58 11px:38 10px:19 9px:5",
+      "tiny": 120,
+      "smallTap": 0,
+      "taps": 30,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân Đấu Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "choi-thu-ngay-1280-dark",
+    "route": "/choi-thu-ngay",
+    "width": 1280,
+    "mode": "dark",
+    "height": 3825,
+    "issues": {
+      "pageHeight": 3825,
+      "overflow": 0,
+      "tinyText": "12px:58 11px:38 10px:19 9px:5",
+      "tiny": 120,
+      "smallTap": 0,
+      "taps": 30,
+      "clipped": 1,
+      "top": [],
+      "h1": "Sân Đấu Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "ho-so-360-light",
+    "route": "/ho-so",
+    "width": 360,
+    "mode": "light",
+    "height": 2977,
+    "issues": {
+      "pageHeight": 2977,
+      "overflow": 0,
+      "tinyText": "12px:25 11px:11 10px:8",
+      "tiny": 44,
+      "smallTap": 0,
+      "taps": 22,
+      "clipped": 1,
+      "top": [],
+      "h1": "Người thử"
+    },
+    "errors": []
+  },
+  {
+    "name": "ho-so-360-dark",
+    "route": "/ho-so",
+    "width": 360,
+    "mode": "dark",
+    "height": 2977,
+    "issues": {
+      "pageHeight": 2977,
+      "overflow": 0,
+      "tinyText": "12px:25 11px:11 10px:8",
+      "tiny": 44,
+      "smallTap": 0,
+      "taps": 22,
+      "clipped": 1,
+      "top": [],
+      "h1": "Người thử"
+    },
+    "errors": []
+  },
+  {
+    "name": "ho-so-1280-light",
+    "route": "/ho-so",
+    "width": 1280,
+    "mode": "light",
+    "height": 2977,
+    "issues": {
+      "pageHeight": 2977,
+      "overflow": 0,
+      "tinyText": "12px:25 11px:11 10px:8",
+      "tiny": 44,
+      "smallTap": 0,
+      "taps": 22,
+      "clipped": 1,
+      "top": [],
+      "h1": "Người thử"
+    },
+    "errors": []
+  },
+  {
+    "name": "ho-so-1280-dark",
+    "route": "/ho-so",
+    "width": 1280,
+    "mode": "dark",
+    "height": 2977,
+    "issues": {
+      "pageHeight": 2977,
+      "overflow": 0,
+      "tinyText": "12px:25 11px:11 10px:8",
+      "tiny": 44,
+      "smallTap": 0,
+      "taps": 22,
+      "clipped": 1,
+      "top": [],
+      "h1": "Người thử"
+    },
+    "errors": []
+  },
+  {
+    "name": "nhac-cu-dan-bau-360-light",
+    "route": "/nhac-cu/dan-bau",
+    "width": 360,
+    "mode": "light",
+    "height": 4214,
+    "issues": {
+      "pageHeight": 4214,
+      "overflow": 0,
+      "tinyText": "12px:49 10px:22 11px:14 9px:10",
+      "tiny": 95,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đàn bầu"
+    },
+    "errors": []
+  },
+  {
+    "name": "nhac-cu-dan-bau-360-dark",
+    "route": "/nhac-cu/dan-bau",
+    "width": 360,
+    "mode": "dark",
+    "height": 4214,
+    "issues": {
+      "pageHeight": 4214,
+      "overflow": 0,
+      "tinyText": "12px:49 10px:22 11px:14 9px:10",
+      "tiny": 95,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đàn bầu"
+    },
+    "errors": []
+  },
+  {
+    "name": "nhac-cu-dan-bau-1280-light",
+    "route": "/nhac-cu/dan-bau",
+    "width": 1280,
+    "mode": "light",
+    "height": 4214,
+    "issues": {
+      "pageHeight": 4214,
+      "overflow": 0,
+      "tinyText": "12px:49 10px:22 11px:14 9px:10",
+      "tiny": 95,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đàn bầu"
+    },
+    "errors": []
+  },
+  {
+    "name": "nhac-cu-dan-bau-1280-dark",
+    "route": "/nhac-cu/dan-bau",
+    "width": 1280,
+    "mode": "dark",
+    "height": 4214,
+    "issues": {
+      "pageHeight": 4214,
+      "overflow": 0,
+      "tinyText": "12px:49 10px:22 11px:14 9px:10",
+      "tiny": 95,
+      "smallTap": 0,
+      "taps": 35,
+      "clipped": 1,
+      "top": [],
+      "h1": "Đàn bầu"
+    },
+    "errors": []
+  },
+  {
+    "name": "admin-360-light",
+    "route": "/admin",
+    "width": 360,
+    "mode": "light",
+    "height": 1634,
+    "issues": {
+      "pageHeight": 1634,
+      "overflow": 0,
+      "tinyText": "12px:18 11px:9",
+      "tiny": 27,
+      "smallTap": 0,
+      "taps": 8,
+      "clipped": 1,
+      "top": [],
+      "h1": "Quản Trị Đăng Ký Chơi Thử Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "admin-360-dark",
+    "route": "/admin",
+    "width": 360,
+    "mode": "dark",
+    "height": 1634,
+    "issues": {
+      "pageHeight": 1634,
+      "overflow": 0,
+      "tinyText": "12px:18 11px:9",
+      "tiny": 27,
+      "smallTap": 0,
+      "taps": 8,
+      "clipped": 1,
+      "top": [],
+      "h1": "Quản Trị Đăng Ký Chơi Thử Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "admin-1280-light",
+    "route": "/admin",
+    "width": 1280,
+    "mode": "light",
+    "height": 1634,
+    "issues": {
+      "pageHeight": 1634,
+      "overflow": 0,
+      "tinyText": "12px:18 11px:9",
+      "tiny": 27,
+      "smallTap": 0,
+      "taps": 8,
+      "clipped": 1,
+      "top": [],
+      "h1": "Quản Trị Đăng Ký Chơi Thử Ngũ Cung"
+    },
+    "errors": []
+  },
+  {
+    "name": "admin-1280-dark",
+    "route": "/admin",
+    "width": 1280,
+    "mode": "dark",
+    "height": 1634,
+    "issues": {
+      "pageHeight": 1634,
+      "overflow": 0,
+      "tinyText": "12px:18 11px:9",
+      "tiny": 27,
+      "smallTap": 0,
+      "taps": 8,
+      "clipped": 1,
+      "top": [],
+      "h1": "Quản Trị Đăng Ký Chơi Thử Ngũ Cung"
+    },
+    "errors": []
+  }
+]

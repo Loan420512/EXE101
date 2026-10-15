@@ -17,7 +17,7 @@ import { IconSparkles, IconWarning } from "@/components/icons";
 export default function RegisterForm() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [ageGroup, setAgeGroup] = useState("18-24");
+  const [ageGroup, setAgeGroup] = useState("13-17");
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -92,27 +92,29 @@ export default function RegisterForm() {
                 />
               </div>
 
-              {/* NHÓM TUỔI */}
+              {/* NHÓM TUỔI — 7+ theo quyết định dự án */}
               <div>
                 <label className="block text-xs font-bold text-[#16141A] dark:text-[#E8EAE0] uppercase mb-1">
-                  Nhóm tuổi của bạn
+                  Nhóm tuổi
                 </label>
                 <select
                   value={ageGroup}
                   onChange={(e) => setAgeGroup(e.target.value)}
                   className="w-full px-3 py-2 text-sm rounded-[3px] border-2 border-[#16141A] dark:border-[#E8EAE0] bg-[#E8EAE0]/30 dark:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-[#D23A22]"
                 >
-                  <option value="under-18">Dưới 18 tuổi (Học sinh)</option>
-                  <option value="18-24">18 - 24 tuổi (Sinh viên, mới ra trường)</option>
-                  <option value="25-34">25 - 34 tuổi (Người đi làm)</option>
-                  <option value="35-plus">Từ 35 tuổi trở lên (Gia đình, phụ huynh)</option>
+                  <option value="7-12">7 – 12 tuổi (Phụ huynh điền thay bé)</option>
+                  <option value="13-17">13 – 17 tuổi (Học sinh THCS / THPT)</option>
+                  <option value="18-plus">Từ 18 tuổi trở lên (Sinh viên, gia đình)</option>
                 </select>
               </div>
 
-              {/* DÒNG NHẮC PHỤ HUYNH THEO YÊU CẦU */}
-              <div className="p-3 rounded bg-amber-50 dark:bg-stone-900 border border-amber-200 dark:border-stone-700 text-[11px] text-[#524F59] dark:text-[#A8A6B0]">
-                <span className="inline-flex items-center gap-1 align-[-2px]"><IconWarning size={14} aria-hidden /></span> <strong>Lưu ý:</strong> Học sinh dưới 18 tuổi cần có sự đồng ý của phụ huynh trước khi đăng ký tham gia buổi chơi thử nghiệm offline.
-              </div>
+              {/* DÒNG NHẮC PHỤ HUYNH — khớp quyết định 7+ */}
+              {ageGroup === "7-12" && (
+                <div className="p-3 rounded bg-amber-50 dark:bg-stone-900 border border-amber-200 dark:border-stone-700 text-[11px] text-[#524F59] dark:text-[#A8A6B0]">
+                  <span className="inline-flex items-center gap-1 align-[-2px]"><IconWarning size={14} aria-hidden /></span>{" "}
+                  <strong>Nhóm 7 – 12 tuổi:</strong> Phụ huynh vui lòng điền họ tên và email của mình thay cho bé. Thông tin chỉ dùng để liên lạc về buổi chơi thử.
+                </div>
+              )}
 
               {/* NÚT GỬI */}
               <button

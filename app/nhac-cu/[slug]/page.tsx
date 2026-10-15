@@ -127,11 +127,11 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:pb-12">
             {/* Breadcrumb */}
             <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs font-bold text-[#534E5C] dark:text-[#A8A4B2]">
-              <Link href="/" className="hover:text-[#CC3520]">
+              <Link href="/" className="px-2 -mx-2 py-3 -my-3 hover:text-[#CC3520]">
                 Trang chủ
               </Link>
               <span>/</span>
-              <Link href="/duyet" className="hover:text-[#CC3520]">
+              <Link href="/duyet" className="px-2 -mx-2 py-3 -my-3 hover:text-[#CC3520]">
                 Duyệt
               </Link>
               <span>/</span>
