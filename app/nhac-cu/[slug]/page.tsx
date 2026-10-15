@@ -116,7 +116,7 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
 
       <Header />
 
-      <main className={`flex-1 w-full realm-${inst.element}`}>
+      <main className={`below-header flex-1 w-full realm-${inst.element}`}>
         {/* ============================ HERO TRÀN LỀ ============================ */}
         <section
           className="border-b-[3px] border-[#1A1720] dark:border-[#EAE8D8]"
