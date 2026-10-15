@@ -6,6 +6,8 @@ import UniverseRoot from "@/components/UniverseRoot";
 import BottomNav from "@/components/BottomNav";
 import WhoIsPlaying from "@/components/WhoIsPlaying";
 import CommandPalette from "@/components/CommandPalette";
+import PlayerLayer from "@/components/PlayerLayer";
+import SettingsBootstrap from "@/components/SettingsBootstrap";
 
 const beVietnamPro = Be_Vietnam_Pro({
   weight: ["400", "500", "600", "700", "800"],
@@ -137,10 +139,12 @@ export default function RootLayout({
         </a>
 
         <UniverseRoot>
+          <SettingsBootstrap />
           <div id="main-content" className="flex-1 flex flex-col pb-16 md:pb-0" suppressHydrationWarning>
             {children}
           </div>
           <BottomNav />
+          <PlayerLayer />
           <WhoIsPlaying />
           <CommandPalette />
         </UniverseRoot>

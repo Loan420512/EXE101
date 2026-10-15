@@ -340,14 +340,14 @@ export default function LivingBackground({
       {/* 2. Canvas WebGL giấy điệp — mờ để ảnh nền còn nhìn rõ */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[-2] w-full h-full opacity-20 mix-blend-overlay dark:opacity-15 dark:mix-blend-screen"
+        className="living-bg-shader fixed inset-0 pointer-events-none z-[-2] w-full h-full opacity-20 mix-blend-overlay dark:opacity-15 dark:mix-blend-screen"
         aria-hidden="true"
       />
 
       {/* 5. Canvas hạt ngũ hành GPU/2D nổi nhẹ phía trên giấy điệp */}
       <canvas
         ref={particleCanvasRef}
-        className="fixed inset-0 pointer-events-none z-[-1] w-full h-full"
+        className="living-bg-particle fixed inset-0 pointer-events-none z-[-1] w-full h-full"
         aria-hidden="true"
       />
 

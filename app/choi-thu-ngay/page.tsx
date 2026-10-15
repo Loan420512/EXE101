@@ -3,23 +3,21 @@
 /**
  * ==============================================================================
  * FILE: app/choi-thu-ngay/page.tsx
- * MỤC ĐÍCH: Bàn chơi Ngũ Cung tương tác thời gian thực
- * TÍNH NĂNG:
- * - Chế độ 1: Đấu với Máy (Bot AI thông minh, không phạm luật)
- * - Chế độ 2: Chuyền máy (Pass & Play) cho 2 - 5 người chơi
- * - Thiết kế tối ưu cho bé 7+: nút bấm >= 44px, gợi ý tổ hợp trực quan, bảng hướng dẫn 4 bước
- * - Tương tác âm thanh WebAudio theo từng nốt ngũ cung khi đánh bài
+ * MỤC ĐÍCH: (U6) Bàn chơi Ngũ Cung dựng như bàn thật — Chợ Nhạc ở giữa bàn, cọc
+ * rút và cọc bỏ hai bên, bài trên tay xòe hình cánh quạt, nước đi hợp lệ được
+ * làm sáng, ba nước (Chọn nhạc cụ / Trình tấu / Phá âm) có hoạt ảnh riêng.
+ * KHÔNG SỬA LUẬT: mọi diễn biến đi qua lib/rules/engine.ts.
+ * Chế độ: Đấu máy • Chuyền máy • Phòng trực tuyến (Bản thử — cần máy chủ cổng 4000).
  * ==============================================================================
  */
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useState, useEffect, useRef, useTransition } from "react";
 import Link from "next/link";
-import {
+import type {
   GameState,
   CardInstance,
   ComboResult,
   BreakSoundTarget,
-  ElementType,
 } from "@/lib/rules/types";
 import {
   createGame,
@@ -28,46 +26,59 @@ import {
   breakSound,
   findCombos,
   getBreakSoundOptions,
-  getCurrentPlayer,
   HAND_LIMIT,
   WIN_THRESHOLD,
 } from "@/lib/rules/engine";
-import { decideBotMove, executeBotTurn } from "@/lib/rules/bot";
+import { executeBotTurn } from "@/lib/rules/bot";
+import { COMBO_LABELS } from "@/lib/rules/labels";
+import { ELEMENT_CONFIG } from "@/data/instruments";
 import { soundEngine } from "@/lib/audio";
+import HandFan from "@/components/board/HandFan";
+import TableFelt from "@/components/board/TableFelt";
+import ActionFlash, { type BoardFlash } from "@/components/board/ActionFlash";
+import GameSummary from "@/components/board/GameSummary";
 import {
-  IconWarning, IconStar, IconClose,
-  IconUsers, IconGamepad, IconQuestion, IconVolume, IconVolumeMute,
-  IconCycle, IconSparkles, IconSwords, IconTrophy, IconArrowRight,
-  IconShield, IconMusicNote, IconCheck, IconChevronRight, IconSearch,
-  IconShare, IconLink, IconCrown,
+  IconWarning, IconClose, IconUsers, IconGamepad, IconQuestion,
+  IconVolume, IconVolumeMute, IconCycle, IconSparkles, IconSwords,
+  IconArrowRight, IconCheck, IconChevronLeft, IconChevronRight,
+  IconSearch, IconLink, IconMusicNote, IconHand,
 } from "@/components/icons";
 
-const ELEMENT_LABELS: Record<ElementType, { name: string; note: string; color: string; bg: string; border: string }> = {
-  tho: { name: "Thổ", note: "Cung (C4)", color: "text-[#B45309]", bg: "bg-[#F2B632]", border: "border-[#B45309]" },
-  kim: { name: "Kim", note: "Thương (D4)", color: "text-[#475569]", bg: "bg-[#CBD5E1]", border: "border-[#475569]" },
-  moc: { name: "Mộc", note: "Giốc (E4)", color: "text-[#15803D]", bg: "bg-[#3F7D3B]", border: "border-[#15803D]" },
-  hoa: { name: "Hỏa", note: "Chủy (G4)", color: "text-[#B91C1C]", bg: "bg-[#D23A22]", border: "border-[#B91C1C]" },
-  thuy: { name: "Thủy", note: "Vũ (A4)", color: "text-[#1D4ED8]", bg: "bg-[#1F3F7E]", border: "border-[#1D4ED8]" },
-};
+type Mode = "bot" | "pass" | "online";
 
-const COMBO_LABELS: Record<string, { label: string; desc: string; score: number }> = {
-  "ngu-cung": { label: "Ngũ Cung Hòa Điệu", desc: "5 lá đủ 5 hành khác nhau", score: 8 },
-  "hop-tau": { label: "Hợp Tấu", desc: "3 nhạc cụ khác nhau cùng họ", score: 4 },
-  "dong-am": { label: "Đồng Âm", desc: "3 lá cùng họ (có trùng loại)", score: 2 },
-  "lien-hoan": { label: "Liên Hoàn Tương Sinh", desc: "Cặp sinh (Mộc->Hỏa->Thổ->Kim->Thủy) + nhận 1 lá Chợ", score: 2 },
-};
+/** Hạt giống ván mới — nằm ngoài component để giữ phần render thuần nhất. */
+function randomSeed(): number {
+  return Math.floor(Math.random() * 100000);
+}
+
+/** Đọc ?mode= & ?seed= từ URL (chỉ dùng trên máy khách). */
+function readBoardParams(): { mode: Mode | null; seed: number | null } {
+  if (typeof window === "undefined") return { mode: null, seed: null };
+  const q = new URLSearchParams(window.location.search);
+  const rawMode = q.get("mode");
+  const rawSeed = q.get("seed");
+  const mode: Mode | null =
+    rawMode === "pass" ? "pass" : rawMode === "online" ? "online" : rawMode === "bot" ? "bot" : null;
+  const seed = rawSeed && /^\d{4,12}$/.test(rawSeed) ? Number(rawSeed.slice(-6)) : null;
+  return { mode, seed };
+}
 
 export default function ChoiThuNgayPage() {
-  const [gameMode, setGameMode] = useState<"bot" | "pass" | "online">("bot");
+  const [gameMode, setGameMode] = useState<Mode>("bot");
   const [playerCount, setPlayerCount] = useState<number>(2);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
   const [passScreenLocked, setPassScreenLocked] = useState<boolean>(false);
-  const [isBotThinking, setIsBotThinking] = useState<boolean>(false);
+  const [rulesError, setRulesError] = useState<string | null>(null);
+  const [flash, setFlash] = useState<BoardFlash | null>(null);
+  const [enteringId, setEnteringId] = useState<string | null>(null);
+  /** Lá đang bấm trên tay → lọc nước đi có dùng lá này (chơi một ngón cái). */
+  const [pickedCardId, setPickedCardId] = useState<string | null>(null);
+  const flashTimer = useRef<number | null>(null);
 
-  // Trạng thái chơi Online Realtime
+  // Trạng thái phòng trực tuyến (WebSocket)
   const [onlineRoomCode, setOnlineRoomCode] = useState<string>("");
-  const [onlinePlayerName, setOnlinePlayerName] = useState<string>("Bé An");
+  const [onlinePlayerName, setOnlinePlayerName] = useState<string>("");
   const [onlineMyPlayerId, setOnlineMyPlayerId] = useState<string | null>(null);
   const [onlineIsHost, setOnlineIsHost] = useState<boolean>(false);
   const [onlineRoomPlayers, setOnlineRoomPlayers] = useState<{ id: string; name: string; isHost: boolean }[]>([]);
@@ -75,53 +86,74 @@ export default function ChoiThuNgayPage() {
   const [onlineInputCode, setOnlineInputCode] = useState<string>("");
   const [onlineCopied, setOnlineCopied] = useState<boolean>(false);
   const [onlineError, setOnlineError] = useState<string | null>(null);
-  const wsRef = React.useRef<WebSocket | null>(null);
+  const wsRef = useRef<WebSocket | null>(null);
 
   const [, startTransition] = useTransition();
 
-  // Khởi tạo GameState
   const [game, setGame] = useState<GameState>(() =>
-    createGame({
-      playerCount: 1,
-      botCount: 1,
-      names: ["Bạn", "Máy Trí Tuệ"],
-      seed: 42,
-    })
+    createGame({ playerCount: 1, botCount: 1, names: ["Bạn", "Máy 1"], seed: 42 })
   );
 
-  // Khởi động lại ván chơi
-  const handleRestart = (mode = gameMode, count = playerCount) => {
-    let newGame: GameState;
-    if (mode === "bot") {
-      newGame = createGame({
-        playerCount: 1,
-        botCount: count - 1,
-        names: ["Bạn", "Máy 1", "Máy 2", "Máy 3"].slice(0, count),
-        seed: Math.floor(Math.random() * 100000),
-      });
-    } else {
-      newGame = createGame({
-        playerCount: count,
-        botCount: 0,
-        names: Array.from({ length: count }, (_, i) => `Người chơi ${i + 1}`),
-        seed: Math.floor(Math.random() * 100000),
-      });
+  const handleRestart = (mode: Mode = gameMode, count: number = playerCount) => {
+    if (mode === "online") {
+      setGameMode("online");
+      return;
     }
+    const newGame =
+      mode === "bot"
+        ? createGame({
+            playerCount: 1,
+            botCount: Math.max(1, count - 1),
+            names: ["Bạn", "Máy 1", "Máy 2", "Máy 3", "Máy 4"].slice(0, count),
+            seed: randomSeed(),
+          })
+        : createGame({
+            playerCount: count,
+            botCount: 0,
+            names: Array.from({ length: count }, (_, i) => `Người chơi ${i + 1}`),
+            seed: randomSeed(),
+          });
     setGame(newGame);
     setPassScreenLocked(false);
+    setRulesError(null);
+    setPickedCardId(null);
+    setFlash(null);
   };
 
-  const handleToggleSound = () => {
-    const next = soundEngine.toggleMute();
-    setIsMuted(next);
-  };
+  const handleToggleSound = () => setIsMuted(soundEngine.toggleMute());
 
-  const activePlayer = game.players[game.currentPlayerIndex]!;
+  /** Nhãn hoạt ảnh cho nước vừa đi — tự tắt sau 0.9 giây. */
+  const triggerFlash = (f: BoardFlash) => {
+    if (flashTimer.current) window.clearTimeout(flashTimer.current);
+    setFlash(f);
+    flashTimer.current = window.setTimeout(() => setFlash(null), 900);
+  };
+  useEffect(() => () => {
+    if (flashTimer.current) window.clearTimeout(flashTimer.current);
+  }, []);
+
+  const activePlayer = game.players[game.currentPlayerIndex] ?? game.players[0]!;
+  /** Máy tới lượt: trạng thái suy ra từ GameState, không cần state riêng. */
+  const botTurn = gameMode !== "online" && !game.over && activePlayer.isBot;
+  const myTurn = gameMode === "online" ? !game.over : !activePlayer.isBot && !game.over;
   const currentCombos = findCombos(activePlayer.hand);
   const currentBreakOptions = getBreakSoundOptions(game);
-  const canPickMarket = activePlayer.hand.length < HAND_LIMIT && game.market.length > 0;
+  const canPickMarket = myTurn && activePlayer.hand.length < HAND_LIMIT && game.market.length > 0;
 
-  // Kết nối và quản lý phòng trực tuyến qua WebSocket
+  const legalHandIds = Array.from(
+    new Set([
+      ...currentCombos.flatMap((c) => c.cards.map((x) => x.instanceId)),
+      ...currentBreakOptions.map((o) => o.actingCardInstanceId),
+    ])
+  );
+  const visibleCombos = pickedCardId
+    ? currentCombos.filter((c) => c.cards.some((x) => x.instanceId === pickedCardId))
+    : currentCombos;
+  const visibleBreaks = pickedCardId
+    ? currentBreakOptions.filter((o) => o.actingCardInstanceId === pickedCardId)
+    : currentBreakOptions;
+
+  /* ── Phòng trực tuyến (cần máy chủ ws cổng 4000) ─────────────────────────── */
   const connectOnlineRoom = (action: "create" | "join", code?: string) => {
     setOnlineError(null);
     try {
@@ -171,10 +203,10 @@ export default function ChoiThuNgayPage() {
       };
 
       ws.onerror = () => {
-        setOnlineError("Máy chủ phòng chơi (ws://localhost:4000) chưa kết nối được. Vui lòng thử lại!");
+        setOnlineError("Chưa nối được máy chủ phòng chơi (ws://localhost:4000). Hãy chạy server phòng rồi thử lại.");
       };
     } catch {
-      setOnlineError("Lỗi kết nối WebSocket trực tuyến.");
+      setOnlineError("Lỗi kết nối WebSocket.");
     }
   };
 
@@ -184,185 +216,199 @@ export default function ChoiThuNgayPage() {
     }
   };
 
-  // Xử lý tự động khi đến lượt Bot
+  /* ── Lượt máy: gọi lõi bot có sẵn, không đụng luật ───────────────────────── */
   useEffect(() => {
     if (game.over || gameMode === "online") return;
     const current = game.players[game.currentPlayerIndex];
-    if (current && current.isBot && !isBotThinking) {
-      setIsBotThinking(true);
-      const timer = setTimeout(() => {
-        startTransition(() => {
-          try {
-            const nextGame = executeBotTurn(game);
-            setGame(nextGame);
-            // Phát âm thanh khi máy đánh
-            if (!isMuted) {
-              soundEngine.playElementTone("hoa");
-            }
-          } catch (e) {
-            console.error("Lỗi lượt máy:", e);
-          } finally {
-            setIsBotThinking(false);
-          }
-        });
-      }, 700);
+    if (!current?.isBot) return;
 
-      return () => clearTimeout(timer);
-    }
-  }, [game, isBotThinking, isMuted, gameMode]);
-
-  // Hành động Người chơi: Nhặt lá từ Chợ Nhạc
-  const handlePickMarket = (index: number) => {
-    if (isBotThinking || game.over || activePlayer.isBot) return;
-    try {
-      const card = game.market[index];
-      if (card && !isMuted) {
-        soundEngine.playElementTone(card.element);
-      }
-      if (gameMode === "online") {
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: "ACTION_PICK_MARKET", marketIndex: index }));
+    const timer = window.setTimeout(() => {
+      startTransition(() => {
+        try {
+          const nextGame = executeBotTurn(game);
+          setGame(nextGame);
+          if (!isMuted) soundEngine.playElementTone("hoa");
+          const next = nextGame.players[nextGame.currentPlayerIndex];
+          triggerFlash({
+            kind: "present",
+            title: `${current.name} đã ra nước`,
+            detail: next ? `${next.name} tới lượt` : "Đang chuyển lượt",
+            color: "#CBD5E1",
+          });
+        } catch (e) {
+          console.error("Lỗi lượt máy:", e);
+          setRulesError(e instanceof Error ? e.message : "Lượt máy gặp lỗi.");
         }
+      });
+    }, 700);
+
+    return () => window.clearTimeout(timer);
+  }, [game, gameMode, isMuted]);
+
+  /* ── Nối từ Trung tâm Chơi: ?mode=bot|pass|online&seed=YYYYMMDD ─────────── */
+  useEffect(() => {
+    const { mode, seed } = readBoardParams();
+    if (!mode && seed === null) return;
+
+    const frame = requestAnimationFrame(() => {
+      setGameMode(mode ?? "bot");
+      if (mode === "online") return; // phòng online chờ người chơi nối vào
+
+      const count = 2;
+      const nextGame =
+        mode === "pass"
+          ? createGame({
+              playerCount: count,
+              botCount: 0,
+              names: ["Người chơi 1", "Người chơi 2"].slice(0, count),
+              seed: seed ?? randomSeed(),
+            })
+          : createGame({
+              playerCount: 1,
+              botCount: count - 1,
+              names: ["Bạn", "Máy 1"].slice(0, count),
+              seed: seed ?? 42,
+            });
+      setGame(nextGame);
+      setPassScreenLocked(false);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  /* ── Ba nước của người chơi ──────────────────────────────────────────────── */
+  const sendOnline = (payload: Record<string, unknown>) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify(payload));
+    }
+  };
+
+  const handlePickMarket = (index: number) => {
+    if (!myTurn || game.over) return;
+    const card = game.market[index];
+    if (!card) return;
+    try {
+      if (!isMuted) soundEngine.playElementTone(card.element);
+      const cfg = ELEMENT_CONFIG[card.element];
+      triggerFlash({
+        kind: "pick",
+        title: "Chọn nhạc cụ",
+        detail: `${card.name} · họ ${cfg.name} về tay ${activePlayer.name}`,
+        color: cfg.color,
+      });
+      setEnteringId(card.instanceId);
+      window.setTimeout(() => setEnteringId(null), 500);
+      setPickedCardId(null);
+      if (gameMode === "online") {
+        sendOnline({ type: "ACTION_PICK_MARKET", marketIndex: index });
         return;
       }
       const nextGame = pickFromMarket(game, index);
       setGame(nextGame);
       checkPassScreen(nextGame);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Nước đi không hợp lệ");
+      setRulesError(err instanceof Error ? err.message : "Nước đi không hợp lệ.");
     }
   };
 
-  // Hành động Người chơi: Trình tấu tổ hợp
   const handlePresentCombo = (combo: ComboResult) => {
-    if (isBotThinking || game.over || activePlayer.isBot) return;
+    if (!myTurn || game.over) return;
     try {
-      if (!isMuted && combo.cards[0]) {
-        soundEngine.playElementTone(combo.cards[0].element);
-      }
+      if (!isMuted && combo.cards[0]) soundEngine.playElementTone(combo.cards[0].element);
+      const meta = COMBO_LABELS[combo.kind] ?? { label: combo.kind, desc: "", score: combo.score };
+      triggerFlash({
+        kind: "present",
+        title: `Trình tấu · ${meta.label}`,
+        detail: `+${combo.score} điểm · ${combo.cards.map((c) => c.name).join(" · ")}`,
+        color: ELEMENT_CONFIG[combo.cards[0]?.element ?? "tho"].color,
+      });
+      setPickedCardId(null);
       if (gameMode === "online") {
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: "ACTION_PRESENT_COMBO", combo }));
-        }
+        sendOnline({ type: "ACTION_PRESENT_COMBO", combo });
         return;
       }
       const nextGame = presentCombo(game, combo, 0);
       setGame(nextGame);
       checkPassScreen(nextGame);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Nước đi không hợp lệ");
+      setRulesError(err instanceof Error ? err.message : "Nước đi không hợp lệ.");
     }
   };
 
-  // Hành động Người chơi: Phá âm đối thủ
   const handleBreakSound = (opt: BreakSoundTarget) => {
-    if (isBotThinking || game.over || activePlayer.isBot) return;
+    if (!myTurn || game.over) return;
     try {
-      if (!isMuted) {
-        soundEngine.playElementTone("kim");
-      }
+      if (!isMuted) soundEngine.playElementTone("kim");
+      const acting = activePlayer.hand.find((c) => c.instanceId === opt.actingCardInstanceId);
+      const victim = game.players.find((p) => p.id === opt.targetPlayerId);
+      const target = victim?.hand.find((c) => c.instanceId === opt.targetCardInstanceId);
+      triggerFlash({
+        kind: "break",
+        title: "Phá âm",
+        detail:
+          acting && target && victim
+            ? `${acting.name} ép ${victim.name} bỏ ${target.name}`
+            : "Nước khắc chế đã đi",
+        color: "#1F3F7E",
+      });
+      setPickedCardId(null);
       if (gameMode === "online") {
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: "ACTION_BREAK_SOUND", target: opt }));
-        }
+        sendOnline({ type: "ACTION_BREAK_SOUND", target: opt });
         return;
       }
       const nextGame = breakSound(game, opt);
       setGame(nextGame);
       checkPassScreen(nextGame);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Nước đi không hợp lệ");
+      setRulesError(err instanceof Error ? err.message : "Nước đi không hợp lệ.");
     }
   };
 
-  // Kiểm tra màn hình chuyền máy cho lượt tiếp theo
   const checkPassScreen = (nextGame: GameState) => {
-    if (gameMode === "pass" && !nextGame.over) {
-      setPassScreenLocked(true);
-    }
+    if (gameMode === "pass" && !nextGame.over) setPassScreenLocked(true);
   };
+
+  const showBoard = gameMode !== "online" || onlineStatus === "playing";
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] dark:bg-[#141318] text-[#1A1720] dark:text-[#EAE8D8] py-8 px-4 sm:px-6 select-none font-sans realm-kim">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* NÚT QUAY LẠI TRANG CHỦ */}
-        <div>
+    <div className="min-h-screen flex flex-col select-none" style={{ backgroundColor: "#0B0C14", color: "#E8EAE0" }}>
+      {/* ═══ THANH TRÊN ═══ */}
+      <header className="sticky top-0 z-30 border-b-2 border-[#16141A] bg-[#121016]/95 backdrop-blur">
+        <div className="mx-auto max-w-6xl px-3 py-2 flex flex-wrap items-center gap-2">
           <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#CC3520] hover:underline"
+            href="/choi"
+            className="tap inline-flex items-center gap-1 rounded-[3px] px-1.5 text-label font-bold text-white/65 hover:text-white"
           >
-            ← Quay lại Trang chủ Ngũ Cung
+            <IconChevronLeft size={16} aria-hidden /> <span className="hidden sm:inline">Trung tâm Chơi</span>
           </Link>
-        </div>
+          <h1 className="font-display font-black text-body-sm sm:text-body text-white">Sân Đấu Ngũ Cung</h1>
+          <span className="text-micro font-black uppercase tracking-widest px-1.5 py-0.5 rounded-[3px] border border-[#F2B632]/50 text-[#F2B632]">
+            Bé 7+
+          </span>
 
-        {/* HEADER ĐIỀU KHIỂN CHÍNH */}
-        <header className="bg-[#FFFDF9] dark:bg-[#1E1C23] border-[3px] border-[#1A1720] dark:border-[#EAE8D8] p-4 sm:p-6 rounded-2xl shadow-[6px_6px_0px_#1A1720] dark:shadow-[6px_6px_0px_#EAE8D8] paper-board flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-[#CC3520] text-white text-xs font-black uppercase tracking-widest rounded-full border-2 border-[#1A1720]">
-                Bàn Chơi 7+
-              </span>
-              <h1
-                className="font-display font-black text-2xl sm:text-3xl text-[#1A1720] dark:text-[#EAE8D8]"
-                style={{ lineHeight: "var(--lh-heading-tight)", paddingTop: "0.05em" }}
+          <div className="ml-auto flex rounded-[4px] border-2 border-[#16141A] bg-white/6 p-1">
+            {([
+              { id: "bot", label: "Đấu máy", Icon: IconGamepad },
+              { id: "pass", label: "Chuyền máy", Icon: IconUsers },
+              { id: "online", label: "Trực tuyến", Icon: IconSearch },
+            ] as const).map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                onClick={() => (id === "online" ? setGameMode("online") : handleRestart(id, playerCount))}
+                aria-pressed={gameMode === id}
+                className={`tap inline-flex items-center gap-1.5 px-2.5 rounded-[3px] text-label font-bold transition-colors
+                  focus-visible:outline-2 focus-visible:outline-[#D23A22]
+                  ${gameMode === id ? "bg-[#F2B632] text-[#16141A]" : "text-white/60 hover:text-white"}`}
               >
-                Sân Đấu Ngũ Cung
-              </h1>
-            </div>
-            <p className="text-sm text-[#534E5C] dark:text-[#A8A4B2] font-medium" style={{ lineHeight: "var(--lh-body)" }}>
-              Thu thập 5 hành • Trình tấu tổ hợp âm vang • Chạm mốc 15 điểm để chiến thắng
-            </p>
+                <Icon size={15} aria-hidden />
+                <span className="hidden md:inline">{label}</span>
+              </button>
+            ))}
           </div>
 
-          {/* CÁC NÚT ĐIỀU KHIỂN NHANH */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            {/* Chế độ chơi */}
-            <div className="flex rounded-xl border-[2px] border-[#1A1720] dark:border-[#EAE8D8] bg-stone-100 dark:bg-stone-800 p-1">
-              <button
-                onClick={() => {
-                  setGameMode("bot");
-                  handleRestart("bot", playerCount);
-                }}
-                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 min-h-[44px] ${
-                  gameMode === "bot"
-                    ? "bg-[#1A1720] text-white shadow-sm"
-                    : "text-stone-700 dark:text-stone-300 hover:text-black dark:hover:text-white"
-                }`}
-              >
-              <IconGamepad className="w-4 h-4" />
-                Đấu với Máy
-              </button>
-              <button
-                onClick={() => {
-                  setGameMode("pass");
-                  handleRestart("pass", playerCount);
-                }}
-                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 min-h-[44px] ${
-                  gameMode === "pass"
-                    ? "bg-[#1A1A1A] text-white shadow-sm"
-                    : "text-stone-700 hover:text-black"
-                }`}
-              >
-                <IconUsers className="w-4 h-4" />
-                Chuyền máy
-              </button>
-              <button
-                onClick={() => {
-                  setGameMode("online");
-                }}
-                className={`px-3 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center gap-1.5 min-h-[44px] ${
-                  gameMode === "online"
-                    ? "bg-[#1A1A1A] text-white shadow-sm"
-                    : "text-stone-700 hover:text-black"
-                }`}
-              >
-                <IconSearch className="w-4 h-4" />
-                Phòng Online
-              </button>
-            </div>
-
-            {/* Số người chơi (chỉ cho Bot và Chuyền máy) */}
-            {gameMode !== "online" && (
+          {gameMode !== "online" && (
+            <label className="flex items-center gap-1.5 text-micro font-bold text-white/55">
+              <span className="hidden sm:inline">Người</span>
               <select
                 value={playerCount}
                 onChange={(e) => {
@@ -370,119 +416,124 @@ export default function ChoiThuNgayPage() {
                   setPlayerCount(count);
                   handleRestart(gameMode, count);
                 }}
-                className="bg-white border-[2px] border-[#1A1A1A] px-3 py-2 rounded-xl text-xs sm:text-sm font-bold min-h-[44px] shadow-[2px_2px_0px_#1A1A1A]"
+                className="tap-w rounded-[3px] border-2 border-[#16141A] bg-[#1E1C26] px-1.5 text-label font-bold text-white"
               >
-                <option value={2}>2 Người chơi</option>
-                <option value={3}>3 Người chơi</option>
-                <option value={4}>4 Người chơi</option>
-                <option value={5}>5 Người chơi</option>
+                {[2, 3, 4, 5].map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
               </select>
-            )}
+            </label>
+          )}
 
-            {/* Nút Âm thanh */}
-            <button
-              onClick={handleToggleSound}
-              className="p-2 sm:px-3 sm:py-2 bg-white border-[2px] border-[#1A1A1A] rounded-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1A1A1A] hover:bg-stone-50"
-              title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
-            >
-              {isMuted ? <IconVolumeMute className="w-5 h-5 text-stone-500" /> : <IconVolume className="w-5 h-5 text-[#D23A22]" />}
-            </button>
+          <button
+            onClick={handleToggleSound}
+            aria-pressed={!isMuted}
+            className="tap flex items-center justify-center rounded-[3px] border-2 border-[#16141A] bg-white/8 text-white/70 hover:text-white"
+            title={isMuted ? "Bật âm thanh" : "Tắt âm thanh"}
+          >
+            {isMuted
+              ? <IconVolumeMute size={18} aria-hidden />
+              : <IconVolume size={18} className="text-[#F2B632]" aria-hidden />}
+          </button>
+          <button
+            onClick={() => setShowTutorial(true)}
+            className="tap flex items-center gap-1.5 rounded-[3px] border-2 border-[#16141A] bg-[#F2B632] px-2 text-[#16141A] text-label font-black shadow-[2px_2px_0px_#16141A] hover:brightness-105"
+          >
+            <IconQuestion size={16} aria-hidden /> Luật
+          </button>
+          <button
+            onClick={() => handleRestart()}
+            className="tap flex items-center justify-center rounded-[3px] border-2 border-[#16141A] bg-white/8 text-white/70 hover:text-white"
+            aria-label="Chia ván mới"
+            title="Chia ván mới"
+          >
+            <IconCycle size={18} aria-hidden />
+          </button>
+        </div>
+      </header>
 
-            {/* Nút Hướng dẫn */}
-            <button
-              onClick={() => setShowTutorial(true)}
-              className="tap p-2 sm:px-3 sm:py-2 bg-[#F2B632] border-[2px] border-[#1A1A1A] rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#1A1A1A] hover:brightness-105"
-            >
-              <IconQuestion className="w-5 h-5 text-[#1A1A1A]" />
-              <span className="hidden sm:inline text-xs font-black">Luật 7+</span>
-            </button>
+      {/* ═══ BÀN CHƠI ═══ */}
+      <main className="flex-1 mx-auto w-full max-w-6xl px-3 pb-6 pt-3 grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-[minmax(0,1fr)_336px] md:items-start">
+        {/* Trạng thái lượt */}
+        <section className="md:col-span-2 surface-night px-4 py-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          <p className="font-display font-black text-body-sm text-white">
+            {game.over ? "Ván đã kết thúc" : `Đến lượt ${activePlayer.name}`}
+          </p>
+          <p className="text-label text-white/55" aria-live="polite">
+            {game.over
+              ? "Xem tổng kết để biết mỗi người đã trình tấu gì."
+              : myTurn
+              ? "Một nước duy nhất: nhặt lá Chợ · Trình tấu · Phá âm"
+              : botTurn
+              ? "Máy đang cân nhắc…"
+              : "Chờ mở bài"}
+          </p>
+          <p className="ml-auto text-label tabular-nums text-white/60">
+            Mốc thắng <b className="text-[#F2B632]">{WIN_THRESHOLD}</b>đ
+          </p>
+        </section>
 
-            {/* Nút Chơi lại */}
-            <button
-              onClick={() => handleRestart()}
-              className="p-2 sm:px-3 sm:py-2 bg-white border-[2px] border-[#1A1A1A] rounded-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center gap-1 shadow-[2px_2px_0px_#1A1A1A] hover:bg-stone-50"
-              title="Chia ván mới"
-            >
-              <IconCycle className="w-5 h-5 text-stone-700" />
-            </button>
-          </div>
-        </header>
-
-        {/* GIAO DIỆN PHÒNG CHỜ ONLINE REALTIME */}
+        {/* Phòng chờ trực tuyến */}
         {gameMode === "online" && onlineStatus !== "playing" && (
-          <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] space-y-5 animate-in fade-in duration-200">
-            <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
-              <div className="flex items-center gap-2">
-                <IconSearch className="w-5 h-5 text-[#D23A22]" />
-                <h2 className="text-xl font-black text-[#1A1A1A]">
-                  Phòng Chơi Trực Tuyến Thời Gian Thực (WebSocket)
-                </h2>
-              </div>
-              <span className="text-xs font-bold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-300">
-                Cổng 4000 Hoạt động
+          <section className="md:col-span-2 surface-night p-4 sm:p-5 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="font-display font-black text-body text-white">Phòng chơi trực tuyến</h2>
+              <span className="text-micro font-black uppercase tracking-wider px-2 py-0.5 rounded-[3px] border border-[#F2B632]/50 text-[#F2B632]">
+                Sắp có · Bản thử
               </span>
             </div>
+            <p className="text-label text-white/55">
+              Màn phòng chơi đã dựng xong nhưng cần máy chủ chạy ở cổng 4000. Chưa có máy chủ thì chọn
+              Đấu máy hoặc Chuyền máy — hai chế độ đó chạy trọn trên máy này.
+            </p>
 
             {onlineError && (
-              <div className="p-3 bg-red-50 border-2 border-red-500 rounded-xl text-red-800 text-xs font-bold">
-                <span className="inline-flex items-center gap-1.5 align-[-2px]"><IconWarning size={14} aria-hidden /></span> {onlineError}
-              </div>
+              <p className="rounded-[4px] border-2 border-[#FFB4A2]/60 bg-[#D23A22]/20 p-3 text-label font-bold text-white flex items-start gap-2">
+                <IconWarning size={16} className="shrink-0 mt-0.5" aria-hidden /> {onlineError}
+              </p>
             )}
 
             {onlineStatus === "disconnected" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* TÊN NGƯỜI CHƠI */}
-                <div className="space-y-4 md:col-span-2">
-                  <label className="block text-xs font-black text-[#1A1A1A] uppercase tracking-wider">
-                    Tên hiển thị của bạn
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="online-name" className="block text-micro font-black uppercase tracking-wider text-white/50">
+                    Tên hiển thị
                   </label>
                   <input
+                    id="online-name"
                     type="text"
                     maxLength={15}
                     value={onlinePlayerName}
                     onChange={(e) => setOnlinePlayerName(e.target.value)}
-                    placeholder="Ví dụ: Bé An, Bạn Nam..."
-                    className="w-full max-w-sm px-4 py-2.5 bg-white border-2 border-[#1A1A1A] rounded-xl font-bold text-sm min-h-[44px]"
+                    placeholder="Ví dụ: Bé An"
+                    className="w-full max-w-xs px-3 py-2.5 rounded-[3px] bg-white/10 border-2 border-white/20 text-body-sm font-bold text-white placeholder:text-white/35"
                   />
-                </div>
-
-                {/* TẠO PHÒNG MỚI */}
-                <div className="p-5 border-2 border-[#1A1A1A] rounded-xl bg-amber-50/70 space-y-3 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-black text-base text-[#1A1A1A]">Tạo phòng chơi mới</h3>
-                    <p className="text-xs text-stone-600 font-medium">
-                      Hệ thống sẽ cấp mã 4 ký tự ngắn gọn để bạn gửi cho bạn bè hoặc người thân vào chơi.
-                    </p>
-                  </div>
                   <button
                     onClick={() => connectOnlineRoom("create")}
-                    className="w-full py-3 bg-[#D23A22] hover:bg-red-700 text-white font-black text-sm rounded-xl border-2 border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] min-h-[44px]"
+                    className="tap w-full max-w-xs mt-1 rounded-[4px] border-[3px] border-[#16141A] bg-[#D23A22] text-white
+                      font-black text-body-sm shadow-[3px_3px_0px_#16141A] hover:-translate-y-0.5 transition-all"
                   >
-                    Tạo phòng ngay
+                    Tạo phòng mới
                   </button>
                 </div>
-
-                {/* VÀO PHÒNG CÓ SẴN */}
-                <div className="p-5 border-2 border-[#1A1A1A] rounded-xl bg-blue-50/70 space-y-3 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-black text-base text-[#1A1A1A]">Vào phòng qua mã</h3>
-                    <p className="text-xs text-stone-600 font-medium">
-                      Nhập mã phòng 4 ký tự do bạn bè hoặc chủ phòng cung cấp.
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
+                <div className="space-y-2">
+                  <label htmlFor="online-code" className="block text-micro font-black uppercase tracking-wider text-white/50">
+                    Vào phòng bằng mã 4 ký tự
+                  </label>
+                  <div className="flex gap-2 items-start">
                     <input
+                      id="online-code"
                       type="text"
                       maxLength={4}
                       value={onlineInputCode}
                       onChange={(e) => setOnlineInputCode(e.target.value.toUpperCase())}
-                      placeholder="Mã 4 chữ"
-                      className="flex-1 px-3 py-2 bg-white border-2 border-[#1A1A1A] rounded-xl font-mono text-center font-black tracking-widest text-base uppercase min-h-[44px]"
+                      placeholder="ABCD"
+                      className="w-28 px-3 py-2.5 rounded-[3px] bg-white/10 border-2 border-white/20 text-center font-mono text-body font-black tracking-widest uppercase text-white placeholder:text-white/35"
                     />
                     <button
                       disabled={onlineInputCode.trim().length !== 4}
                       onClick={() => connectOnlineRoom("join")}
-                      className="px-5 py-2 bg-[#1A1A1A] hover:bg-stone-800 disabled:opacity-50 text-white font-black text-xs rounded-xl min-h-[44px]"
+                      className="tap-w rounded-[4px] border-2 border-[#16141A] bg-[#F2B632] px-4 text-[#16141A] font-black text-body-sm shadow-[2px_2px_0px_#16141A] disabled:opacity-35"
                     >
                       Vào phòng
                     </button>
@@ -490,523 +541,404 @@ export default function ChoiThuNgayPage() {
                 </div>
               </div>
             ) : (
-              /* ĐANG Ở TRONG SẢNH CHỜ (LOBBY) */
-              <div className="space-y-6 text-center max-w-lg mx-auto py-4">
-                <div className="space-y-2">
-                  <span className="text-xs font-black uppercase tracking-widest text-stone-500">
-                    Mã phòng của bạn
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-micro font-black uppercase tracking-widest text-white/45">Mã phòng</span>
+                  <span className="font-mono font-black text-h3 tracking-widest text-[#F2B632] px-3 py-1 rounded-[4px] border-2 border-white/20 bg-white/6">
+                    {onlineRoomCode}
                   </span>
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="text-4xl font-mono font-black tracking-widest px-6 py-2 bg-amber-100 border-[3px] border-[#1A1A1A] rounded-2xl shadow-[4px_4px_0px_#1A1A1A]">
-                      {onlineRoomCode}
-                    </div>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(onlineRoomCode);
-                        setOnlineCopied(true);
-                        setTimeout(() => setOnlineCopied(false), 2000);
-                      }}
-                      className="p-3 bg-white border-2 border-[#1A1A1A] rounded-xl hover:bg-stone-50 min-h-[44px] min-w-[44px] shadow-[2px_2px_0px_#1A1A1A]"
-                      title="Sao chép mã phòng"
-                    >
-                      {onlineCopied ? <IconCheck size={20} className="text-emerald-600" aria-hidden /> : <IconLink size={20} aria-hidden />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-stone-600 font-medium">
-                    Hãy chia sẻ mã này cho người khác để cùng tham gia!
-                  </p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(onlineRoomCode);
+                      setOnlineCopied(true);
+                      window.setTimeout(() => setOnlineCopied(false), 2000);
+                    }}
+                    className="tap flex items-center justify-center rounded-[3px] border-2 border-white/20 text-white/70 hover:text-white"
+                    aria-label="Sao chép mã phòng"
+                  >
+                    {onlineCopied
+                      ? <IconCheck size={18} className="text-[#7FD189]" aria-hidden />
+                      : <IconLink size={18} aria-hidden />}
+                  </button>
                 </div>
 
-                {/* DANH SÁCH NGƯỜI CHƠI TRONG PHÒNG */}
-                <div className="space-y-2 text-left bg-stone-50 p-4 rounded-xl border-2 border-[#1A1A1A]">
-                  <h4 className="text-xs font-black uppercase text-stone-500">
-                    Người chơi đã vào phòng ({onlineRoomPlayers.length} người)
-                  </h4>
-                  <div className="divide-y divide-stone-200">
+                {onlineRoomPlayers.length === 0 ? (
+                  <p className="text-label text-white/45 italic">Chưa ghi nhận người chơi nào trong phòng.</p>
+                ) : (
+                  <ul className="list-none m-0 p-0 space-y-1">
                     {onlineRoomPlayers.map((p) => (
-                      <div key={p.id} className="py-2 flex items-center justify-between text-xs font-bold">
-                        <span className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                          {p.name} {p.id === onlineMyPlayerId && <span className="text-stone-400">(Bạn)</span>}
-                        </span>
+                      <li key={p.id} className="flex items-center gap-2 text-label font-bold text-white/75 py-1">
+                        <span className="w-2 h-2 rounded-full bg-[#7FD189]" aria-hidden />
+                        {p.name} {p.id === onlineMyPlayerId && <span className="text-white/40">(bạn)</span>}
                         {p.isHost && (
-                          <span className="px-2 py-0.5 bg-[#D23A22] text-white text-[10px] rounded font-black">
+                          <span className="ml-auto text-micro font-black px-1.5 py-0.5 rounded-[3px] bg-[#D23A22] text-white">
                             Chủ phòng
                           </span>
                         )}
-                      </div>
+                      </li>
                     ))}
-                  </div>
-                </div>
+                  </ul>
+                )}
 
-                {/* NÚT BẮT ĐẦU */}
                 {onlineIsHost ? (
                   <button
                     onClick={startOnlineGame}
-                    className="w-full py-3.5 bg-[#D23A22] hover:bg-red-700 text-white font-black text-sm rounded-xl border-[2px] border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A] min-h-[48px]"
+                    className="tap w-full max-w-sm rounded-[4px] border-[3px] border-[#16141A] bg-[#D23A22] text-white
+                      font-black text-body-sm shadow-[3px_3px_0px_#16141A] hover:-translate-y-0.5 transition-all"
                   >
-                    Bắt đầu trận đấu (Tự động thêm Bot nếu thiếu)
+                    Bắt đầu ván
                   </button>
                 ) : (
-                  <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs font-bold text-amber-900 animate-pulse">
-                    Đang đợi chủ phòng nhấn Bắt đầu ván...
-                  </div>
+                  <p className="text-label font-bold text-[#F2B632]">Đang đợi chủ phòng bắt đầu ván…</p>
                 )}
               </div>
             )}
           </section>
         )}
 
-        {/* BẢNG ĐIỂM NGƯỜI CHƠI */}
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {game.players.map((p, idx) => {
-            const isTurn = idx === game.currentPlayerIndex;
-            return (
-              <div
-                key={p.id}
-                className={`p-3.5 rounded-xl border-[3px] transition-all relative ${
-                  isTurn
-                    ? "bg-amber-100/90 border-[#D23A22] shadow-[4px_4px_0px_#D23A22] scale-[1.02]"
-                    : "bg-white border-[#1A1A1A] shadow-[2px_2px_0px_#1A1A1A] opacity-85"
-                }`}
-              >
-                {isTurn && (
-                  <span className="absolute -top-3 left-3 bg-[#D23A22] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full border border-[#1A1A1A] animate-pulse">
-                    Đang đánh
-                  </span>
-                )}
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-sm truncate">{p.name}</span>
-                  {p.isBot && <IconGamepad size={14} className="text-stone-500 flex-shrink-0" aria-hidden />}
-                </div>
-                <div className="mt-2 flex items-baseline justify-between">
-                  <span className="text-2xl font-black text-[#D23A22]">{p.score} <span className="text-xs font-bold text-stone-500">/ 15đ</span></span>
-                  <span className="text-xs font-bold text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-300">
-                    {p.hand.length} lá
-                  </span>
-                </div>
-                {p.hopTauCount > 0 && (
-                  <div className="mt-1 text-[11px] font-bold text-emerald-700">
-                    <span className="inline-flex items-center gap-1 align-[-1px]"><IconStar size={12} aria-hidden /></span> {p.hopTauCount} Hợp tấu
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </section>
-
-        {/* KHU VỰC TRUNG TÂM: CHỢ NHẠC & CỌC BÀI */}
-        <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-5 sm:p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-black tracking-tight text-[#1A1A1A]">
-                Chợ Nhạc Cụ (Chọn 1 lá về tay)
-              </span>
-              <span className="text-xs font-bold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full border border-stone-300">
-                5 lá sẵn sàng
-              </span>
-            </div>
-            <div className="text-xs font-bold text-stone-600 flex items-center gap-3">
-              <span>Cọc rút: <b>{game.deck.length}</b> lá</span>
-              <span>Cọc bỏ: <b>{game.discard.length}</b> lá</span>
-            </div>
-          </div>
-
-          {/* 5 LÁ BÀI TRÊN CHỢ */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-            {game.market.map((card, idx) => {
-              const el = ELEMENT_LABELS[card.element];
-              const isTurn = !activePlayer.isBot && !game.over;
-              return (
-                <div
-                  key={card.instanceId}
-                  onClick={() => isTurn && handlePickMarket(idx)}
-                  className={`border-[3px] border-[#1A1A1A] rounded-xl p-3 flex flex-col justify-between h-40 sm:h-44 transition-all relative overflow-hidden group ${
-                    isTurn && canPickMarket
-                      ? "cursor-pointer hover:-translate-y-1 hover:shadow-[4px_4px_0px_#1A1A1A] bg-white"
-                      : "opacity-90 bg-stone-50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[11px] font-black px-2 py-0.5 rounded-md text-white border border-[#1A1A1A] ${el.bg}`}>
-                      {el.name}
-                    </span>
-                    <span className="text-[10px] font-bold text-stone-500">{el.note}</span>
-                  </div>
-
-                  <div className="my-auto text-center space-y-1">
-                    <IconMusicNote size={28} className="mx-auto text-stone-700 opacity-60 group-hover:scale-110 transition" aria-hidden />
-                    <h3 className="font-black text-sm sm:text-base leading-tight text-[#1A1A1A]">
-                      {card.name}
-                    </h3>
-                  </div>
-
-                  {isTurn && canPickMarket ? (
-                    <button
-                      className="w-full py-1.5 bg-[#F2B632] border-2 border-[#1A1A1A] rounded-lg text-xs font-black shadow-[2px_2px_0px_#1A1A1A] group-hover:bg-amber-400 min-h-[34px]"
+        {showBoard && (
+          <>
+            {/* Người chơi quanh bàn */}
+            <section
+              className="md:col-start-1 md:row-start-2 -mx-3 px-3"
+              aria-label="Người chơi quanh bàn"
+            >
+              <ul className="flex gap-2 overflow-x-auto scrollbar-hide list-none m-0 p-1">
+                {game.players.map((p, idx) => {
+                  const isTurn = idx === game.currentPlayerIndex && !game.over;
+                  return (
+                    <li
+                      key={p.id}
+                      className={`shrink-0 rounded-[4px] border-2 px-3 py-2 min-w-[132px] transition-all ${
+                        isTurn
+                          ? "border-[#F2B632] bg-[#F2B632]/18"
+                          : "border-white/12 bg-white/5"
+                      }`}
                     >
-                      Nhặt lá này
-                    </button>
-                  ) : (
-                    <div className="text-[10px] text-center text-stone-400 font-bold">
-                      Chợ nhạc cụ
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
+                      <p className="flex items-center gap-1.5 text-label font-black text-white truncate">
+                        {p.name}
+                        {p.isBot && <IconGamepad size={12} className="text-white/45" aria-hidden />}
+                      </p>
+                      <p className="flex items-baseline gap-2 mt-0.5">
+                        <span
+                          className="font-display font-black text-body tabular-nums"
+                          style={{ color: isTurn ? "#F2B632" : "#E8EAE0" }}
+                        >
+                          {p.score}
+                        </span>
+                        <span className="text-micro text-white/45 tabular-nums">
+                          /{WIN_THRESHOLD}đ · {p.hand.length} lá
+                        </span>
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
 
-        {/* KHU VỰC TAY BÀI CỦA NGƯỜI CHƠI HIỆN TẠI */}
-        <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-5 sm:p-6 rounded-2xl shadow-[6px_6px_0px_#1A1A1A] space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-stone-200 pb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-[#1A1A1A]">
-                  Tay bài: {activePlayer.name}
+            {/* MẶT BÀN: Chợ Nhạc + hai cọc */}
+            <section
+              className="md:col-start-1 md:row-start-3 rounded-[10px] border-[3px] border-[#16141A] p-3 sm:p-5"
+              style={{
+                background: "radial-gradient(120% 100% at 50% 0%, #1A2140 0%, #12172C 48%, #0C0E1A 100%)",
+                boxShadow: "inset 0 0 0 5px rgba(242,182,50,.10), 6px 6px 0 rgba(0,0,0,.55)",
+              }}
+              aria-label="Giữa bàn: Chợ Nhạc và hai cọc bài"
+            >
+              <TableFelt
+                market={game.market}
+                deckCount={game.deck.length}
+                discardCount={game.discard.length}
+                canPick={canPickMarket}
+                onPick={handlePickMarket}
+              />
+            </section>
+
+            {/* NƯỚC ĐI — cột phải trên desktop, giữa bàn trên điện thoại */}
+            <aside className="md:col-start-2 md:row-start-2 md:row-span-3 space-y-3">
+              <div className="surface-night p-3">
+                <h2 className="font-display font-black text-body-sm text-white flex items-center gap-2">
+                  <IconHand size={16} className="text-[#F2B632]" aria-hidden /> Nước đi của {activePlayer.name}
                 </h2>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-stone-100 border border-stone-300">
-                  {activePlayer.hand.length} / {HAND_LIMIT} lá tối đa
-                </span>
+                <p className="text-label text-white/50 mt-1">
+                  Chạm một lá dưới để chỉ xem nước đi dùng lá đó.
+                </p>
+                {pickedCardId && (
+                  <button
+                    onClick={() => setPickedCardId(null)}
+                    className="tap-w mt-2 inline-flex items-center gap-1.5 text-micro font-black px-2 py-1 rounded-[3px] border border-white/25 text-white/70 hover:text-white"
+                  >
+                    <IconClose size={12} aria-hidden /> Bỏ lọc
+                  </button>
+                )}
               </div>
-              <p className="text-xs text-stone-600 font-medium">
-                Chọn 1 trong 3 hành động: Nhặt 1 lá Chợ • Trình tấu tổ hợp • Phá âm đối thủ
-              </p>
-            </div>
 
-            {/* Trạng thái máy suy nghĩ */}
-            {isBotThinking && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-100 border-2 border-amber-600 rounded-lg text-amber-900 font-bold text-xs animate-pulse">
-                <IconGamepad size={16} aria-hidden />
-                {activePlayer.name} đang toan tính nước đi...
-              </div>
-            )}
-          </div>
-
-          {/* HIỂN THỊ CÁC LÁ TRÊN TAY */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
-            {activePlayer.hand.map((card) => {
-              const el = ELEMENT_LABELS[card.element];
-              return (
-                <div
-                  key={card.instanceId}
-                  className={`border-[2px] border-[#1A1A1A] rounded-xl p-2.5 bg-white shadow-[2px_2px_0px_#1A1A1A] flex flex-col justify-between h-32 relative`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[10px] font-black px-1.5 py-0.5 rounded text-white ${el.bg}`}>
-                      {el.name}
-                    </span>
-                    <span className="text-[9px] font-bold text-stone-400">{el.note.split(" ")[0]}</span>
-                  </div>
-                  <div className="text-center my-auto">
-                    <p className="font-extrabold text-xs sm:text-sm leading-tight text-[#1A1A1A]">
-                      {card.name}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* GỢI Ý TỔ HỢP TRÌNH TẤU (DÀNH CHO BÉ 7+ DỄ CHƠI) */}
-          <div className="space-y-3 pt-2">
-            <h3 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
-              <IconSparkles size={16} className="text-[#D23A22]" aria-hidden />
-              Tổ Hợp Hòa Thanh Khả Thi Trên Tay ({currentCombos.length})
-            </h3>
-
-            {currentCombos.length === 0 ? (
-              <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-500 font-medium italic">
-                Chưa đủ lá để ghép tổ hợp. Hãy nhặt thêm lá từ Chợ Nhạc để hoàn thiện Ngũ Cung, Hợp tấu hoặc Liên hoàn!
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {currentCombos.map((combo, idx) => {
-                  const meta = COMBO_LABELS[combo.kind] ?? { label: combo.kind, desc: "", score: combo.score };
-                  return (
-                    <div
-                      key={idx}
-                      className="border-[2px] border-[#1A1A1A] p-3 rounded-xl bg-amber-50/70 shadow-[3px_3px_0px_#1A1A1A] flex flex-col justify-between gap-2.5"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-black text-sm text-[#1A1A1A]">{meta.label}</span>
-                          <span className="px-2 py-0.5 bg-[#D23A22] text-white text-xs font-black rounded border border-[#1A1A1A]">
-                            +{combo.score} Điểm
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-stone-600 mt-1">{meta.desc}</p>
-                        <div className="mt-2 flex flex-wrap gap-1">
-                          {combo.cards.map((c) => (
-                            <span
-                              key={c.instanceId}
-                              className={`text-[10px] font-bold px-1.5 py-0.5 rounded text-white ${ELEMENT_LABELS[c.element].bg}`}
-                            >
-                              {c.name}
+              {/* TRÌNH TẤU */}
+              <div className="surface-night p-3 space-y-2">
+                <p className="text-label font-black text-white flex items-center gap-2">
+                  <IconSparkles size={15} className="text-[#D23A22]" aria-hidden />
+                  Trình tấu ({visibleCombos.length})
+                </p>
+                {visibleCombos.length === 0 ? (
+                  <p className="text-label text-white/45 italic">
+                    {pickedCardId
+                      ? "Lá này chưa ghép thành tổ hợp nào."
+                      : "Chưa đủ lá ghép tổ hợp. Nhặt thêm lá Chợ cùng họ hoặc cho đủ năm hành."}
+                  </p>
+                ) : (
+                  <ul className="list-none m-0 p-0 space-y-2">
+                    {visibleCombos.map((combo, idx) => {
+                      const meta = COMBO_LABELS[combo.kind] ?? { label: combo.kind, desc: "", score: combo.score };
+                      const lead = ELEMENT_CONFIG[combo.cards[0]?.element ?? "tho"];
+                      return (
+                        <li key={`${combo.kind}-${idx}`}>
+                          <button
+                            onClick={() => handlePresentCombo(combo)}
+                            disabled={!myTurn}
+                            className="tap-w w-full rounded-[4px] border-2 border-[#16141A] p-2.5 text-left
+                              shadow-[2px_2px_0px_#16141A] hover:-translate-y-0.5 active:translate-y-0 transition-all
+                              disabled:opacity-40 disabled:hover:translate-y-0 disabled:cursor-not-allowed
+                              focus-visible:outline-2 focus-visible:outline-[#D23A22]"
+                            style={{ backgroundColor: lead.color }}
+                          >
+                            <span className="flex items-baseline justify-between gap-2">
+                              <span className="font-display font-black text-label text-[#16141A]">{meta.label}</span>
+                              <span className="font-display font-black text-body tabular-nums text-[#16141A]">
+                                +{combo.score}
+                              </span>
                             </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <button
-                        disabled={activePlayer.isBot || isBotThinking}
-                        onClick={() => handlePresentCombo(combo)}
-                        className="w-full py-2 bg-[#1A1A1A] hover:bg-stone-800 text-white font-black text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[44px]"
-                      >
-                        <IconSparkles size={14} className="text-[#F2B632]" aria-hidden />
-                        Trình tấu ngay (+{combo.score}đ)
-                      </button>
-                    </div>
-                  );
-                })}
+                            <span className="block text-micro font-bold text-[#16141A]/75 mt-0.5">{meta.desc}</span>
+                            <span className="mt-1.5 flex flex-wrap gap-1">
+                              {combo.cards.map((c) => (
+                                <span
+                                  key={c.instanceId}
+                                  className="text-micro font-bold rounded-[2px] px-1 py-0.5 bg-[#16141A]/85 text-white"
+                                >
+                                  {c.name}
+                                </span>
+                              ))}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* HÀNH ĐỘNG PHÁ ÂM TƯƠNG KHẮC */}
-          <div className="space-y-3 pt-2 border-t-2 border-stone-200">
-            <h3 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
-              <IconSwords size={16} className="text-[#1F3F7E]" aria-hidden />
-              Hành Động Phá Âm ({currentBreakOptions.length} Cơ hội khắc chế)
-            </h3>
-
-            {currentBreakOptions.length === 0 ? (
-              <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs text-stone-500 font-medium italic">
-                Hiện không có đối thủ nào cầm lá thuộc hành bị các lá trên tay bạn khắc chế.
+              {/* PHÁ ÂM */}
+              <div className="surface-night p-3 space-y-2">
+                <p className="text-label font-black text-white flex items-center gap-2">
+                  <IconSwords size={15} className="text-[#93B4E8]" aria-hidden />
+                  Phá âm ({visibleBreaks.length})
+                </p>
+                {visibleBreaks.length === 0 ? (
+                  <p className="text-label text-white/45 italic">
+                    {pickedCardId
+                      ? "Lá này không khắc lá nào trên tay đối thủ."
+                      : "Chưa có mục tiêu khắc chế. Cứ trình tấu hoặc nhặt lá Chợ."}
+                  </p>
+                ) : (
+                  <ul className="list-none m-0 p-0 space-y-2">
+                    {visibleBreaks.slice(0, 8).map((opt, idx) => {
+                      const victim = game.players.find((p) => p.id === opt.targetPlayerId);
+                      const acting = activePlayer.hand.find((c) => c.instanceId === opt.actingCardInstanceId);
+                      const targetCard = victim?.hand.find((c) => c.instanceId === opt.targetCardInstanceId);
+                      if (!victim || !acting || !targetCard) return null;
+                      const aCfg = ELEMENT_CONFIG[acting.element];
+                      return (
+                        <li key={`${opt.targetPlayerId}-${idx}`}>
+                          <button
+                            onClick={() => handleBreakSound(opt)}
+                            disabled={!myTurn}
+                            className="tap-w w-full rounded-[4px] border-2 border-[#16141A] p-2.5 text-left
+                              bg-[#1F3F7E] text-white shadow-[2px_2px_0px_#16141A]
+                              hover:-translate-y-0.5 active:translate-y-0 transition-all
+                              disabled:opacity-40 disabled:cursor-not-allowed
+                              focus-visible:outline-2 focus-visible:outline-[#F2B632]"
+                          >
+                            <span className="flex items-baseline justify-between gap-2">
+                              <span className="text-label font-black">Ép bỏ {victim.name}</span>
+                              <span className="text-micro font-bold opacity-80">{aCfg.name} khắc</span>
+                            </span>
+                            <span className="mt-1 flex items-center gap-1.5 text-micro font-bold opacity-90">
+                              {acting.name} <IconArrowRight size={11} aria-hidden /> bỏ {targetCard.name}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {currentBreakOptions.slice(0, 6).map((opt, idx) => {
-                  const targetOpponent = game.players.find((p) => p.id === opt.targetPlayerId);
-                  const actingCard = activePlayer.hand.find((c) => c.instanceId === opt.actingCardInstanceId);
-                  const targetCard = targetOpponent?.hand.find((c) => c.instanceId === opt.targetCardInstanceId);
 
-                  if (!targetOpponent || !actingCard || !targetCard) return null;
-
-                  return (
-                    <div
-                      key={idx}
-                      className="border-[2px] border-[#1A1A1A] p-3 rounded-xl bg-blue-50/70 shadow-[3px_3px_0px_#1A1A1A] flex flex-col justify-between gap-2.5"
-                    >
-                      <div className="text-xs space-y-1">
-                        <div className="font-bold text-stone-700">
-                          Mục tiêu: <span className="font-black text-[#D23A22]">{targetOpponent.name}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[11px] font-medium text-stone-600">
-                          <span>Dùng <b>{actingCard.name}</b> ({ELEMENT_LABELS[actingCard.element].name})</span>
-                          <IconArrowRight size={12} className="text-stone-400" aria-hidden />
-                          <span>Ép bỏ <b>{targetCard.name}</b> ({ELEMENT_LABELS[targetCard.element].name})</span>
-                        </div>
-                      </div>
-
-                      <button
-                        disabled={activePlayer.isBot || isBotThinking}
-                        onClick={() => handleBreakSound(opt)}
-                        className="w-full py-2 bg-[#1F3F7E] hover:bg-blue-900 text-white font-black text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[44px]"
-                      >
-                        <IconSwords size={14} aria-hidden />
-                        Phá âm mục tiêu này
-                      </button>
-                    </div>
-                  );
-                })}
+              {/* Diễn biến */}
+              <div className="surface-night p-3">
+                <p className="text-micro font-black uppercase tracking-widest text-white/45 mb-1">Diễn biến</p>
+                <ul className="list-none m-0 p-0 space-y-1 max-h-40 overflow-y-auto text-label text-white/65">
+                  {game.log.length === 0 && (
+                    <li className="italic text-white/35">Ván vừa chia, chưa có diễn biến.</li>
+                  )}
+                  {game.log.slice().reverse().slice(0, 30).map((entry, i) => (
+                    <li key={i} className="flex gap-1.5">
+                      <IconChevronRight size={12} className="shrink-0 mt-1 text-white/25" aria-hidden />
+                      <span>{entry}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}
-          </div>
-        </section>
+            </aside>
 
-        {/* NHẬT KÝ VÁN ĐẤU */}
-        <section className="bg-[#FFFDF9] border-[3px] border-[#1A1A1A] p-4 sm:p-5 rounded-2xl shadow-[4px_4px_0px_#1A1A1A] space-y-2">
-          <h3 className="text-xs font-black uppercase tracking-wider text-stone-500">
-            Nhật ký diễn biến trận đấu
-          </h3>
-          <div className="h-28 overflow-y-auto space-y-1 text-xs font-medium text-stone-700 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-            {game.log.slice().reverse().map((entry, idx) => (
-              <div key={idx} className="flex items-start gap-2">
-                <IconChevronRight size={12} className="text-stone-400 mt-0.5 flex-shrink-0" aria-hidden />
-                <span>{entry}</span>
+            {/* TAY BÀI — cánh quạt sát mép dưới cho ngón cái */}
+            <section
+              className="md:col-start-1 md:row-start-4 surface-night p-2 sm:p-3"
+              aria-label={`Tay bài của ${activePlayer.name}`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-1">
+                <p className="text-label font-black text-white">
+                  Tay bài {activePlayer.name}
+                  <span className="ml-2 font-bold text-white/45 tabular-nums">
+                    {activePlayer.hand.length}/{HAND_LIMIT} lá
+                  </span>
+                </p>
+                <p className="text-micro text-white/45">Lá sáng viền là lá đang có nước đi</p>
               </div>
-            ))}
-          </div>
-        </section>
+              <HandFan
+                cards={activePlayer.hand}
+                legalIds={legalHandIds}
+                enteringId={enteringId}
+                disabled={!myTurn}
+                onSelect={(card: CardInstance) =>
+                  setPickedCardId((prev) => (prev === card.instanceId ? null : card.instanceId))
+                }
+              />
+            </section>
+          </>
+        )}
 
-        {/* FOOTER ĐIỀU HƯỚNG */}
-        <footer className="flex flex-wrap items-center justify-between gap-4 text-xs font-bold text-stone-600 pt-2">
-          <div className="flex items-center gap-4">
-            <Link href="/luat-choi" className="hover:underline hover:text-black">
-              Tra cứu luật đầy đủ
-            </Link>
-            <Link href="/ngu-hanh" className="hover:underline hover:text-black">
-              Sơ đồ Tương sinh - Tương khắc
-            </Link>
-            <Link href="/choi-thu" className="hover:underline hover:text-black text-[#D23A22]">
-              Đăng ký bộ bài thật 7+
-            </Link>
+        {/* Trạng thái lỗi — có thiết kế, không dùng alert() */}
+        {rulesError && (
+          <div className="md:col-span-2 rounded-[4px] border-2 border-[#FFB4A2]/70 bg-[#D23A22]/20 p-3 flex items-start gap-2">
+            <IconWarning size={18} className="shrink-0 text-[#FFB4A2]" aria-hidden />
+            <p className="text-label font-bold text-white flex-1">{rulesError}</p>
+            <button
+              onClick={() => setRulesError(null)}
+              className="tap-w flex items-center justify-center rounded-[3px] text-white/70 hover:text-white"
+              aria-label="Đóng thông báo"
+            >
+              <IconClose size={16} aria-hidden />
+            </button>
           </div>
-          <div>Bản quyền © 2026 Ngũ Cung Board Game</div>
-        </footer>
-      </div>
+        )}
 
-      {/* MÀN HÌNH KHÓA CHUYỀN MÁY (PASS & PLAY SHIELD) */}
-      {passScreenLocked && (
-        <div className="fixed inset-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-md w-full shadow-[8px_8px_0px_#1A1A1A] text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 bg-[#F2B632] border-[3px] border-[#1A1A1A] rounded-2xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_#1A1A1A]">
-              <IconSearch size={32} className="text-[#1A1A1A]" aria-hidden />
+        <p className="md:col-span-2 text-label text-white/35 flex items-center gap-2">
+          <IconMusicNote size={14} aria-hidden />
+          Âm phát khi ra nước là âm mô phỏng bằng Web Audio, chưa phải thu âm nhạc cụ thật.
+        </p>
+      </main>
+
+      {/* ═══ HOẠT ẢNH NƯỚC ĐI ═══ */}
+      <ActionFlash flash={flash} />
+
+      {/* ═══ MÀN CHUYỀN MÁY ═══ */}
+      {passScreenLocked && !game.over && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0C14]/92 backdrop-blur-sm">
+          <div className="surface-night max-w-md w-full p-6 text-center space-y-5">
+            <div className="mx-auto w-16 h-16 rounded-[6px] border-[3px] border-[#16141A] bg-[#F2B632]
+              flex items-center justify-center shadow-[4px_4px_0px_#16141A]">
+              <IconUsers size={32} className="text-[#16141A]" aria-hidden />
             </div>
-
             <div className="space-y-2">
-              <h3 className="text-2xl font-black text-[#1A1A1A]">Chuyền máy!</h3>
-              <p className="text-sm font-medium text-stone-600">
-                Hãy chuyền thiết bị cho{" "}
-                <span className="font-black text-[#D23A22] text-base">
-                  {game.players[game.currentPlayerIndex]?.name}
-                </span>{" "}
-                để tiếp tục lượt chơi bí mật.
+              <h2 className="font-display font-black text-h3 text-white">Chuyền máy</h2>
+              <p className="text-body-sm text-white/65">
+                Đưa thiết bị cho <span className="font-black text-[#F2B632]">{activePlayer.name}</span> rồi mở bài.
+                Người khác chưa nên nhìn tay bài này.
               </p>
             </div>
-
             <button
               onClick={() => setPassScreenLocked(false)}
-              className="w-full py-3.5 bg-[#D23A22] hover:bg-red-700 text-white font-black text-sm rounded-xl border-[2px] border-[#1A1A1A] shadow-[4px_4px_0px_#1A1A1A] min-h-[48px] transition-all"
+              className="tap w-full rounded-[4px] border-[3px] border-[#16141A] bg-[#D23A22] text-white
+                font-black text-body-sm shadow-[3px_3px_0px_#16141A] hover:-translate-y-0.5 transition-all"
             >
-              Tôi đã sẵn sàng, mở bài!
+              Tôi là {activePlayer.name}, mở bài
             </button>
           </div>
         </div>
       )}
 
-      {/* MODAL CHIẾN THẮNG */}
-      {game.over && (
-        <div className="fixed inset-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-lg w-full shadow-[8px_8px_0px_#1A1A1A] text-center space-y-6">
-            <div className="w-20 h-20 bg-[#F2B632] border-[3px] border-[#1A1A1A] rounded-3xl flex items-center justify-center mx-auto shadow-[4px_4px_0px_#1A1A1A]">
-              <IconTrophy size={40} className="text-[#D23A22]" aria-hidden />
-            </div>
+      {/* ═══ TỔNG KẾT SAU VÁN ═══ */}
+      {game.over && <GameSummary game={game} onRestart={() => handleRestart()} />}
 
-            <div className="space-y-1">
-              <span className="text-xs font-black uppercase tracking-widest text-[#D23A22]">
-                Khúc Khải Hoàn Âm Vang
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-[#1A1A1A]">
-                {game.players.find((p) => p.id === game.winnerId)?.name} Chiến Thắng!
-              </h3>
-            </div>
-
-            {/* BẢNG XẾP HẠNG CUỐI VÁN */}
-            <div className="border-[2px] border-[#1A1A1A] rounded-xl overflow-hidden divide-y divide-stone-200">
-              {game.players
-                .slice()
-                .sort((a, b) => (b.score !== a.score ? b.score - a.score : b.hopTauCount - a.hopTauCount))
-                .map((p, idx) => (
-                  <div key={p.id} className="p-3 flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-stone-200 flex items-center justify-center text-[10px]">
-                        #{idx + 1}
-                      </span>
-                      {p.name}
-                    </span>
-                    <span className="text-sm font-black text-[#D23A22]">
-                      {p.score} điểm ({p.hopTauCount} Hợp tấu)
-                    </span>
-                  </div>
-                ))}
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleRestart()}
-                className="flex-1 py-3 bg-[#D23A22] text-white font-black text-sm rounded-xl border-[2px] border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] min-h-[44px]"
-              >
-                Chơi ván mới
-              </button>
-              <Link
-                href="/choi-thu"
-                className="flex-1 py-3 bg-[#F2B632] text-[#1A1A1A] font-black text-sm rounded-xl border-[2px] border-[#1A1A1A] shadow-[3px_3px_0px_#1A1A1A] flex items-center justify-center min-h-[44px]"
-              >
-                Đăng ký bản thật
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL HƯỚNG DẪN NHANH DÀNH CHO BÉ 7+ */}
+      {/* ═══ LUẬT NHANH 7+ ═══ */}
       {showTutorial && (
-        <div className="fixed inset-0 z-50 bg-[#1A1A1A]/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFDF9] border-[4px] border-[#1A1A1A] p-6 sm:p-8 rounded-2xl max-w-lg w-full shadow-[8px_8px_0px_#1A1A1A] space-y-5">
-            <div className="flex items-center justify-between border-b-2 border-stone-200 pb-3">
-              <h3 className="text-xl font-black text-[#1A1A1A] flex items-center gap-2">
-                <IconQuestion size={20} className="text-[#D23A22]" aria-hidden />
-                Luật Chơi Dành Cho Bé 7+
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0C14]/92 backdrop-blur-sm overflow-y-auto">
+          <div className="surface-night max-w-lg w-full p-5 sm:p-6 space-y-4 my-6">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-display font-black text-body text-white flex items-center gap-2">
+                <IconQuestion size={18} className="text-[#F2B632]" aria-hidden /> Luật nhanh cho bé 7+
+              </h2>
               <button
                 onClick={() => setShowTutorial(false)}
-                className="text-stone-400 hover:text-black font-black p-1 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
+                className="tap flex items-center justify-center rounded-[3px] text-white/60 hover:text-white"
                 aria-label="Đóng hướng dẫn"
               >
                 <IconClose size={18} aria-hidden />
               </button>
             </div>
 
-            <div className="space-y-3.5 text-xs sm:text-sm font-medium text-stone-700">
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#F2B632] text-black font-black flex items-center justify-center text-xs flex-shrink-0">
-                  1
-                </span>
-                <div>
-                  <h4 className="font-bold text-black">Mỗi lượt làm 1 trong 3 việc:</h4>
-                  <p>Nhặt 1 lá từ Chợ Nhạc, hoặc Trình tấu tổ hợp ghi điểm, hoặc Phá âm đối thủ.</p>
-                </div>
-              </div>
+            <ol className="list-none m-0 p-0 space-y-2.5">
+              {[
+                {
+                  n: 1, bg: "#F2B632", fg: "#16141A",
+                  t: "Mỗi lượt làm đúng 1 việc",
+                  d: "Nhặt 1 lá từ Chợ Nhạc, hoặc Trình tấu một tổ hợp, hoặc Phá âm đối thủ.",
+                },
+                {
+                  n: 2, bg: "#D23A22", fg: "#FFFFFF",
+                  t: "Bốn cách ghi điểm",
+                  d: "Đồng âm 2đ (3 lá cùng họ) · Liên hoàn 2đ (cặp sinh, được tặng 1 lá Chợ) · Hợp tấu 4đ (3 nhạc cụ khác nhau cùng họ) · Ngũ cung 8đ (đủ 5 hành).",
+                },
+                {
+                  n: 3, bg: "#1F3F7E", fg: "#FFFFFF",
+                  t: "Phá âm",
+                  d: "Bỏ 1 lá của mình để ép đối thủ bỏ 1 lá thuộc hành bị lá đó khắc (Mộc khắc Thổ, Thổ khắc Thủy…).",
+                },
+                {
+                  n: 4, bg: "#3F7D3B", fg: "#FFFFFF",
+                  t: `Ai chạm ${WIN_THRESHOLD} điểm trước thì thắng`,
+                  d: "Hòa điểm thì phân định bằng số lần Hợp tấu.",
+                },
+              ].map((row) => (
+                <li key={row.n} className="flex items-start gap-3 rounded-[4px] border-2 border-white/12 bg-white/5 p-3">
+                  <span
+                    className="w-7 h-7 shrink-0 rounded-[3px] border-2 border-[#16141A] flex items-center justify-center font-display font-black text-label"
+                    style={{ backgroundColor: row.bg, color: row.fg }}
+                  >
+                    {row.n}
+                  </span>
+                  <span>
+                    <span className="block text-label font-black text-white">{row.t}</span>
+                    <span className="block text-label text-white/65 mt-0.5">{row.d}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
 
-              <div className="p-3 bg-red-50 rounded-xl border border-red-200 flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#D23A22] text-white font-black flex items-center justify-center text-xs flex-shrink-0">
-                  2
-                </span>
-                <div>
-                  <h4 className="font-bold text-black">4 cách ghi điểm:</h4>
-                  <ul className="list-disc pl-4 space-y-0.5 text-xs">
-                    <li><b>Đồng âm (2đ):</b> 3 lá cùng họ.</li>
-                    <li><b>Liên hoàn (2đ):</b> Cặp sinh theo chiều Mộc→Hỏa→Thổ→Kim→Thủy + tặng 1 lá Chợ!</li>
-                    <li><b>Hợp tấu (4đ):</b> 3 nhạc cụ KHÁC NHAU cùng họ.</li>
-                    <li><b>Ngũ Cung (8đ):</b> 5 lá đủ 5 họ khác nhau.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="p-3 bg-blue-50 rounded-xl border border-blue-200 flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#1F3F7E] text-white font-black flex items-center justify-center text-xs flex-shrink-0">
-                  3
-                </span>
-                <div>
-                  <h4 className="font-bold text-black">Phá âm (Khắc chế):</h4>
-                  <p>Bỏ 1 lá hành mình để ép 1 đối thủ bỏ 1 lá hành bị khắc (ví dụ: Mộc khắc Thổ, Thổ khắc Thủy...).</p>
-                </div>
-              </div>
-
-              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#3F7D3B] text-white font-black flex items-center justify-center text-xs flex-shrink-0">
-                  4
-                </span>
-                <div>
-                  <h4 className="font-bold text-black">Ai đạt 15 điểm trước sẽ thắng!</h4>
-                  <p>Nếu hòa điểm, ai biểu diễn nhiều bộ Hợp tấu hơn sẽ là người chiến thắng.</p>
-                </div>
-              </div>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setShowTutorial(false)}
+                className="tap flex-1 min-w-[160px] rounded-[4px] border-[3px] border-[#16141A] bg-[#F2B632] text-[#16141A]
+                  font-black text-body-sm shadow-[3px_3px_0px_#16141A] hover:-translate-y-0.5 transition-all"
+              >
+                Đã hiểu, chơi tiếp
+              </button>
+              <Link href="/luat-choi" className="cta-ghost flex-1 justify-center min-w-[150px]">
+                Luật đầy đủ <IconArrowRight size={16} aria-hidden />
+              </Link>
             </div>
-
-            <button
-              onClick={() => setShowTutorial(false)}
-              className="w-full py-3 bg-[#1A1A1A] text-white font-black text-sm rounded-xl min-h-[44px]"
-            >
-              Đã hiểu, vào chơi ngay!
-            </button>
           </div>
         </div>
       )}
     </div>
   );
 }
-

@@ -72,6 +72,15 @@ class SoundEngine {
     return this.analyser;
   }
 
+  /** Máy trình duyệt này có Web Audio không — dùng cho trạng thái lỗi của trình phát. */
+  public isSupported(): boolean {
+    if (typeof window === "undefined") return false;
+    return Boolean(
+      window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    );
+  }
+
   public setMuted(muted: boolean) {
     this.isMuted = muted;
     if (muted) {
