@@ -179,7 +179,7 @@ function PlaygroundInner() {
 
       <Header />
 
-      <main className={`flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full realm-${selectedTimbre}`}>
+      <main className={`below-header flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 w-full realm-${selectedTimbre}`}>
         {/* NÚT QUAY LẠI */}
         <div className="mb-6">
           <Link

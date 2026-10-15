@@ -531,6 +531,15 @@ html.universe-united {
 /* Billboard: jump xa (chấm chỉ số / vòng lặp cuối→đầu) dùng fade qua Web Animations
    API trong components/Billboard.tsx, còn kéo ngang dùng transition inline. */
 
+/* ── Khoảng trời cho header cố định ──
+   Header là position:fixed cao 57px. Trang nào đặt <Header /> rồi nội dung chạy
+   ngay từ đầu <main> (py-*) sẽ bị thanh điều hướng che mất dòng đầu tiên
+   (ví dụ link "← Quay lại Trang chủ Ngũ Cung"). Những trang đó thêm class
+   .below-header vào <main> để chừa chỗ. */
+.below-header {
+  padding-top: calc(57px + 1.5rem);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

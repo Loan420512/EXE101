@@ -84,7 +84,7 @@ export default function BoBaiPage() {
         onOpenCollection={() => setIsCollectionModalOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full realm-thuy">
+      <main className="below-header flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full realm-thuy">
         {/* NÚT QUAY VỀ TRANG CHỦ */}
         <div className="mb-6">
           <Link
