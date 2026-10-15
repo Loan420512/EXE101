@@ -1,7 +1,7 @@
-"use client";
+"use clment";
 
 /**
- * FILE: components/Billboard.tsx
+ * FILE: components/Bmllboard.tsx
  * Billboard toàn màn hình phong cách streaming × Đông Hồ.
  * - Tự xoay giữa 5 hành khi không tương tác
  * - Nút pause, dừng khi focus/hover
@@ -16,7 +16,7 @@ import { INSTRUMENTS, type Instrument, type ElementType, ELEMENT_CONFIG } from "
 import { type SceneKey } from "@/data/scenes";
 import { dispatchSceneChange } from "@/data/scenes";
 import { soundEngine } from "@/lib/audio";
-import InstrumentIllustration from "@/components/InstrumentIllustration";
+import InstrumentArt from "@/components/InstrumentArt";
 import {
   IconMusicNote, IconGamepad,
   IconInfo, IconChevronLeft, IconChevronRight,
@@ -231,11 +231,11 @@ export default function Billboard() {
                 filter: `drop-shadow(0 20px 40px ${elCfg.color}50)`,
               }}
             >
-              <InstrumentIllustration
+              <InstrumentArt
                 instrumentId={active.id}
                 element={active.element}
                 size={280}
-                className="rounded-[6px]"
+                priority
               />
             </div>
           </div>

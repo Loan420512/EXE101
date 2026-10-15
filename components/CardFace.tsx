@@ -16,7 +16,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { EffectTargetRect } from "@/effects/types";
-import InstrumentIllustration from "@/components/InstrumentIllustration";
+import InstrumentArt from "@/components/InstrumentArt";
 
 interface CardFaceProps {
   name: string;
@@ -231,7 +231,7 @@ export default function CardFace({
         style={{ transform: isHovered ? `translate3d(${tilt.y * 0.4}px, ${-tilt.x * 0.4}px, 0)` : "none" }}
       >
         {instrumentId ? (
-          <InstrumentIllustration
+          <InstrumentArt
             instrumentId={instrumentId}
             element={element}
             variant={variant}
