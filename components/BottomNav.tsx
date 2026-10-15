@@ -55,7 +55,7 @@ export default function BottomNav() {
               <Link
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex flex-col items-center justify-center gap-0.5 h-full min-h-[44px] text-[10px] font-bold
+                className={`flex flex-col items-center justify-center gap-0.5 h-full min-h-[44px] text-[11px] font-bold
                   focus-visible:outline-2 focus-visible:outline-[#D23A22]
                   ${active ? "text-[#F2B632]" : "text-white/55 hover:text-white"}`}
               >

@@ -91,9 +91,9 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
                 src="/images/logo/logongucung.png"
                 alt=""
                 aria-hidden
-                className="h-8 w-auto object-contain"
-                width={56}
-                height={32}
+                className="h-10 w-auto object-contain"
+                width={70}
+                height={40}
               />
             </picture>
             <span
