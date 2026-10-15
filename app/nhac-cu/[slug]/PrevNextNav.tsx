@@ -47,7 +47,7 @@ export default function PrevNextNav({ prev, next }: PrevNextNavProps) {
   return (
     <nav aria-label="Nhạc cụ trước / tiếp theo" className="flex items-center justify-between gap-3 mb-10">
       {prev ? (
-        <ViewTransition name={`card-${prev.id}`}>
+        <ViewTransition name={`nav-prev-${prev.id}`}>
           <Link
             href={`/nhac-cu/${prev.slug}`}
             rel="prev"
@@ -62,7 +62,7 @@ export default function PrevNextNav({ prev, next }: PrevNextNavProps) {
         <span />
       )}
       {next ? (
-        <ViewTransition name={`card-${next.id}`}>
+        <ViewTransition name={`nav-next-${next.id}`}>
           <Link
             href={`/nhac-cu/${next.slug}`}
             rel="next"
