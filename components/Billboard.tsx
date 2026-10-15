@@ -37,7 +37,7 @@ const AUTO_INTERVAL = 3600; // ms — billboard tự chuyển, không có nút d
 /** Thời gian + đường cong "kéo qua" của track */
 const SLIDE_MS = 720;
 const SLIDE_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
-const FADE_MS = 450; // cho cú nhảy xa (chấm chỉ số, cuối→đầu)
+const FADE_MS = 380; // cho cú nhảy xa (chấm chỉ số, cuối→đầu)
 /** Nội dung dịch ít hơn track → cảm giác có chiều sâu khi kéo */
 const PARALLAX_PCT = 7;
 
@@ -70,8 +70,8 @@ export default function Billboard() {
     if (!node) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const anim = node.animate(
-      [{ opacity: 0 }, { opacity: 1 }],
-      { duration: FADE_MS, easing: "ease-out" }
+      [{ opacity: 0.45 }, { opacity: 1 }],
+      { duration: FADE_MS, easing: "ease-out", fill: "none" }
     );
     return () => anim.cancel();
   }, [activeIdx, moveMode]);
@@ -155,8 +155,8 @@ export default function Billboard() {
                     className="absolute inset-0"
                     style={{
                       background: `linear-gradient(to right,
-                        rgba(6,6,10,0.55) 0%,
-                        rgba(6,6,10,0.25) 45%,
+                        rgba(6,6,10,0.38) 0%,
+                        rgba(6,6,10,0.14) 45%,
                         transparent 75%)`,
                     }}
                   />
@@ -205,13 +205,13 @@ export default function Billboard() {
                         />
                         Họ {inst.elementName} • Âm {inst.tone}
                       </span>
-                      <span className="text-[11px] font-bold text-white/50 border border-white/20 px-2 py-0.5 rounded">
+                      <span className="text-[11px] font-bold text-white/75 border border-white/30 px-2 py-0.5 rounded">
                         {inst.status}
                       </span>
                     </div>
 
                     {/* Câu giá trị — 3 giây */}
-                    <p className="text-base font-semibold text-white/70 max-w-sm leading-relaxed">
+                    <p className="text-base font-semibold text-white/85 max-w-sm leading-relaxed">
                       Thu thập ngũ hành. Nghe văn hóa. Bộ bài 15 nhạc cụ Việt Nam.
                     </p>
 
@@ -219,19 +219,19 @@ export default function Billboard() {
                     <h2
                       className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.1]"
                       style={{
-                        textShadow: `0 2px 4px rgba(0,0,0,0.8), 0 0 40px ${cfg.color}60`,
+                        textShadow: `0 2px 6px rgba(0,0,0,0.55), 0 0 40px ${cfg.color}60`,
                       }}
                     >
                       {inst.name}
                     </h2>
 
                     {/* Tagline */}
-                    <p className="text-lg text-white/80 font-medium max-w-md">
+                    <p className="text-lg text-white/95 font-medium max-w-md">
                       {tagline}
                     </p>
 
                     {/* Mô tả ngắn */}
-                    <p className="text-sm text-white/60 max-w-sm leading-relaxed line-clamp-2">
+                    <p className="text-sm text-white/80 max-w-sm leading-relaxed line-clamp-2">
                       {inst.summaryVerbatim}
                     </p>
 
@@ -299,20 +299,22 @@ export default function Billboard() {
         })}
       </div>
 
-      {/* ══ SCRIM CÓ ĐỊNH: chữ luôn đọc được, không bị trượt theo track ══ */}
+      {/* ══ SCRIM CỔ ĐỊNH: chữ luôn đọc được, không bị trượt theo track ══
+          Cảnh nền phía sau (ScenePhotoStack) đã có overlay riêng nên lớp này chỉ cần đủ đậm
+          ở mép trái — đẩy lên cao quá cả bảng sẽ thành đen như mực. */}
       <div
         className="absolute inset-0 z-[5] pointer-events-none"
         style={{
           background: `
             linear-gradient(to right,
-              rgba(6,6,10,0.92) 0%,
-              rgba(6,6,10,0.75) 35%,
-              rgba(6,6,10,0.25) 60%,
-              transparent 80%
+              rgba(6,6,10,0.72) 0%,
+              rgba(6,6,10,0.46) 36%,
+              rgba(6,6,10,0.12) 64%,
+              transparent 84%
             ),
             linear-gradient(to top,
-              rgba(6,6,10,0.7) 0%,
-              transparent 40%
+              rgba(6,6,10,0.42) 0%,
+              transparent 38%
             )
           `,
         }}
