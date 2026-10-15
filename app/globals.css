@@ -528,6 +528,15 @@ html.universe-united {
   animation: sheet-rise 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Billboard: ảnh nền riêng của nhạc cụ hiện ra khi tới slide */
+@keyframes billboard-bg-in {
+  from { opacity: 0; transform: scale(1.06); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.billboard-bg-in {
+  animation: billboard-bg-in 0.7s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

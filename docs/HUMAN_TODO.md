@@ -38,3 +38,6 @@ Tài liệu này ghi nhận các công việc bắt buộc phải do con ngườ
    - Rà soát bản quyền xuất bản thương mại của bộ 7 ảnh nền quang cảnh và trống đồng (`assets-src/backgroundweb/`).
    - Chuẩn bị file vector SVG / AI độ phân giải cao của logo `logongucung.png` phục vụ in ấn bao bì hộp bài vật lý và ấn phẩm triển lãm.
 
+9. **Ảnh nền cho từng slide Billboard**:
+   - Thả (drop) ảnh 1600×900 vào `public/images/billboard/<slug>.png|jpg|webp` (nửa trái nên tối để chữ đọc được).
+

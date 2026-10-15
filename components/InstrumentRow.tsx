@@ -1,8 +1,8 @@
-"use clment";
+"use client";
 
 /**
  * FILE: components/InstrumentRow.tsx
- * Hàng ngang nhạc cụ phong cách streammng:
+ * Hàng ngang nhạc cụ phong cách streaming:
  * - Cuộn ngang có snap, edge-peek gợi cuộn
  * - Nút mũi tên trên desktop, vuốt cảm ứng
  * - Phím mũi tên khi focus trong hàng
