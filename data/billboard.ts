@@ -8,19 +8,36 @@
  * - BACKGROUNDS: ảnh nền đứng sau mỗi slide
  *
  * CÁCH ĐỔ ẢNH NỀN VÀO (phần user sẽ làm):
- *   1. Đặt ảnh vào public/images/billboard/<slug>.jpg  (khuyên 1600×900,
- *      nửa trái tối để chữ đọc được, hoặc để ảnh gốc rồi mình xử lý)
- *   2. Thêm một dòng vào BACKGROUNDS:  "dan-tranh": "/images/billboard/dan-tranh.jpg"
+ *   1. Thả ảnh gốc vào public/images/billboard/ — tên file có chứa slug nhạc cụ
+ *      không dấu, không gạch (muốn nền cho Đàn bầu → "danbau...jpg"). Khuyên
+ *      ~1920×1080; ảnh nhỏ hơn vẫn dùng được nhưng sẽ mềm.
+ *   2. Chạy  npm run billboard  → khử vệt nén, phóng lên master 1920px, làm nét,
+ *      xuất webp + avif (1280 và 1920) vào public/images/billboard/optimized/.
+ *   3. Thêm dòng vào BACKGROUNDS bên dưới theo đoạn script in ra.
  * Slide nào chưa có nền sẽ tự dùng cảnh hành (LivingBackground) như cũ.
  * ==============================================================================
  */
 
 import { INSTRUMENTS, type Instrument, type ElementType } from "@/data/instruments";
 
+/**
+ * Nền của một slide. Ảnh đã được scripts/prep-billboard.mjs phóng sẵn tới
+ * 1920px — KHÔNG đưa ảnh gốc nhỏ vào đây, vì next/image không phóng to quá
+ * bề rộng file nguồn nên trình duyệt phải tự giãn → vỡ và mờ.
+ */
+export interface SlideBackground {
+  srcSetAvif: string;
+  srcSetWebp: string;
+  /** ảnh dự phòng cho trình duyệt không có <picture> */
+  webpUrl: string;
+  /** bề rộng ảnh gốc user đưa — nhỏ thì nền được phủ hạt giấy để đỡ lộ nét vỡ */
+  sourceWidth: number;
+}
+
 export interface BillboardSlide {
   instrument: Instrument;
-  /** Đường dẫn ảnh nền đứng sau slide — null = dùng cảnh hành hiện tại */
-  backgroundUrl: string | null;
+  /** null = dùng cảnh hành hiện tại */
+  background: SlideBackground | null;
   /** Câu tagline riêng; bỏ trống thì lấy tagline của hành */
   tagline?: string;
 }
@@ -40,13 +57,28 @@ const SLIDE_ORDER: string[] = [
   "trong-com",   // Thổ  — thêm mới
 ];
 
-/** Ảnh nền theo id nhạc cụ — thêm dòng khi có file trong public/images/billboard */
-const BACKGROUNDS: Record<string, string> = {
-  "ken-bau": "/images/billboard/kenbaubackgroundbillboard.jpg",
-  "dan-bau": "/images/billboard/danbaubackgroundbillboard.jpg",
-  "sao-truc": "/images/billboard/saotrucbackgroundbillboard.jpg",
-  "cong-chieng": "/images/billboard/congchiengbackgroundbillboard.jpg",
+/**
+ * Ảnh nền theo id nhạc cụ. `base` là đường dẫn không đuôi, không cỡ —
+ * các phần mở rộng do scripts/prep-billboard.mjs sinh ra:
+ *   <base>-1280.webp | <base>-1280.avif | <base>-1920.webp | <base>-1920.avif
+ * `sourceWidth` = bề rộng ảnh gốc user thả vào (để biết nền nào cần phủ hạt giấy).
+ */
+const BACKGROUNDS: Record<string, { base: string; sourceWidth: number }> = {
+  "ken-bau": { base: "/images/billboard/optimized/ken-bau", sourceWidth: 640 },
+  "dan-bau": { base: "/images/billboard/optimized/dan-bau", sourceWidth: 665 },
+  "sao-truc": { base: "/images/billboard/optimized/sao-truc", sourceWidth: 547 },
+  "cong-chieng": { base: "/images/billboard/optimized/cong-chieng", sourceWidth: 2560 },
 };
+
+/** Dựng srcSet avif/webp từ base — 1280 cho màn nhỏ, 1920 cho desktop. */
+function toBackground({ base, sourceWidth }: { base: string; sourceWidth: number }): SlideBackground {
+  return {
+    srcSetAvif: `${base}-1280.avif 1280w, ${base}-1920.avif 1920w`,
+    srcSetWebp: `${base}-1280.webp 1280w, ${base}-1920.webp 1920w`,
+    webpUrl: `${base}-1920.webp`,
+    sourceWidth,
+  };
+}
 
 /** Tagline riêng cho vài nhạc cụ để 2 slide cùng hành không trùng chữ */
 const TAGLINES_BY_ID: Record<string, string> = {
@@ -74,7 +106,7 @@ export const BILLBOARD_SLIDES: BillboardSlide[] = SLIDE_ORDER.flatMap((id) => {
   }
   return [{
     instrument,
-    backgroundUrl: BACKGROUNDS[id] ?? null,
+    background: BACKGROUNDS[id] ? toBackground(BACKGROUNDS[id]) : null,
     tagline: TAGLINES_BY_ID[id],
   }];
 });

@@ -13,7 +13,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { type ElementType, ELEMENT_CONFIG } from "@/data/instruments";
 import { BILLBOARD_SLIDES, ELEMENT_TAGLINES, type BillboardSlide } from "@/data/billboard";
 import { type SceneKey } from "@/data/scenes";
@@ -141,15 +140,40 @@ export default function Billboard() {
               inert={!isActive}
             >
               {/* Lớp nền riêng của nhạc cụ (chưa có ảnh thì dùng ScenePhotoStack của hành) */}
-              {s.backgroundUrl && (
+              {s.background && (
                 <div className="absolute inset-0 overflow-hidden" aria-hidden>
-                  <Image
-                    src={s.backgroundUrl}
-                    alt=""
-                    fill
-                    priority={i === 0}
-                    sizes="100vw"
-                    className="object-cover"
+                  {/* <picture> trực tiếp vì ảnh đã được scripts/prep-billboard.mjs
+                      phóng + nén sẵn; đi qua next/image chỉ tổ nén lần hai. */}
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={s.background.srcSetAvif}
+                      sizes="100vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={s.background.srcSetWebp}
+                      sizes="100vw"
+                    />
+                    <img
+                      src={s.background.webpUrl}
+                      alt=""
+                      className="w-full h-full object-cover object-center"
+                      /* Nền carousel tự xoay sau 3.6s nên phải tải sẵn cả 4
+                         slide — để lazy thì ảnh kịp hiện giữa cú kéo (trắng xóa).
+                         Chỉ slide đầu ưu tiên cao, còn lại tải nền ở mức thấp. */
+                      loading="eager"
+                      fetchPriority={i === 0 ? "high" : "low"}
+                      decoding="async"
+                    />
+                  </picture>
+                  {/* Ảnh nguồn nhỏ thì phủ thêm hạt giấy để chỗ bị mềm nhìn như
+                      nhòe mực in, không như ảnh vỡ. */}
+                  <div
+                    className="billboard-grain"
+                    style={{
+                      opacity: s.background.sourceWidth < 900 ? 0.5 : 0.26,
+                    }}
                   />
                   <div
                     className="absolute inset-0"
@@ -317,6 +341,20 @@ export default function Billboard() {
               transparent 38%
             )
           `,
+        }}
+        aria-hidden
+      />
+
+      {/* Trên điện thoại chữ trải đầy ngang nên scrim trái không đủ: thêm màn
+          tối dọc riêng cho màn nhỏ, giữ ảnh thấy được mà chữ vẫn rõ. */}
+      <div
+        className="absolute inset-0 z-[6] pointer-events-none lg:hidden"
+        style={{
+          background: `linear-gradient(to top,
+            rgba(6,6,10,0.82) 0%,
+            rgba(6,6,10,0.55) 45%,
+            rgba(6,6,10,0.28) 100%
+          )`,
         }}
         aria-hidden
       />

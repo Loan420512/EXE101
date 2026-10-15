@@ -39,8 +39,10 @@ Tài liệu này ghi nhận các công việc bắt buộc phải do con ngườ
    - Chuẩn bị file vector SVG / AI độ phân giải cao của logo `logongucung.png` phục vụ in ấn bao bì hộp bài vật lý và ấn phẩm triển lãm.
 
 9. **Ảnh nền cho từng slide Billboard**:
-   - Thả (drop) ảnh **tối thiểu 1600×900** vào `public/images/billboard/<slug>.png|jpg|webp` (nửa trái nên tối để chữ đọc được), rồi khai báo đường dẫn vào `BACKGROUNDS` trong `data/billboard.ts`.
+   - Thả (drop) ảnh gốc vào `public/images/billboard/` — tên file chứa slug nhạc cụ không dấu, không gạch (Đàn bầu → `danbau...jpg`). Khuyên **~1920×1080**, nửa trái hơi tối để chữ đọc được.
+   - Chạy `npm run billboard`: script khử vệt nén JPEG → phóng lên master 1920px (lanczos) → làm nét → xuất webp + avif (1280 và 1920) vào `public/images/billboard/optimized/`, đồng thời in ra đoạn cần dán.
+   - Thêm vào `BACKGROUNDS` trong `data/billboard.ts` theo mẫu `"dan-tranh": { base: "/images/billboard/optimized/dan-tranh", sourceWidth: 1920 }`.
    - ✅ Đã nối 4 slide: Kèn bầu, Đàn bầu, Sáo trúc, Cồng chiêng.
-   - ⚠️ 3 ảnh đầu quá nhỏ (640×400, 665×436, 547×365) — billboard rộng ~1600px nên ảnh bị vỡ/mờ; thay lại ảnh ≥1600×900 khi có.
-   - ⬜ Còn thiếu 4 slide: Đàn đá (`dan-da`), Đàn tranh (`dan-tranh`), Trống đồng (`trong-dong`), Trống cơm (`trong-com`).
+   - ⚠️ 3 ảnh đầu nguồn chỉ 547–665px nên vẫn mềm (đã phóng + làm nét + phủ hạt giấy); thay bản gốc ≥1600×900 khi có.
+   - ⬜ Còn thiếu 4 slide: Đàn đá (`danda`), Đàn tranh (`dantranh`), Trống đồng (`trongdong`), Trống cơm (`trongcom`).
 

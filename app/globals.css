@@ -531,6 +531,18 @@ html.universe-united {
 /* Billboard: jump xa (chấm chỉ số / vòng lặp cuối→đầu) dùng fade qua Web Animations
    API trong components/Billboard.tsx, còn kéo ngang dùng transition inline. */
 
+/* Hạt giấy cho ảnh nền billboard. Ảnh nguồn nhỏ bị phóng lên sẽ mềm; lớp nhiễu
+   SVG này (tạo sẵn bằng feTurbulence, không cần file ảnh) khiến chỗ mềm đọc như
+   nhòe mực in trên giấy điệp chứ không như ảnh vỡ. */
+.billboard-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
 /* ── Khoảng trời cho header cố định ──
    Header là position:fixed cao 57px. Trang nào đặt <Header /> rồi nội dung chạy
    ngay từ đầu <main> (py-*) sẽ bị thanh điều hướng che mất dòng đầu tiên
