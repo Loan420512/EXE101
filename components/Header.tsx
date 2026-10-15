@@ -6,7 +6,7 @@
  * - Logo cân đối, nav gọn, bộ chọn vũ trụ 5 hành, tìm kiếm, âm thanh, hồ sơ
  * - Ẩn khi cuộn xuống, hiện lại khi cuộn lên
  * - Không có thanh "Bản demo" màu vàng (đã bỏ theo review)
- * - Dải màu 5 hành vẫn giữ ở đáy header
+ * - Không còn dải sọc 5 màu ở đáy header (đã bỏ theo review)
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -221,9 +221,6 @@ export default function Header({ onOpenPack, onOpenCollection }: HeaderProps = {
           </Link>
         </div>
       </div>
-
-      {/* DẢI 5 MÀU NGŨ HÀNH — signature Ngũ Cung */}
-      <div className="five-element-ribbon" aria-hidden="true" />
     </header>
   );
 }

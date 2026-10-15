@@ -20,7 +20,6 @@ import {
   IconBook, IconBlocks, IconHand, IconMusicNote, IconTaiji,
 } from "@/components/icons";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
-import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import CardFace from "@/components/CardFace";
 import {
@@ -245,8 +244,6 @@ export default async function InstrumentDetailPage({ params }: PageProps) {
               ))}
             </div>
           </div>
-
-          <ColorRibbon />
         </div>
       </main>
 

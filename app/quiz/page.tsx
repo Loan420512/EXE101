@@ -16,7 +16,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
-import ColorRibbon from "@/components/ColorRibbon";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 import CardFace from "@/components/CardFace";
 import { ElementType, ELEMENT_CONFIG, INSTRUMENTS, Instrument } from "@/data/instruments";
@@ -347,8 +346,6 @@ export default function QuizPage() {
             </div>
           </div>
         )}
-
-        <ColorRibbon />
       </main>
 
       <TeamFaqFooter />

@@ -13,7 +13,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import WuXingDiagram from "@/components/WuXingDiagram";
-import ColorRibbon from "@/components/ColorRibbon";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
 
@@ -61,8 +60,6 @@ export default function NguHanhPage() {
 
         {/* SƠ ĐỒ NGŨ HÀNH TƯƠNG TÁC */}
         <WuXingDiagram />
-
-        <ColorRibbon />
       </main>
 
       <TeamFaqFooter />

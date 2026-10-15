@@ -241,21 +241,8 @@ p, li, td, th {
 
 /* ============================================================
    6. DẢI 5 MÀU NGŨ HÀNH
+   (đã bỏ — giao diện dùng khoảng trắng phân cách, không sọc màu)
    ============================================================ */
-.five-element-ribbon {
-  height: 6px;
-  width: 100%;
-  background: linear-gradient(
-    to right,
-    var(--color-tho)  0%,   var(--color-tho)  20%,
-    var(--color-kim)  20%,  var(--color-kim)  40%,
-    var(--color-moc)  40%,  var(--color-moc)  60%,
-    var(--color-hoa)  60%,  var(--color-hoa)  80%,
-    var(--color-thuy) 80%,  var(--color-thuy) 100%
-  );
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-}
 
 /* ============================================================
    7. CARD AURA — PHÁT SÁNG LINH KHÍ KHI HOVER

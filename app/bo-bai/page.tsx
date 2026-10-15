@@ -12,7 +12,6 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import CardFace from "@/components/CardFace";
 import ModalInstrument from "@/components/ModalInstrument";
-import ColorRibbon from "@/components/ColorRibbon";
 import EffectCanvas from "@/components/EffectCanvas";
 import TeamFaqFooter from "@/components/TeamFaqFooter";
 import LivingBackground from "@/components/LivingBackground/LivingBackground";
@@ -203,8 +202,6 @@ export default function BoBaiPage() {
             dispatchSceneChange("default");
           }}
         />
-
-        <ColorRibbon />
       </main>
 
       <TeamFaqFooter />
